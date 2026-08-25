@@ -140,7 +140,8 @@ class ControllerScriptInterfaceLegacy : public QObject {
     };
     QHash<int, TimerInfo> m_timers;
 
-    QVarLengthArray<int> m_intervalAccumulator;
+    // === CUSTOM MOD (dynamic-jog): int -> double so scaled CDJ ticks accumulate untruncated ===
+    QVarLengthArray<double> m_intervalAccumulator;
     QVarLengthArray<mixxx::Duration> m_lastMovement;
     QVarLengthArray<double> m_dx, m_rampTo, m_rampFactor;
     QVarLengthArray<bool> m_ramp, m_brakeActive, m_spinbackActive, m_softStartActive;

@@ -1,6 +1,7 @@
 #include "effects/effectparameterslotbase.h"
 
 #include "control/controlobject.h"
+#include "effects/defs.h"
 #include "effects/effectparameter.h"
 #include "moc_effectparameterslotbase.cpp"
 
@@ -60,6 +61,12 @@ void EffectParameterSlotBase::onEffectMetaParameterChanged(double parameter, boo
 }
 
 void EffectParameterSlotBase::slotValueChanged(double v) {
+    // BEGIN CUSTOM MOD (Instant-Pad-FX lock): Unit 4 parameters are frozen;
+    // pad-triggered enable/routing controls are unaffected.
+    if (isLockedInstantFxUnitGroup(m_group)) {
+        return;
+    }
+    // END CUSTOM MOD (Instant-Pad-FX lock)
     if (m_pEffectParameter) {
         m_pEffectParameter->setValue(v);
         emit valueChanged(v);

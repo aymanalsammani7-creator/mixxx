@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QSharedPointer>
+#include <QString>
 #include <array>
 #include <memory>
 
@@ -45,6 +46,42 @@ const QString kNoEffectString = QStringLiteral("---");
 const QString kMixerProfile = QStringLiteral("[Mixer Profile]");
 const QString kHighEqFrequency = QStringLiteral("HiEQFrequency");
 const QString kLowEqFrequency = QStringLiteral("LoEQFrequency");
+
+// BEGIN CUSTOM MOD (Instant-Pad-FX lock): identify the dedicated instant-pad-FX
+// unit by group name.
+/// Returns the 1-based standard-effect-unit number ("4" for
+/// "[EffectRack1_EffectUnit4]" or "[EffectRack1_EffectUnit4_Effect2]"),
+/// or -1 if the group is not a standard effect unit group.
+inline int standardEffectUnitNumber(const QString& group) {
+    const qsizetype idx = group.indexOf(QLatin1String("EffectUnit"));
+    if (idx < 0) {
+        return -1;
+    }
+    qsizetype pos = idx + static_cast<qsizetype>(qstrlen("EffectUnit"));
+    qsizetype end = pos;
+    while (end < group.size() && group.at(end).isDigit()) {
+        ++end;
+    }
+    bool ok = false;
+    const int num = group.mid(pos, end - pos).toInt(&ok);
+    return ok ? num : -1;
+}
+
+/// === CUSTOM MOD (Instant-Pad-FX lock) ======================================
+/// Standard effect unit 4 is dedicated to hardware performance-pad triggers
+/// ("Instant Pad FX"). All continuous parameter surfaces (parameter /
+/// button_parameter values, meta, super1, mix) of that unit are frozen at
+/// their configured values; binary enable/routing controls remain fully
+/// operational. Guarded sites: EffectParameterSlotBase::slotValueChanged,
+/// EffectSlot::setMetaParameter / slotEffectMetaParameter,
+/// EffectChain::slotControlChainSuperParameter and the chain mix handler.
+constexpr int kLockedInstantFxPadUnit = 4;
+
+inline bool isLockedInstantFxUnitGroup(const QString& group) {
+    return standardEffectUnitNumber(group) == kLockedInstantFxPadUnit;
+}
+/// ===========================================================================
+// END CUSTOM MOD (Instant-Pad-FX lock)
 
 // NOTE: Setting this to true will enable string manipulation and calls to
 // qDebug() in the audio engine thread. That may cause audio dropouts, so only

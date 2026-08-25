@@ -570,6 +570,12 @@ double EffectSlot::getMetaParameter() const {
 // This function is for the superknob to update individual effects' meta knobs
 // slotEffectMetaParameter does not need to update m_pControlMetaParameter's value
 void EffectSlot::setMetaParameter(double v, bool force) {
+    // BEGIN CUSTOM MOD (Instant-Pad-FX lock): Unit 4 parameters are frozen;
+    // pad-triggered enable/routing controls are unaffected.
+    if (isLockedInstantFxUnitGroup(m_group)) {
+        return;
+    }
+    // END CUSTOM MOD (Instant-Pad-FX lock)
     if (!m_metaknobSoftTakeover.ignore(*m_pControlMetaParameter, v) ||
             !m_pControlEnabled->toBool() || force) {
         m_pControlMetaParameter->set(v);
@@ -578,6 +584,12 @@ void EffectSlot::setMetaParameter(double v, bool force) {
 }
 
 void EffectSlot::slotEffectMetaParameter(double v, bool force) {
+    // BEGIN CUSTOM MOD (Instant-Pad-FX lock): Unit 4 parameters are frozen;
+    // pad-triggered enable/routing controls are unaffected.
+    if (isLockedInstantFxUnitGroup(m_group)) {
+        return;
+    }
+    // END CUSTOM MOD (Instant-Pad-FX lock)
     // Clamp to [0.0, 1.0]
     if (v < 0.0 || v > 1.0) {
         qWarning() << debugString() << "value out of limits";

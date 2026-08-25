@@ -263,7 +263,22 @@ void EffectChain::sendParameterUpdate() {
     pRequest->pTargetChain = m_pEngineEffectChain;
     pRequest->SetEffectChainParameters.enabled = m_pControlChainEnabled->toBool();
     pRequest->SetEffectChainParameters.mix_mode = mixMode();
-    pRequest->SetEffectChainParameters.mix = m_pControlChainMix->get();
+
+    double mix = m_pControlChainMix->get();
+    // BEGIN CUSTOM MOD (Instant-Pad-FX lock): Unit 4 parameters are frozen;
+    // pad-triggered enable/routing controls are unaffected.
+    if (isLockedInstantFxUnitGroup(m_group)) {
+        static bool s_frozenChainMixInitialized = false;
+        static double s_frozenChainMix = 0.0;
+        if (!s_frozenChainMixInitialized) {
+            s_frozenChainMix = mix;
+            s_frozenChainMixInitialized = true;
+        }
+        mix = s_frozenChainMix;
+    }
+    // END CUSTOM MOD (Instant-Pad-FX lock)
+    pRequest->SetEffectChainParameters.mix = mix;
+
     m_pMessenger->writeRequest(pRequest);
 }
 
@@ -353,6 +368,13 @@ void EffectChain::slotControlClear(double v) {
 }
 
 void EffectChain::slotControlChainSuperParameter(double v, bool force) {
+    // BEGIN CUSTOM MOD (Instant-Pad-FX lock): Unit 4 parameters are frozen;
+    // pad-triggered enable/routing controls are unaffected.
+    if (isLockedInstantFxUnitGroup(m_group)) {
+        return;
+    }
+    // END CUSTOM MOD (Instant-Pad-FX lock)
+
     // qDebug() << debugString() << "slotControlChainSuperParameter" << v;
 
     m_pControlChainSuperParameter->set(v);

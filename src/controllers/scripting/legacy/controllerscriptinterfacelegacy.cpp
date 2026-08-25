@@ -1,6 +1,7 @@
 #include "controllerscriptinterfacelegacy.h"
 
 #include <QStringEncoder>
+#include <cstdlib>
 #include <gsl/pointers>
 
 #include "control/controlobject.h"
@@ -26,6 +27,21 @@ constexpr int kScratchTimerMs = 1;
 constexpr double kAlphaBetaDt = kScratchTimerMs / 1000.0;
 // stop ramping at a rate which doesn't produce any audible output anymore
 constexpr double kBrakeRampToRate = 0.01;
+
+// === CUSTOM MOD (dynamic-jog): CDJ-style relative tick scaling =================
+// Global multiplier applied to every engine.scratchTick() report. Higher =
+// heavier CDJ wheels feel faster; lower = sluggish/resistant feel.
+constexpr double kJogTickSensitivity = 2.5;
+// Progressive flick inertia: a single report above this many RAW ticks gets an
+// extra momentum boost, mimicking a hard vinyl fling on a CDJ platter.
+constexpr double kJogFlingBoostThreshold = 10.0;
+constexpr double kJogFlingBoost = 1.3;
+// SCOPE WARNING: this scaling is intentionally GLOBAL — it applies to EVERY
+// controller script that calls engine.scratchTick() (100+ shipped mappings).
+// Mappings with built-in scratch scaling will feel doubly fast. Tune globally
+// via kJogTickSensitivity below (compile-time; the [Controls], JogSensitivity
+// runtime key only overrides the RateControl pitch-bend path, not this one).
+// =============================================================================
 } // namespace
 
 ControllerScriptInterfaceLegacy::ControllerScriptInterfaceLegacy(
@@ -757,7 +773,12 @@ void ControllerScriptInterfaceLegacy::scratchEnable(int deck,
 
 void ControllerScriptInterfaceLegacy::scratchTick(int deck, int interval) {
     m_lastMovement[deck] = mixxx::Time::elapsed();
-    m_intervalAccumulator[deck] += interval;
+    // === CUSTOM MOD (dynamic-jog): CDJ resistance curve ===
+    double scaledInterval = interval * kJogTickSensitivity;
+    if (std::abs(interval) > kJogFlingBoostThreshold) {
+        scaledInterval *= kJogFlingBoost;
+    }
+    m_intervalAccumulator[deck] += scaledInterval;
 }
 
 void ControllerScriptInterfaceLegacy::scratchProcess(int timerId) {

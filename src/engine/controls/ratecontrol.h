@@ -174,4 +174,6 @@ private:
   double m_tempRateRatio;
   // Speed for temporary rate change
   double m_dRateTempRampChange;
+  // === CUSTOM MOD (dynamic-jog): CDJ-style jog sensitivity, read once at startup ===
+  double m_dJogSensitivity;
 };

@@ -1,6 +1,7 @@
 #include "engine/controls/ratecontrol.h"
 
 #include <QtDebug>
+#include <cmath>
 
 #include "control/controlobject.h"
 #include "control/controlpotmeter.h"
@@ -18,6 +19,11 @@
 namespace {
 constexpr int kRateSensitivityMin = 100;
 constexpr int kRateSensitivityMax = 2500;
+
+// === CUSTOM MOD (dynamic-jog): pitch-bend path sensitivity ====================
+constexpr double kDefaultJogSensitivity = 2.5;
+constexpr double kJogFlingBoostThreshold = 10.0;
+constexpr double kJogFlingBoost = 1.3;
 } // namespace
 
 // Static default values for rate buttons (percents)
@@ -110,7 +116,9 @@ RateControl::RateControl(const QString& group, UserSettingsPointer pConfig)
           m_targetPos(mixxx::audio::FramePos()),
           m_bTempStarted(false),
           m_tempRateRatio(0.0),
-          m_dRateTempRampChange(0.0) {
+          m_dRateTempRampChange(0.0),
+          // === CUSTOM MOD (dynamic-jog): default value; ctor body may override from config ===
+          m_dJogSensitivity(kDefaultJogSensitivity) {
     // Vinyl control COs are only created for main decks
     if (PlayerManager::isDeckGroup(getGroup())) {
         m_pVCEnabled = ControlObject::getControl(
@@ -205,6 +213,13 @@ RateControl::RateControl(const QString& group, UserSettingsPointer pConfig)
     // Enable by default, because it was always scratching before introducing
     // this control.
     m_pScratch2Scratching->set(1.0);
+
+    // === CUSTOM MOD (dynamic-jog): read jog sensitivity once at startup (non-RT path) ===
+    bool ok = false;
+    const double cfgValue = pConfig->getValueString(ConfigKey(QStringLiteral("[Controls]"),
+                                              QStringLiteral("JogSensitivity")))
+                                    .toDouble(&ok);
+    m_dJogSensitivity = (ok && cfgValue > 0.0) ? cfgValue : kDefaultJogSensitivity;
 
     //     // Update Internal Settings
     //     // Set Pitchbend Mode
@@ -374,15 +389,22 @@ double RateControl::getWheelFactor() const {
 }
 
 double RateControl::getJogFactor() const {
-    // FIXME: Sensitivity should be configurable separately?
+    // FIXME: Sensitivity should be configurable separately? (overridable via [Controls], JogSensitivity)
     constexpr double jogSensitivity = 0.1; // Nudges during playback
     double jogValue = m_pJog->get();
+
+    // === CUSTOM MOD (dynamic-jog): CDJ sensitivity + flick inertia ===
+    if (std::fabs(jogValue) > kJogFlingBoostThreshold) {
+        jogValue *= kJogFlingBoost;
+    }
+    jogValue *= m_dJogSensitivity;
 
     // Since m_pJog is an accumulator, reset it since we've used its value.
     if (jogValue != 0.) {
         m_pJog->set(0.);
     }
 
+    // === CUSTOM MOD (dynamic-jog): the Rotary moving-average filter deliberately smooths the boosted nudges ===
     double jogValueFiltered = m_pJogFilter->filter(jogValue);
     double jogFactor = jogValueFiltered * jogSensitivity;
 
