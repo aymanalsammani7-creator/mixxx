@@ -143,7 +143,8 @@ class ControllerScriptInterfaceLegacy : public QObject {
     // === CUSTOM MOD (dynamic-jog): int -> double so scaled CDJ ticks accumulate untruncated ===
     QVarLengthArray<double> m_intervalAccumulator;
     QVarLengthArray<mixxx::Duration> m_lastMovement;
-    QVarLengthArray<double> m_dx, m_rampTo, m_rampFactor;
+    // === CUSTOM MOD (cdj-backspin): m_rampEaseRate holds the eased rate for CDJ-style brake/spinback ease-out ===
+    QVarLengthArray<double> m_dx, m_rampTo, m_rampFactor, m_rampEaseRate;
     QVarLengthArray<bool> m_ramp, m_brakeActive, m_spinbackActive, m_softStartActive;
     QVarLengthArray<AlphaBetaFilter*> m_scratchFilters;
     QHash<int, int> m_scratchTimers;

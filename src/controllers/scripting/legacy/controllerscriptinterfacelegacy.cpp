@@ -67,6 +67,10 @@ ControllerScriptInterfaceLegacy::ControllerScriptInterfaceLegacy(
         m_brakeActive[i] = false;
         m_spinbackActive[i] = false;
         m_softStartActive[i] = false;
+        // === CUSTOM MOD (cdj-backspin): init ramp state so no latent garbage before first scratchEnable ===
+        m_rampTo[i] = 0.0;
+        m_rampFactor[i] = 0.001; // same value scratchEnable() uses
+        m_rampEaseRate[i] = 0.0;
     }
 }
 
@@ -810,7 +814,18 @@ void ControllerScriptInterfaceLegacy::scratchProcess(int timerId) {
 #if SCRATCH_DEBUG_OUTPUT
         qDebug() << "     ramp && !softStart";
 #endif
-        filter->observation(m_rampTo[deck] * m_rampFactor[deck]);
+        if (m_brakeActive[deck] || m_spinbackActive[deck]) {
+            // === CUSTOM MOD (cdj-backspin): CDJ-style ease-out — exponential
+            // decay of the rate toward the ramp target every 1ms tick
+            // (r <- target + (r - target) * decay). Asymptotic, so the final
+            // stop happens at genuinely inaudible rate instead of a hard cut. ===
+            constexpr double kRampEaseDecayPerTick = 0.995; // tau ~= 200 ms
+            m_rampEaseRate[deck] = m_rampTo[deck] +
+                    (m_rampEaseRate[deck] - m_rampTo[deck]) * kRampEaseDecayPerTick;
+            filter->observation(m_rampEaseRate[deck] * kAlphaBetaDt);
+        } else {
+            filter->observation(m_rampTo[deck] * m_rampFactor[deck]);
+        }
         // Once this code path is run, latch so it always runs until reset
         //m_lastMovement[deck] += mixxx::Duration::fromSeconds(1);
     } else if (m_softStartActive[deck]) {
@@ -1007,6 +1022,9 @@ void ControllerScriptInterfaceLegacy::brake(int deck, bool activate, double fact
         filter->init(kAlphaBetaDt, initRate, alphaBrake, betaBrake);
     }
 
+    // === CUSTOM MOD (cdj-backspin): snapshot start rate for exponential ease-out ===
+    m_rampEaseRate[deck] = initRate;
+
     // activate the ramping in scratchProcess()
     m_ramp[deck] = true;
 }
@@ -1098,7 +1116,10 @@ bool ControllerScriptInterfaceLegacy::isSpinbackActive(int deck) {
                         .arg(QString::number(deck)));
         return false;
     }
-    return m_softStartActive[deck];
+    // === CUSTOM MOD (cdj-backspin): regression fix — this returned
+    // m_softStartActive[deck], so scripts querying spinback state got
+    // soft-start state instead; return the actual spinback flag ===
+    return m_spinbackActive[deck];
 }
 
 bool ControllerScriptInterfaceLegacy::isSoftStartActive(int deck) {
