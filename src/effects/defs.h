@@ -63,7 +63,9 @@ inline int standardEffectUnitNumber(const QString& group) {
         ++end;
     }
     bool ok = false;
-    const int num = group.mid(pos, end - pos).toInt(&ok);
+    // CUSTOM MOD: view-based parse (no QString temporary); empty slice fails
+    // conversion via ok.
+    const int num = QStringView{group}.sliced(pos, end - pos).toInt(&ok);
     return ok ? num : -1;
 }
 
