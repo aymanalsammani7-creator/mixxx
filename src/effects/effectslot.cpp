@@ -19,6 +19,19 @@
 #include "moc_effectslot.cpp"
 #include "util/math.h"
 
+// === CUSTOM MOD (padfx-load-bypass): allows the guarded meta paths to run while
+// an effect is being loaded, so freshly loaded locked-unit effects initialize
+// exactly like stock Mixxx; the lock re-engages immediately afterwards. ===
+// Main-thread only (EffectSlot is a main-thread class), so a plain bool is safe.
+namespace {
+bool s_padFxLoadInProgress = false;
+
+struct PadFxLoadGuard {
+    PadFxLoadGuard() { s_padFxLoadInProgress = true; }
+    ~PadFxLoadGuard() { s_padFxLoadInProgress = false; }
+};
+} // namespace
+
 // The maximum number of effect parameters we're going to support.
 constexpr unsigned int kDefaultMaxParameters = 16;
 
@@ -275,6 +288,9 @@ void EffectSlot::loadEffectWithDefaults(const EffectManifestPointer pManifest) {
 void EffectSlot::loadEffectInner(const EffectManifestPointer pManifest,
         EffectPresetPointer pEffectPreset,
         bool adoptMetaknobFromPreset) {
+    // === CUSTOM MOD (padfx-load-bypass): lift the Instant-Pad-FX lock for the
+    // whole load; RAII because of the early return below. ===
+    PadFxLoadGuard padFxLoadGuard;
     if (kEffectDebugOutput) {
         if (pManifest) {
             qDebug() << this << m_group << "loading effect" << pManifest->id();
@@ -572,7 +588,8 @@ double EffectSlot::getMetaParameter() const {
 void EffectSlot::setMetaParameter(double v, bool force) {
     // BEGIN CUSTOM MOD (Instant-Pad-FX lock): Unit 4 parameters are frozen;
     // pad-triggered enable/routing controls are unaffected.
-    if (isLockedInstantFxUnitGroup(m_group)) {
+    // padfx-load-bypass: lifted while loadEffectInner is running.
+    if (!s_padFxLoadInProgress && isLockedInstantFxUnitGroup(m_group)) {
         return;
     }
     // END CUSTOM MOD (Instant-Pad-FX lock)
@@ -586,7 +603,8 @@ void EffectSlot::setMetaParameter(double v, bool force) {
 void EffectSlot::slotEffectMetaParameter(double v, bool force) {
     // BEGIN CUSTOM MOD (Instant-Pad-FX lock): Unit 4 parameters are frozen;
     // pad-triggered enable/routing controls are unaffected.
-    if (isLockedInstantFxUnitGroup(m_group)) {
+    // padfx-load-bypass: lifted while loadEffectInner is running.
+    if (!s_padFxLoadInProgress && isLockedInstantFxUnitGroup(m_group)) {
         return;
     }
     // END CUSTOM MOD (Instant-Pad-FX lock)

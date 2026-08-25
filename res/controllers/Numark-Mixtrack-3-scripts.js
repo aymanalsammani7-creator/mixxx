@@ -42,6 +42,10 @@ const PitchBendOnWheelOff = engine.getSetting("PitchBendOnWheelOff") === true;
 //                              Unit 3 slot 1 (load Reverb/Echo there) into the active deck;
 //                              below center the unit is muted for that deck. The unit is
 //                              armed once automatically on the first knob movement.
+// 5. PAD FX (UNIT 4)         : PAD MODE (hold) + hotcue pads 1-4 = Instant Pad FX on locked
+//                              Unit 4: 1 hold=wash, 2 tap=wash latch, 3 hold=effect gate,
+//                              4 tap=effect gate latch; Instant-FX-off strip button clears
+//                              everything. Load Echo into Unit 4 slot 1 once.
 //
 // Usage: tap WHEEL to toggle scratch mode; hold WHEEL ~half a second to swap the deck
 // layer; the WHEEL LED then reflects the scratch-mode state of the new virtual deck.
@@ -149,6 +153,8 @@ var NumarkMixtrack3 = {
     group: "[Master]",
     // === CUSTOM MOD (ColorFX): set true once Effect Unit 3 has been armed by the filter knob ===
     colorFxUnitArmed: false,
+    // === CUSTOM MOD (padfx): set true once Effect Unit 4 has been armed by a Pad FX button ===
+    padFxUnitArmed: false,
     // === CUSTOM MOD (audit-fix): per-static-group WHEEL press timestamps, immune to SHIFT+TAP swaps between DOWN and UP ===
     wheelDownTimes: {},
     decks: [],
@@ -1511,8 +1517,64 @@ NumarkMixtrack3.WheelMove = function(channel, control, value, status, group) {
     }
 };
 
+// === CUSTOM MOD (padfx): instant performance-pad FX on the C++-locked Effect Unit 4 ===
+// Unit 4 ignores continuous parameter updates from knobs/UI, but enabled/routing toggles still
+// work, so these pads only arm the unit, toggle its channel routing and toggle slot 1.
+NumarkMixtrack3.padFxPad = function(deck, pad, value) {
+    // defensive: only react to button DOWN / UP events
+    if (value !== DOWN && value !== OFF) {
+        return;
+    }
+
+    var fxUnit = "[EffectRack1_EffectUnit4]";
+    var chEnable = "group_[Channel" + deck.decknum + "]_enable";
+    var slotGroup = "[EffectRack1_EffectUnit4_Effect1]";
+
+    // one-time arming of the locked unit
+    if (!NumarkMixtrack3.padFxUnitArmed) {
+        NumarkMixtrack3.padFxUnitArmed = true;
+        engine.setValue(fxUnit, "enabled", 1);
+        if (engine.getValue(slotGroup, "loaded") === 0) {
+            print("PadFX: load Echo into Effect Unit 4 slot 1 (main window, Unit 4 panel) - persists across restarts");
+        }
+    }
+
+    if (pad === 1 && value === DOWN) {
+        // HOLD = echo wash on this deck while held
+        engine.setValue(fxUnit, chEnable, 1);
+        deck.LEDs.hotCue1.onOff(ON);
+    } else if (pad === 1) {
+        engine.setValue(fxUnit, chEnable, 0);
+        deck.LEDs.hotCue1.onOff(OFF);
+    } else if (pad === 2 && value === DOWN) {
+        // TAP = latch echo wash on this deck
+        var cur = engine.getValue(fxUnit, chEnable);
+        engine.setValue(fxUnit, chEnable, cur ? 0 : 1);
+        deck.LEDs.hotCue2.onOff(cur ? OFF : ON);
+    } else if (pad === 3 && value === DOWN) {
+        // HOLD = effect gate (slot 1 enabled) while held
+        engine.setValue(slotGroup, "enabled", 1);
+        deck.LEDs.hotCue3.onOff(ON);
+    } else if (pad === 3) {
+        engine.setValue(slotGroup, "enabled", 0);
+        deck.LEDs.hotCue3.onOff(OFF);
+    } else if (pad === 4 && value === DOWN) {
+        // TAP = latch effect gate (slot 1 enabled)
+        var slotOn = engine.getValue(slotGroup, "enabled");
+        engine.setValue(slotGroup, "enabled", slotOn ? 0 : 1);
+        deck.LEDs.hotCue4.onOff(slotOn ? OFF : ON);
+    }
+};
+
 NumarkMixtrack3.HotCueButton = function(channel, control, value, status, group) {
     var deck = NumarkMixtrack3.deckFromGroup(group);
+
+    // === CUSTOM MOD (padfx): while PAD MODE is held, hotcue pads 1-4 trigger Unit 4 pad FX ===
+    if (deck.PADMode) {
+        NumarkMixtrack3.padFxPad(deck, control - 0x1B + 1, value);
+        return;
+    }
+
     var hotCue = parseInt(control - leds.hotCue1 + 1);
 
     if (deck.shiftKey) {
@@ -1728,6 +1790,16 @@ NumarkMixtrack3.InstantFXOff = function(channel, control, value, status, group) 
     for (var i = 0, n = deck.InstantFX.length; i < n; i++) {
         var buttonNum = deck.InstantFX[i];
         engine.setValue("[EffectRack1_EffectUnit" + deck.decknum + "_Effect" + buttonNum + "]", "enabled", false);
+    }
+
+    // === CUSTOM MOD (padfx): also kill any latched/held Unit 4 pad-FX washes and reset their pad LEDs ===
+    for (var u = 1; u <= 4; u++) {
+        engine.setValue("[EffectRack1_EffectUnit4]", "group_[Channel" + u + "]_enable", 0);
+        var padDeck = NumarkMixtrack3.decks["D" + u];
+        if (padDeck && padDeck.LEDs) {
+            padDeck.LEDs["hotCue1"].onOff(OFF);
+            padDeck.LEDs["hotCue2"].onOff(OFF);
+        }
     }
 };
 
