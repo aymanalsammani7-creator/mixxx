@@ -1,0 +1,184 @@
+<!-- CUSTOM MOD (rekordbox-skin): Rekordbox-style layout for local Mixxx build -->
+<!--
+  Rekordbox-style Pad FX panel for EffectUnit4 (performance pad FX).
+  Effect enable buttons + per-deck routing + EDIT mode toggle.
+  [Controls],PadFxEditMode belongs to parallel C++ work; binding a missing CO
+  is harmless (connection is skipped until the control lands).
+  Variables:
+    ChanNum : deck whose label is shown (1 or 2)
+-->
+<Template>
+  <WidgetGroup>
+    <ObjectName>RbPadFxPanel</ObjectName>
+    <Layout>vertical</Layout>
+    <SizePolicy>me,min</SizePolicy>
+    <Children>
+
+      <Label>
+        <ObjectName>RbPadFxHeader</ObjectName>
+        <Size>me,16f</Size>
+        <Text>PAD FX D&#8202;<Variable name="ChanNum"/></Text>
+      </Label>
+
+      <WidgetGroup><!-- instant pad FX toggles -->
+        <Layout>horizontal</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+
+          <PushButton><!-- Unit4 Effect1 -->
+            <TooltipId>EffectSlot_enabled</TooltipId>
+            <ObjectName>RbPadButton</ObjectName>
+            <Size>52f,24f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>SPACE</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>SPACE</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[EffectRack1_EffectUnit4_Effect1],enabled</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+
+          <PushButton><!-- Unit4 Effect2 -->
+            <TooltipId>EffectSlot_enabled</TooltipId>
+            <ObjectName>RbPadButton</ObjectName>
+            <Size>52f,24f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>REVERB</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>REVERB</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[EffectRack1_EffectUnit4_Effect2],enabled</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+
+          <PushButton><!-- Unit4 Effect3 -->
+            <TooltipId>EffectSlot_enabled</TooltipId>
+            <ObjectName>RbPadButton</ObjectName>
+            <Size>52f,24f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>FLANGER</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>FLANGER</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[EffectRack1_EffectUnit4_Effect3],enabled</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+
+        </Children>
+      </WidgetGroup>
+
+      <WidgetGroup><!-- routing + edit mode -->
+        <Layout>horizontal</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+
+          <PushButton><!-- route unit 4 to deck 1 -->
+            <TooltipId>EffectUnit_group_enabled</TooltipId>
+            <ObjectName>RbPadRouteButton</ObjectName>
+            <Size>36f,22f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>D1</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>D1</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[EffectRack1_EffectUnit4],group_[Channel1]_enable</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+
+          <PushButton><!-- route unit 4 to deck 2 -->
+            <TooltipId>EffectUnit_group_enabled</TooltipId>
+            <ObjectName>RbPadRouteButton</ObjectName>
+            <Size>36f,22f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>D2</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>D2</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[EffectRack1_EffectUnit4],group_[Channel2]_enable</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+
+          <PushButton><!-- pad FX edit mode (CO from parallel C++ work) -->
+            <ObjectName>RbPadEditButton</ObjectName>
+            <Size>44f,22f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>EDIT</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>EDIT</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[Controls],PadFxEditMode</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+
+        </Children>
+      </WidgetGroup>
+
+    </Children>
+  </WidgetGroup>
+</Template>

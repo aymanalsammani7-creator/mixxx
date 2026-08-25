@@ -5,6 +5,7 @@
 #include <QSet>
 
 #include "control/controlpotmeter.h"
+#include "control/controlpushbutton.h"
 #include "effects/backends/effectsbackendmanager.h"
 #include "effects/presets/effectchainpresetmanager.h"
 #include "engine/channelhandle.h"
@@ -118,6 +119,9 @@ class EffectsManager {
     // TODO: replace these with effect parameters that are hidden by default
     ControlPotmeter m_loEqFreq;
     ControlPotmeter m_hiEqFreq;
+
+    // === CUSTOM MOD (padfx-edit): ON = Unit-4 pad-FX depths editable; OFF = frozen for performance ===
+    std::unique_ptr<ControlPushButton> m_pPadFxEditMode;
 
     // This is set true when setup() is run. Then, the initial decks (their EQ
     // and QuickEffect chains) have been initialized, either with defaults or the

@@ -37,15 +37,19 @@ const PitchBendOnWheelOff = engine.getSetting("PitchBendOnWheelOff") === true;
 // 3. LAYER-FIX               : PADLoopButton, toggleJogMode (slip) and PFLButton
 //                              (quantize) now resolve the virtual deck via deckFromGroup
 //                              and act on deck.group, so they keep working after a layer swap.
-// 4. COLOR FX FILTER KNOB    : unshifted filter knob still drives the Quick FX filter and,
-//                              above knob center (value > 64), additionally blends Effect
-//                              Unit 3 slot 1 (load Reverb/Echo there) into the active deck;
-//                              below center the unit is muted for that deck. The unit is
-//                              armed once automatically on the first knob movement.
-// 5. PAD FX (UNIT 4)         : PAD MODE (hold) + hotcue pads 1-4 = Instant Pad FX on locked
-//                              Unit 4: 1 hold=wash, 2 tap=wash latch, 3 hold=effect gate,
-//                              4 tap=effect gate latch; Instant-FX-off strip button clears
-//                              everything. Load Echo into Unit 4 slot 1 once.
+// 4. COLOR FX / FILTER KNOB (v2-cfx): unshifted filter knob drives ONLY the per-deck quick
+//                              effect super knob ([QuickEffectRack1_[ChannelN]] super1).
+//                              Stock default = Filter loaded => stock Rekordbox filter behavior;
+//                              load any other CFX via the skin's CFX selector => Rekordbox
+//                              USER-mode color FX on that deck. (The old Effect Unit 3 blend
+//                              hack is fully removed.)
+// 5. PAD FX (UNIT 4, v2-padfx): PAD MODE (hold) + hotcue pads = Rekordbox-style 3-slot stack:
+//                              pads 1-3 HOLD = momentary gates of Unit 4 slots 1-3 (LED while
+//                              held), pad 4 TAP = toggle [Controls],PadFxEditMode (ON = skin
+//                              knobs can shape Unit-4 depths, OFF = frozen; LED mirrors state).
+//                              Per-deck wash routing is owned by the skin's Pad FX enable
+//                              buttons. Instant-FX-off strip button clears all Unit-4 washes,
+//                              resets the pad LEDs and exits edit mode.
 //
 // Usage: tap WHEEL to toggle scratch mode; hold WHEEL ~half a second to swap the deck
 // layer; the WHEEL LED then reflects the scratch-mode state of the new virtual deck.
@@ -151,9 +155,7 @@ var loopsize = [2, 4, 8, 16, 0.125, 0.25, 0.5, 1];
 
 var NumarkMixtrack3 = {
     group: "[Master]",
-    // === CUSTOM MOD (ColorFX): set true once Effect Unit 3 has been armed by the filter knob ===
-    colorFxUnitArmed: false,
-    // === CUSTOM MOD (padfx): set true once Effect Unit 4 has been armed by a Pad FX button ===
+    // === CUSTOM MOD (v2-padfx): set true once Effect Unit 4 has been armed by a Pad FX button ===
     padFxUnitArmed: false,
     // === CUSTOM MOD (audit-fix): per-static-group WHEEL press timestamps, immune to SHIFT+TAP swaps between DOWN and UP ===
     wheelDownTimes: {},
@@ -1517,9 +1519,11 @@ NumarkMixtrack3.WheelMove = function(channel, control, value, status, group) {
     }
 };
 
-// === CUSTOM MOD (padfx): instant performance-pad FX on the C++-locked Effect Unit 4 ===
-// Unit 4 ignores continuous parameter updates from knobs/UI, but enabled/routing toggles still
-// work, so these pads only arm the unit, toggle its channel routing and toggle slot 1.
+// === CUSTOM MOD (v2-padfx): Rekordbox-style 3-slot instant Pad FX stack on the C++-locked Effect Unit 4 ===
+// Unit 4 ignores continuous parameter updates from knobs/UI, but enabled/routing toggles still work,
+// so pads 1-3 gate the three effect slots directly. Wash routing (group_[ChannelN]_enable) is owned
+// by the skin's per-deck Pad FX enable buttons; pad 4 toggles [Controls],PadFxEditMode (the EDIT
+// button: ON = Unit-4 depths editable from the skin, OFF = frozen; a missing CO reads 0 = frozen).
 NumarkMixtrack3.padFxPad = function(deck, pad, value) {
     // defensive: only react to button DOWN / UP events
     if (value !== DOWN && value !== OFF) {
@@ -1527,49 +1531,39 @@ NumarkMixtrack3.padFxPad = function(deck, pad, value) {
     }
 
     var fxUnit = "[EffectRack1_EffectUnit4]";
-    var chEnable = "group_[Channel" + deck.decknum + "]_enable";
-    var slotGroup = "[EffectRack1_EffectUnit4_Effect1]";
+    var slotGroups = {
+        1: "[EffectRack1_EffectUnit4_Effect1]",
+        2: "[EffectRack1_EffectUnit4_Effect2]",
+        3: "[EffectRack1_EffectUnit4_Effect3]"
+    };
 
     // one-time arming of the locked unit
     if (!NumarkMixtrack3.padFxUnitArmed) {
         NumarkMixtrack3.padFxUnitArmed = true;
         engine.setValue(fxUnit, "enabled", 1);
-        if (engine.getValue(slotGroup, "loaded") === 0) {
-            print("PadFX: load Echo into Effect Unit 4 slot 1 (main window, Unit 4 panel) - persists across restarts");
+        if (engine.getValue(slotGroups[1], "loaded") === 0) {
+            print("PadFX: load Space/Reverb/Flanger into Unit 4 slots 1-3 (skin Pad FX panel or main window)");
         }
     }
 
-    if (pad === 1 && value === DOWN) {
-        // HOLD = echo wash on this deck while held
-        engine.setValue(fxUnit, chEnable, 1);
-        deck.LEDs.hotCue1.onOff(ON);
-    } else if (pad === 1) {
-        engine.setValue(fxUnit, chEnable, 0);
-        deck.LEDs.hotCue1.onOff(OFF);
-    } else if (pad === 2 && value === DOWN) {
-        // TAP = latch echo wash on this deck
-        var cur = engine.getValue(fxUnit, chEnable);
-        engine.setValue(fxUnit, chEnable, cur ? 0 : 1);
-        deck.LEDs.hotCue2.onOff(cur ? OFF : ON);
-    } else if (pad === 3 && value === DOWN) {
-        // HOLD = effect gate (slot 1 enabled) while held
-        engine.setValue(slotGroup, "enabled", 1);
-        deck.LEDs.hotCue3.onOff(ON);
-    } else if (pad === 3) {
-        engine.setValue(slotGroup, "enabled", 0);
-        deck.LEDs.hotCue3.onOff(OFF);
+    if (pad >= 1 && pad <= 3) {
+        // HOLD = momentary slot gate: the effect runs only while the pad is held
+        engine.setValue(slotGroups[pad], "enabled", value === DOWN ? 1 : 0);
+        deck.LEDs["hotCue" + pad].onOff(value === DOWN ? ON : OFF);
     } else if (pad === 4 && value === DOWN) {
-        // TAP = latch effect gate (slot 1 enabled)
-        var slotOn = engine.getValue(slotGroup, "enabled");
-        engine.setValue(slotGroup, "enabled", slotOn ? 0 : 1);
-        deck.LEDs.hotCue4.onOff(slotOn ? OFF : ON);
+        // TAP = toggle Pad-FX edit mode
+        var editMode = engine.getValue("[Controls]", "PadFxEditMode");
+        engine.setValue("[Controls]", "PadFxEditMode", editMode ? 0 : 1);
+        print("PadFX: edit mode " + (editMode ? "OFF - Unit 4 depths frozen" : "ON - Unit 4 depths editable"));
+        deck.LEDs.hotCue4.onOff(editMode ? OFF : ON);
     }
 };
 
 NumarkMixtrack3.HotCueButton = function(channel, control, value, status, group) {
     var deck = NumarkMixtrack3.deckFromGroup(group);
 
-    // === CUSTOM MOD (padfx): while PAD MODE is held, hotcue pads 1-4 trigger Unit 4 pad FX ===
+    // === CUSTOM MOD (v2-padfx): while PAD MODE is held, hotcue pads drive the Unit 4 Pad-FX stack
+    // (pads 1-3 = momentary slot gates, pad 4 = edit-mode toggle) ===
     if (deck.PADMode) {
         NumarkMixtrack3.padFxPad(deck, control - 0x1B + 1, value);
         return;
@@ -1792,15 +1786,18 @@ NumarkMixtrack3.InstantFXOff = function(channel, control, value, status, group) 
         engine.setValue("[EffectRack1_EffectUnit" + deck.decknum + "_Effect" + buttonNum + "]", "enabled", false);
     }
 
-    // === CUSTOM MOD (padfx): also kill any latched/held Unit 4 pad-FX washes and reset their pad LEDs ===
+    // === CUSTOM MOD (v2-padfx): also kill any held Unit 4 pad-FX washes and reset their pad LEDs ===
     for (var u = 1; u <= 4; u++) {
         engine.setValue("[EffectRack1_EffectUnit4]", "group_[Channel" + u + "]_enable", 0);
         var padDeck = NumarkMixtrack3.decks["D" + u];
         if (padDeck && padDeck.LEDs) {
             padDeck.LEDs["hotCue1"].onOff(OFF);
             padDeck.LEDs["hotCue2"].onOff(OFF);
+            padDeck.LEDs["hotCue3"].onOff(OFF);
         }
     }
+    // === CUSTOM MOD (v2-padfx): exit Pad-FX edit mode so the skin's Unit-4 depth knobs freeze again ===
+    engine.setValue("[Controls]", "PadFxEditMode", 0);
 };
 
 NumarkMixtrack3.FXButton = function(channel, control, value, status, group) {
@@ -2029,27 +2026,11 @@ NumarkMixtrack3.FilterKnob = function(channel, control, value, status, group) {
             parameterSoftTakeOver("[Channel" + decknum + "]", "pregain", value);
         }
     } else {
+        // === CUSTOM MOD (v2-cfx): the old Effect Unit 3 blend hack is superseded by per-deck
+        // QuickEffect CFX selection from the skin. The knob drives the per-deck quick effect
+        // super knob only: stock default = Filter (stock Rekordbox behavior); any CFX loaded
+        // via the skin's CFX selector = Rekordbox USER-mode color FX on this deck alone.
         parameterSoftTakeOver("[QuickEffectRack1_[Channel" + decknum + "]]", "super1", value);
-
-        // === CUSTOM MOD (ColorFX): filter + Space reverb blend above knob center ===
-        var colorFxUnit = "[EffectRack1_EffectUnit3]";
-        if (!NumarkMixtrack3.colorFxUnitArmed) {
-            // one-time arming: switch Effect Unit 3 on so slot 1 can receive meta
-            engine.setValue(colorFxUnit, "enabled", 1);
-            NumarkMixtrack3.colorFxUnitArmed = true;
-            if (engine.getValue("[EffectRack1_EffectUnit3_Effect1]", "loaded") === 0) {
-                print("ColorFX: load Reverb/Echo into Effect Unit 3 slot 1 (persists across restarts)");
-            }
-        }
-        // Note: Effect1 meta is shared between both physical decks (last-mover wins);
-        // the group enable targeting follows the active layer because decknum comes
-        // from the deckFromGroup resolution of this side's QuickEffectRack group.
-        if (value > 64) {
-            engine.setValue("[EffectRack1_EffectUnit3_Effect1]", "meta", (value - 64) / 63);
-            engine.setValue(colorFxUnit, "group_[Channel" + decknum + "]_enable", 1);
-        } else {
-            engine.setValue(colorFxUnit, "group_[Channel" + decknum + "]_enable", 0);
-        }
     }
 };
 

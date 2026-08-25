@@ -1,0 +1,237 @@
+<!-- CUSTOM MOD (rekordbox-skin): Rekordbox-style layout for local Mixxx build -->
+<!--
+  Compact Rekordbox-style Beat FX rack panel for one effect unit.
+  Adapted from LateNight's fx/unit.xml + fx/slot_controls.xml mechanism
+  (fixed "collapsed" layout, no expand/collapse, no singletons).
+  Variables:
+    FxUnit : 1..4
+-->
+<Template>
+  <SetVariable name="FxUnitGroup">[EffectRack1_EffectUnit<Variable name="FxUnit"/>]</SetVariable>
+
+  <WidgetGroup>
+    <ObjectName>RbFxUnitPanel</ObjectName>
+    <Layout>vertical</Layout>
+    <SizePolicy>me,min</SizePolicy>
+    <Children>
+
+      <Label>
+        <ObjectName>RbFxUnitHeader</ObjectName>
+        <Size>me,18f</Size>
+        <Text>FX&#8202;<Variable name="FxUnit"/></Text>
+      </Label>
+
+      <!-- Effect slots 1..3: enable toggle, meta knob, selector -->
+      <WidgetGroup>
+        <Layout>vertical</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+
+          <WidgetGroup><!-- Slot 1 -->
+            <Layout>horizontal</Layout>
+            <SizePolicy>me,min</SizePolicy>
+            <Children>
+              <PushButton>
+                <TooltipId>EffectSlot_enabled</TooltipId>
+                <ObjectName>RbFxToggleButton</ObjectName>
+                <Size>34f,20f</Size>
+                <NumberStates>2</NumberStates>
+                <RightClickIsPushButton>false</RightClickIsPushButton>
+                <State>
+                  <Number>0</Number>
+                  <Text>&#160;</Text>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+                </State>
+                <State>
+                  <Number>1</Number>
+                  <Text>ON</Text>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+                </State>
+                <Connection>
+                  <ConfigKey><Variable name="FxUnitGroup"/>_Effect1,enabled</ConfigKey>
+                  <ButtonState>LeftButton</ButtonState>
+                </Connection>
+              </PushButton>
+              <KnobComposed>
+                <TooltipId>EffectSlot_metaknob</TooltipId>
+                <Size>30f,26f</Size>
+                <Knob>skins:Rekordbox/graphics/knobs/knob_indicator_small_green.svg</Knob>
+                <BackPath>skins:Rekordbox/graphics/knobs/knob_bg_small.svg</BackPath>
+                <MinAngle>-130</MinAngle>
+                <MaxAngle>130</MaxAngle>
+                <ArcRadius>10.0</ArcRadius>
+                <ArcUnipolar>true</ArcUnipolar>
+                <ArcColor>#00a0e9</ArcColor>
+                <ArcThickness>2</ArcThickness>
+                <Connection>
+                  <ConfigKey><Variable name="FxUnitGroup"/>_Effect1,meta</ConfigKey>
+                </Connection>
+              </KnobComposed>
+              <EffectSelector>
+                <MinimumSize>90,20</MinimumSize>
+                <MaximumSize>,20</MaximumSize>
+                <SizePolicy>me,f</SizePolicy>
+                <EffectRack>1</EffectRack>
+                <EffectUnit><Variable name="FxUnit"/></EffectUnit>
+                <Effect>1</Effect>
+              </EffectSelector>
+            </Children>
+          </WidgetGroup>
+
+          <WidgetGroup><!-- Slot 2 -->
+            <Layout>horizontal</Layout>
+            <SizePolicy>me,min</SizePolicy>
+            <Children>
+              <PushButton>
+                <TooltipId>EffectSlot_enabled</TooltipId>
+                <ObjectName>RbFxToggleButton</ObjectName>
+                <Size>34f,20f</Size>
+                <NumberStates>2</NumberStates>
+                <RightClickIsPushButton>false</RightClickIsPushButton>
+                <State>
+                  <Number>0</Number>
+                  <Text>&#160;</Text>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+                </State>
+                <State>
+                  <Number>1</Number>
+                  <Text>ON</Text>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+                </State>
+                <Connection>
+                  <ConfigKey><Variable name="FxUnitGroup"/>_Effect2,enabled</ConfigKey>
+                  <ButtonState>LeftButton</ButtonState>
+                </Connection>
+              </PushButton>
+              <KnobComposed>
+                <TooltipId>EffectSlot_metaknob</TooltipId>
+                <Size>30f,26f</Size>
+                <Knob>skins:Rekordbox/graphics/knobs/knob_indicator_small_green.svg</Knob>
+                <BackPath>skins:Rekordbox/graphics/knobs/knob_bg_small.svg</BackPath>
+                <MinAngle>-130</MinAngle>
+                <MaxAngle>130</MaxAngle>
+                <ArcRadius>10.0</ArcRadius>
+                <ArcUnipolar>true</ArcUnipolar>
+                <ArcColor>#00a0e9</ArcColor>
+                <ArcThickness>2</ArcThickness>
+                <Connection>
+                  <ConfigKey><Variable name="FxUnitGroup"/>_Effect2,meta</ConfigKey>
+                </Connection>
+              </KnobComposed>
+              <EffectSelector>
+                <MinimumSize>90,20</MinimumSize>
+                <MaximumSize>,20</MaximumSize>
+                <SizePolicy>me,f</SizePolicy>
+                <EffectRack>1</EffectRack>
+                <EffectUnit><Variable name="FxUnit"/></EffectUnit>
+                <Effect>2</Effect>
+              </EffectSelector>
+            </Children>
+          </WidgetGroup>
+
+          <WidgetGroup><!-- Slot 3 -->
+            <Layout>horizontal</Layout>
+            <SizePolicy>me,min</SizePolicy>
+            <Children>
+              <PushButton>
+                <TooltipId>EffectSlot_enabled</TooltipId>
+                <ObjectName>RbFxToggleButton</ObjectName>
+                <Size>34f,20f</Size>
+                <NumberStates>2</NumberStates>
+                <RightClickIsPushButton>false</RightClickIsPushButton>
+                <State>
+                  <Number>0</Number>
+                  <Text>&#160;</Text>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+                </State>
+                <State>
+                  <Number>1</Number>
+                  <Text>ON</Text>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+                </State>
+                <Connection>
+                  <ConfigKey><Variable name="FxUnitGroup"/>_Effect3,enabled</ConfigKey>
+                  <ButtonState>LeftButton</ButtonState>
+                </Connection>
+              </PushButton>
+              <KnobComposed>
+                <TooltipId>EffectSlot_metaknob</TooltipId>
+                <Size>30f,26f</Size>
+                <Knob>skins:Rekordbox/graphics/knobs/knob_indicator_small_green.svg</Knob>
+                <BackPath>skins:Rekordbox/graphics/knobs/knob_bg_small.svg</BackPath>
+                <MinAngle>-130</MinAngle>
+                <MaxAngle>130</MaxAngle>
+                <ArcRadius>10.0</ArcRadius>
+                <ArcUnipolar>true</ArcUnipolar>
+                <ArcColor>#00a0e9</ArcColor>
+                <ArcThickness>2</ArcThickness>
+                <Connection>
+                  <ConfigKey><Variable name="FxUnitGroup"/>_Effect3,meta</ConfigKey>
+                </Connection>
+              </KnobComposed>
+              <EffectSelector>
+                <MinimumSize>90,20</MinimumSize>
+                <MaximumSize>,20</MaximumSize>
+                <SizePolicy>me,f</SizePolicy>
+                <EffectRack>1</EffectRack>
+                <EffectUnit><Variable name="FxUnit"/></EffectUnit>
+                <Effect>3</Effect>
+              </EffectSelector>
+            </Children>
+          </WidgetGroup>
+
+        </Children>
+      </WidgetGroup>
+
+      <!-- Unit-level controls: dry/wet, super, chain preset -->
+      <WidgetGroup>
+        <Layout>horizontal</Layout>
+        <SizePolicy>me,min</SizePolicy>
+        <Children>
+          <KnobComposed>
+            <TooltipId>EffectUnit_mix</TooltipId>
+            <Size>30f,26f</Size>
+            <Knob>skins:Rekordbox/graphics/knobs/knob_indicator_small_red.svg</Knob>
+            <BackPath>skins:Rekordbox/graphics/knobs/knob_bg_small.svg</BackPath>
+            <MinAngle>-130</MinAngle>
+            <MaxAngle>130</MaxAngle>
+            <ArcRadius>10.0</ArcRadius>
+            <ArcUnipolar>true</ArcUnipolar>
+            <ArcColor>#a00000</ArcColor>
+            <ArcThickness>2</ArcThickness>
+            <Connection>
+              <ConfigKey><Variable name="FxUnitGroup"/>,mix</ConfigKey>
+            </Connection>
+          </KnobComposed>
+          <KnobComposed>
+            <TooltipId>EffectUnit_super1</TooltipId>
+            <Size>30f,26f</Size>
+            <Knob>skins:Rekordbox/graphics/knobs/knob_indicator_small_green.svg</Knob>
+            <BackPath>skins:Rekordbox/graphics/knobs/knob_bg_small.svg</BackPath>
+            <MinAngle>-130</MinAngle>
+            <MaxAngle>130</MaxAngle>
+            <ArcRadius>10.0</ArcRadius>
+            <ArcUnipolar>true</ArcUnipolar>
+            <ArcColor>#00a0e9</ArcColor>
+            <ArcThickness>2</ArcThickness>
+            <Connection>
+              <ConfigKey><Variable name="FxUnitGroup"/>,super1</ConfigKey>
+            </Connection>
+          </KnobComposed>
+          <EffectChainPresetButton>
+            <EffectUnit><Variable name="FxUnit"/></EffectUnit>
+            <Size>60f,20f</Size>
+            <ObjectName>RbChainPreset</ObjectName>
+          </EffectChainPresetButton>
+        </Children>
+      </WidgetGroup>
+
+    </Children>
+  </WidgetGroup>
+</Template>

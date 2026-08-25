@@ -19,6 +19,7 @@
 #include "effects/backends/builtin/autogaincontroleffect.h"
 #include "effects/backends/builtin/autopaneffect.h"
 #include "effects/backends/builtin/compressoreffect.h"
+#include "effects/backends/builtin/gatecompeffect.h"
 #include "effects/backends/builtin/distortioneffect.h"
 #include "effects/backends/builtin/echoeffect.h"
 #include "effects/backends/builtin/glitcheffect.h"
@@ -26,6 +27,7 @@
 #include "effects/backends/builtin/loudnesscontoureffect.h"
 #include "effects/backends/builtin/metronomeeffect.h"
 #include "effects/backends/builtin/phasereffect.h"
+#include "effects/backends/builtin/sweepeffect.h"
 #ifdef __RUBBERBAND__
 #include "effects/backends/builtin/pitchshifteffect.h"
 #endif
@@ -68,8 +70,11 @@ BuiltInBackend::BuiltInBackend() {
     registerEffect<DistortionEffect>();
     registerEffect<GlitchEffect>();
     registerEffect<CompressorEffect>();
+    registerEffect<GateCompEffect>();
     registerEffect<AutoGainControlEffect>();
     registerEffect<GainEffect>();
+    // CUSTOM MOD (rekordbox-cfx): Sound Color FX processors
+    registerEffect<SweepEffect>();
 }
 
 std::unique_ptr<EffectProcessor> BuiltInBackend::createProcessor(

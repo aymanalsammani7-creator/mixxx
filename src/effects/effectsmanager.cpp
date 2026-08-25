@@ -31,6 +31,11 @@ EffectsManager::EffectsManager(
           m_initializedFromEffectsXml(false) {
     qRegisterMetaType<EffectChainMixMode>("EffectChainMixMode");
 
+    // === CUSTOM MOD (padfx-edit): ON = Unit-4 pad-FX depths editable; OFF = frozen for performance ===
+    m_pPadFxEditMode = std::make_unique<ControlPushButton>(
+            ConfigKey(QStringLiteral("[Controls]"), QStringLiteral("PadFxEditMode")));
+    m_pPadFxEditMode->setButtonMode(mixxx::control::ButtonMode::Toggle);
+
     m_pBackendManager = EffectsBackendManagerPointer(new EffectsBackendManager());
 
     auto [requestPipe, responsePipe] = makeTwoWayMessagePipe<EffectsRequest*,

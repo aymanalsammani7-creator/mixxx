@@ -589,7 +589,8 @@ void EffectSlot::setMetaParameter(double v, bool force) {
     // BEGIN CUSTOM MOD (Instant-Pad-FX lock): Unit 4 parameters are frozen;
     // pad-triggered enable/routing controls are unaffected.
     // padfx-load-bypass: lifted while loadEffectInner is running.
-    if (!s_padFxLoadInProgress && isLockedInstantFxUnitGroup(m_group)) {
+    // padfx-edit: lifted while "[Controls], PadFxEditMode" is ON.
+    if (!s_padFxLoadInProgress && !padFxEditModeActive() && isLockedInstantFxUnitGroup(m_group)) {
         return;
     }
     // END CUSTOM MOD (Instant-Pad-FX lock)
@@ -604,7 +605,8 @@ void EffectSlot::slotEffectMetaParameter(double v, bool force) {
     // BEGIN CUSTOM MOD (Instant-Pad-FX lock): Unit 4 parameters are frozen;
     // pad-triggered enable/routing controls are unaffected.
     // padfx-load-bypass: lifted while loadEffectInner is running.
-    if (!s_padFxLoadInProgress && isLockedInstantFxUnitGroup(m_group)) {
+    // padfx-edit: lifted while "[Controls], PadFxEditMode" is ON.
+    if (!s_padFxLoadInProgress && !padFxEditModeActive() && isLockedInstantFxUnitGroup(m_group)) {
         return;
     }
     // END CUSTOM MOD (Instant-Pad-FX lock)

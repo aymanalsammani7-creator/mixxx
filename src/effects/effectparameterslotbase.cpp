@@ -63,7 +63,8 @@ void EffectParameterSlotBase::onEffectMetaParameterChanged(double parameter, boo
 void EffectParameterSlotBase::slotValueChanged(double v) {
     // BEGIN CUSTOM MOD (Instant-Pad-FX lock): Unit 4 parameters are frozen;
     // pad-triggered enable/routing controls are unaffected.
-    if (isLockedInstantFxUnitGroup(m_group)) {
+    // padfx-edit: lifted while "[Controls], PadFxEditMode" is ON.
+    if (!padFxEditModeActive() && isLockedInstantFxUnitGroup(m_group)) {
         return;
     }
     // END CUSTOM MOD (Instant-Pad-FX lock)

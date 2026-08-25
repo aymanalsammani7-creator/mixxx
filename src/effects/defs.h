@@ -5,6 +5,7 @@
 #include <array>
 #include <memory>
 
+#include "control/controlproxy.h"
 #include "engine/channelhandle.h"
 #include "util/compatibility/qhash.h"
 
@@ -81,6 +82,17 @@ constexpr int kLockedInstantFxPadUnit = 4;
 
 inline bool isLockedInstantFxUnitGroup(const QString& group) {
     return standardEffectUnitNumber(group) == kLockedInstantFxPadUnit;
+}
+
+// === CUSTOM MOD (padfx-edit): ON = Unit-4 pad-FX depths editable; OFF = frozen for performance ===
+/// Reader-only accessor for "[Controls], PadFxEditMode". The ControlObject
+/// itself is created by EffectsManager; a missing CO simply reads 0, so the
+/// performance lock behaves exactly as before when edit mode was never set up.
+inline bool padFxEditModeActive() {
+    // function-local static: single instance, lazy-initialized on first
+    // (main-thread) call; ControlProxy does not create the CO.
+    static ControlProxy s_mode(QStringLiteral("[Controls]"), QStringLiteral("PadFxEditMode"));
+    return s_mode.get() > 0.0;
 }
 /// ===========================================================================
 // END CUSTOM MOD (Instant-Pad-FX lock)

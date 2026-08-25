@@ -1,0 +1,76 @@
+/* CUSTOM MOD (rekordbox-skin): Rekordbox-style layout for local Mixxx build
+   Minimal dark Rekordbox-ish stylesheet.
+   Backgrounds #1a1a1a, white labels, blue accent #00a0e9.
+   Button states are drawn by graphics/btn.svg and graphics/btn_active.svg,
+   referenced from skin XML <State> entries, not from here. */
+
+WWidget {
+  background-color: #1a1a1a;
+}
+
+WLabel {
+  color: #ffffff;
+  background-color: transparent;
+  font-size: 11px;
+}
+
+#RbFxUnitHeader,
+#RbCfxHeader,
+#RbDeckTitle,
+#RbPadFxHeader {
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+#RbMixerChanLabel {
+  color: #ffffff;
+  font-size: 10px;
+}
+
+WPushButton {
+  color: #ffffff;
+  background-color: transparent;
+  border: none;
+  font-size: 10px;
+}
+
+#RbPlayButton,
+#RbCueButton,
+#RbSyncButton {
+  font-size: 11px;
+}
+
+#RbHotcueButton {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+#RbFxToggleButton,
+#RbCfxButton,
+#RbCfxGate,
+#RbPadButton,
+#RbPadRouteButton,
+#RbPadEditButton,
+#RbRateReset,
+#RbCueHeadButton {
+  color: #e8e8e8;
+}
+
+WEffectSelector {
+  background-color: #262626;
+  color: #ffffff;
+  border: 1px solid #3c3c3c;
+  font-size: 10px;
+}
+
+WEffectChainPresetButton {
+  background-color: #262626;
+  color: #ffffff;
+  border: 1px solid #3c3c3c;
+  font-size: 10px;
+}
+
+WSplitter::handle {
+  background-color: #101010;
+}

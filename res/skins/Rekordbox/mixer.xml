@@ -1,0 +1,148 @@
+<!-- CUSTOM MOD (rekordbox-skin): Rekordbox-style layout for local Mixxx build -->
+<!--
+  Rekordbox-style 4-channel center mixer + master section.
+  Channel strip adapted from LateNight's mixer/channel_left.xml +
+  quick_effect_knob_left.xml (plain KnobComposed bound to the EQ chain COs).
+  Variables:
+    ChanNum : 1..4
+-->
+<Template>
+  <SetVariable name="Group">[Channel<Variable name="ChanNum"/>]</SetVariable>
+  <SetVariable name="EqEffect">[EqualizerRack1_<Variable name="Group"/>_Effect1]</SetVariable>
+  <SetVariable name="QuickEffectRack">[QuickEffectRack1_<Variable name="Group"/>]</SetVariable>
+
+  <WidgetGroup>
+    <ObjectName>RbMixerChannel</ObjectName>
+    <Layout>vertical</Layout>
+    <SizePolicy>min,min</SizePolicy>
+    <Children>
+
+      <Label>
+        <ObjectName>RbMixerChanLabel</ObjectName>
+        <Size>me,14f</Size>
+        <Text>CH&#8202;<Variable name="ChanNum"/></Text>
+      </Label>
+
+      <WidgetGroup><!-- knobs column -->
+        <Layout>vertical</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+
+          <KnobComposed><!-- HIGH -->
+            <TooltipId>filterHigh</TooltipId>
+            <Size>40f,32f</Size>
+            <Knob>skins:Rekordbox/graphics/knobs/knob_indicator_regular_grey.svg</Knob>
+            <BackPath>skins:Rekordbox/graphics/knobs/knob_bg_regular.svg</BackPath>
+            <MinAngle>-130</MinAngle>
+            <MaxAngle>130</MaxAngle>
+            <ArcRadius>13.0</ArcRadius>
+            <ArcUnipolar>false</ArcUnipolar>
+            <ArcColor>#858585</ArcColor>
+            <ArcThickness>2</ArcThickness>
+            <Connection>
+              <ConfigKey><Variable name="EqEffect"/>,parameter3</ConfigKey>
+            </Connection>
+          </KnobComposed>
+
+          <KnobComposed><!-- MID -->
+            <TooltipId>filterMid</TooltipId>
+            <Size>40f,32f</Size>
+            <Knob>skins:Rekordbox/graphics/knobs/knob_indicator_regular_grey.svg</Knob>
+            <BackPath>skins:Rekordbox/graphics/knobs/knob_bg_regular.svg</BackPath>
+            <MinAngle>-130</MinAngle>
+            <MaxAngle>130</MaxAngle>
+            <ArcRadius>13.0</ArcRadius>
+            <ArcUnipolar>false</ArcUnipolar>
+            <ArcColor>#858585</ArcColor>
+            <ArcThickness>2</ArcThickness>
+            <Connection>
+              <ConfigKey><Variable name="EqEffect"/>,parameter2</ConfigKey>
+            </Connection>
+          </KnobComposed>
+
+          <KnobComposed><!-- LOW -->
+            <TooltipId>filterLow</TooltipId>
+            <Size>40f,32f</Size>
+            <Knob>skins:Rekordbox/graphics/knobs/knob_indicator_regular_grey.svg</Knob>
+            <BackPath>skins:Rekordbox/graphics/knobs/knob_bg_regular.svg</BackPath>
+            <MinAngle>-130</MinAngle>
+            <MaxAngle>130</MaxAngle>
+            <ArcRadius>13.0</ArcRadius>
+            <ArcUnipolar>false</ArcUnipolar>
+            <ArcColor>#858585</ArcColor>
+            <ArcThickness>2</ArcThickness>
+            <Connection>
+              <ConfigKey><Variable name="EqEffect"/>,parameter1</ConfigKey>
+            </Connection>
+          </KnobComposed>
+
+          <KnobComposed><!-- FILTER = quick effect macro -->
+            <TooltipId>QuickEffectRack_super1</TooltipId>
+            <Size>40f,32f</Size>
+            <Knob>skins:Rekordbox/graphics/knobs/knob_indicator_regular_blue.svg</Knob>
+            <BackPath>skins:Rekordbox/graphics/knobs/knob_bg_regular.svg</BackPath>
+            <MinAngle>-130</MinAngle>
+            <MaxAngle>130</MaxAngle>
+            <ArcRadius>13.0</ArcRadius>
+            <ArcUnipolar>false</ArcUnipolar>
+            <ArcColor>#00a0e9</ArcColor>
+            <ArcThickness>2</ArcThickness>
+            <Connection>
+              <ConfigKey><Variable name="QuickEffectRack"/>,super1</ConfigKey>
+            </Connection>
+          </KnobComposed>
+
+        </Children>
+      </WidgetGroup>
+
+      <WidgetGroup><!-- fader + cue button -->
+        <Layout>horizontal</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+
+          <SliderComposed><!-- channel volume -->
+            <TooltipId>channel_volume</TooltipId>
+            <Size>42f,110f</Size>
+            <Handle scalemode="STRETCH_ASPECT">skins:Rekordbox/graphics/sliders/knob_volume_deck.svg</Handle>
+            <Slider scalemode="STRETCH_ASPECT">skins:Rekordbox/graphics/sliders/slider_volume_deck.svg</Slider>
+            <Horizontal>false</Horizontal>
+            <BarColor>#00a0e9</BarColor>
+            <BarWidth>2</BarWidth>
+            <BarMargins>8,8</BarMargins>
+            <BarRoundCaps>true</BarRoundCaps>
+            <BarAxisPos>21.0</BarAxisPos>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,volume</ConfigKey>
+            </Connection>
+          </SliderComposed>
+
+          <PushButton><!-- headphone cue -->
+            <TooltipId>pfl</TooltipId>
+            <ObjectName>RbCueHeadButton</ObjectName>
+            <Size>22f,26f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>CUE</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>CUE</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,pfl</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+
+        </Children>
+      </WidgetGroup>
+
+    </Children>
+  </WidgetGroup>
+</Template>

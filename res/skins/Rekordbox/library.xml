@@ -1,0 +1,60 @@
+<!-- CUSTOM MOD (rekordbox-skin): Rekordbox-style layout for local Mixxx build -->
+<!--
+  Minimal library split, adapted from LateNight's library.xml
+  (search box + sidebar tree + track table; no preview deck, no cover art).
+-->
+<Template>
+  <WidgetGroup>
+    <ObjectName>RbLibraryContainer</ObjectName>
+    <Layout>horizontal</Layout>
+    <SizePolicy>me,me</SizePolicy>
+    <Children>
+
+      <Splitter>
+        <ObjectName>RbLibrarySplitter</ObjectName>
+        <SizePolicy>me,me</SizePolicy>
+        <SplitSizes>1,10</SplitSizes>
+        <Collapsible>1,0</Collapsible>
+        <Children>
+
+          <WidgetGroup><!-- search + sidebar -->
+            <ObjectName>RbLibSidebarContainer</ObjectName>
+            <Layout>vertical</Layout>
+            <SizePolicy>min,me</SizePolicy>
+            <MinimumSize>100,</MinimumSize>
+            <Children>
+
+              <WidgetGroup>
+                <ObjectName>RbSearchLineBox</ObjectName>
+                <Layout>horizontal</Layout>
+                <SizePolicy>min,max</SizePolicy>
+                <Children>
+                  <SearchBox></SearchBox>
+                </Children>
+              </WidgetGroup>
+
+              <WidgetGroup>
+                <ObjectName>RbSidebarBox</ObjectName>
+                <Layout>vertical</Layout>
+                <SizePolicy>min,me</SizePolicy>
+                <Children>
+                  <LibrarySidebar></LibrarySidebar>
+                </Children>
+              </WidgetGroup>
+
+            </Children>
+          </WidgetGroup>
+
+          <!-- Library table -->
+          <Library>
+            <ShowButtonText>false</ShowButtonText>
+            <TrackTableBackgroundColorOpacity>0.175</TrackTableBackgroundColorOpacity>
+            <SignalColor>#d9b28c</SignalColor>
+          </Library>
+
+        </Children>
+      </Splitter>
+
+    </Children>
+  </WidgetGroup>
+</Template>

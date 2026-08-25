@@ -267,6 +267,9 @@ void EffectChain::sendParameterUpdate() {
     double mix = m_pControlChainMix->get();
     // BEGIN CUSTOM MOD (Instant-Pad-FX lock): Unit 4 parameters are frozen;
     // pad-triggered enable/routing controls are unaffected.
+    // padfx-edit: while "[Controls], PadFxEditMode" is ON the live mix is sent
+    // through and adopted into the frozen value, so leaving edit mode resumes
+    // from the edited depth instead of the pre-edit snapshot.
     if (isLockedInstantFxUnitGroup(m_group)) {
         static bool s_frozenChainMixInitialized = false;
         static double s_frozenChainMix = 0.0;
@@ -274,7 +277,11 @@ void EffectChain::sendParameterUpdate() {
             s_frozenChainMix = mix;
             s_frozenChainMixInitialized = true;
         }
-        mix = s_frozenChainMix;
+        if (padFxEditModeActive()) {
+            s_frozenChainMix = mix;
+        } else {
+            mix = s_frozenChainMix;
+        }
     }
     // END CUSTOM MOD (Instant-Pad-FX lock)
     pRequest->SetEffectChainParameters.mix = mix;
@@ -370,7 +377,8 @@ void EffectChain::slotControlClear(double v) {
 void EffectChain::slotControlChainSuperParameter(double v, bool force) {
     // BEGIN CUSTOM MOD (Instant-Pad-FX lock): Unit 4 parameters are frozen;
     // pad-triggered enable/routing controls are unaffected.
-    if (isLockedInstantFxUnitGroup(m_group)) {
+    // padfx-edit: lifted while "[Controls], PadFxEditMode" is ON.
+    if (!padFxEditModeActive() && isLockedInstantFxUnitGroup(m_group)) {
         return;
     }
     // END CUSTOM MOD (Instant-Pad-FX lock)

@@ -1,0 +1,191 @@
+<!-- CUSTOM MOD (rekordbox-skin): Rekordbox-style layout for local Mixxx build -->
+<!--
+  Rekordbox-style CFX mini panel for one deck.
+  Loads named effects into that deck's quick effect slot via
+  [<QuickEffectRack1_[ChannelN]_EffectSlot1>],loaded_effect (1-indexed into the
+  VISIBLE effects list) using a PushButton press (value 1) passed through an
+  <Transform><Add>k-1</Add></Transform> so each button emits its target index.
+  DEFAULT unloads the slot via the "clear" ControlPushButton.
+  Variables:
+    ChanNum : 1..4
+
+  INDEX SCHEME (how to adjust):
+  - loaded_effect is 1-based into the user's VisibleEffects list as stored in
+    mixxx.cfg; VisibleEffectsList::readEffectsXml preserves that saved order.
+  - On startup, registered builtins missing from BOTH VisibleEffects and
+    HiddenEffects are PREPENDED in reverse-alphabetical order (the code walks
+    the sorted manifests A..Z and prepends each), landing ABOVE all saved
+    entries. After Sweep + Gate Comp were added to BuiltInBackend they occupy
+    positions #1 (Sweep) and #2 (Gate Comp), shifting every previously saved
+    entry down by exactly +2. The <Add> values below already include that +2.
+  - To re-target a button: determine the effect's 1-based position P in the
+    visible effects list and set <Add>P-1</Add>. If you register further new
+    builtin effects, every stock entry shifts again by the number of new
+    effects that were absent from the config's lists.
+-->
+
+<Template>
+  <SetVariable name="Group">[Channel<Variable name="ChanNum"/>]</SetVariable>
+  <SetVariable name="QuickEffectRack">[QuickEffectRack1_<Variable name="Group"/>]</SetVariable>
+  <SetVariable name="QuickEffectSlot">[QuickEffectRack1_<Variable name="Group"/>_EffectSlot1]</SetVariable>
+
+  <WidgetGroup>
+    <ObjectName>RbCfxPanel</ObjectName>
+    <Layout>vertical</Layout>
+    <SizePolicy>me,min</SizePolicy>
+    <Children>
+
+      <Label>
+        <ObjectName>RbCfxHeader</ObjectName>
+        <Size>me,16f</Size>
+        <Text>CFX&#8202;<Variable name="ChanNum"/></Text>
+      </Label>
+
+      <WidgetGroup><!-- effect selector buttons -->
+        <Layout>horizontal</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+
+          <PushButton><!-- unload quick effect -->
+            <TooltipId>EffectSlot_enabled</TooltipId>
+            <ObjectName>RbCfxButton</ObjectName>
+            <Size>44f,20f</Size>
+            <NumberStates>1</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>DEFAULT</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="QuickEffectSlot"/>,clear</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+
+          <!-- Reverb: visible-list pos 7 (was 5 before Sweep/Gate Comp
+               were prepended above the saved list; see INDEX SCHEME above).
+               Add(7-1) makes the press emit loaded_effect=7. -->
+          <PushButton>
+            <TooltipId>EffectSlot_enabled</TooltipId>
+            <ObjectName>RbCfxButton</ObjectName>
+            <Size>44f,20f</Size>
+            <NumberStates>1</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>SPACE</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="QuickEffectSlot"/>,loaded_effect</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+              <Transform><Add>6</Add></Transform>
+            </Connection>
+          </PushButton>
+
+          <PushButton><!-- Echo = pos 21 on the post-Sweep/GateComp list (was 19) -->
+            <TooltipId>EffectSlot_enabled</TooltipId>
+            <ObjectName>RbCfxButton</ObjectName>
+            <Size>44f,20f</Size>
+            <NumberStates>1</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>DUB ECHO</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="QuickEffectSlot"/>,loaded_effect</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+              <Transform><Add>20</Add></Transform>
+            </Connection>
+          </PushButton>
+
+          <PushButton><!-- Flanger = pos 19 on the post-Sweep/GateComp list (was 17) -->
+            <TooltipId>EffectSlot_enabled</TooltipId>
+            <ObjectName>RbCfxButton</ObjectName>
+            <Size>44f,20f</Size>
+            <NumberStates>1</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>FLANGER</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="QuickEffectSlot"/>,loaded_effect</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+              <Transform><Add>18</Add></Transform>
+            </Connection>
+          </PushButton>
+
+          <PushButton><!-- Bitcrusher = pos 23 on the post-Sweep/GateComp list (was 21) -->
+            <TooltipId>EffectSlot_enabled</TooltipId>
+            <ObjectName>RbCfxButton</ObjectName>
+            <Size>44f,20f</Size>
+            <NumberStates>1</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>CRUSH</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="QuickEffectSlot"/>,loaded_effect</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+              <Transform><Add>22</Add></Transform>
+            </Connection>
+          </PushButton>
+
+        </Children>
+      </WidgetGroup>
+
+      <WidgetGroup><!-- macro knob + quick enable -->
+        <Layout>horizontal</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+          <KnobComposed>
+            <TooltipId>QuickEffectRack_super1</TooltipId>
+            <Size>30f,26f</Size>
+            <Knob>skins:Rekordbox/graphics/knobs/knob_indicator_small_green.svg</Knob>
+            <BackPath>skins:Rekordbox/graphics/knobs/knob_bg_small.svg</BackPath>
+            <MinAngle>-130</MinAngle>
+            <MaxAngle>130</MaxAngle>
+            <ArcRadius>10.0</ArcRadius>
+            <ArcUnipolar>true</ArcUnipolar>
+            <ArcColor>#00a0e9</ArcColor>
+            <ArcThickness>2</ArcThickness>
+            <Connection>
+              <ConfigKey><Variable name="QuickEffectRack"/>,super1</ConfigKey>
+            </Connection>
+          </KnobComposed>
+          <PushButton><!-- momentary quick effect gate -->
+            <TooltipId>QuickEffectRack_enabled</TooltipId>
+            <ObjectName>RbCfxGate</ObjectName>
+            <Size>44f,20f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>FX ON</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>FX ON</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="QuickEffectRack"/>,enabled</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+        </Children>
+      </WidgetGroup>
+
+    </Children>
+  </WidgetGroup>
+</Template>
