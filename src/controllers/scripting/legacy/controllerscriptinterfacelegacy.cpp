@@ -56,6 +56,7 @@ ControllerScriptInterfaceLegacy::ControllerScriptInterfaceLegacy(
     m_ramp.resize(kDecks);
     m_scratchFilters.resize(kDecks);
     m_rampFactor.resize(kDecks);
+    m_rampEaseRate.resize(kDecks); // === CUSTOM MOD (cdj-backspin): required for the init loop below (was missing -> Q_ASSERT abort) ===
     m_brakeActive.resize(kDecks);
     m_spinbackActive.resize(kDecks);
     m_softStartActive.resize(kDecks);
