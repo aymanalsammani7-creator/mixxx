@@ -1,15 +1,31 @@
-/* CUSTOM MOD (rekordbox-skin): Rekordbox-style layout for local Mixxx build
-   Minimal dark Rekordbox-ish stylesheet.
-   Backgrounds #1a1a1a, white labels, blue accent #00a0e9.
-   Button states are drawn by graphics/btn.svg and graphics/btn_active.svg,
-   referenced from skin XML <State> entries, not from here. */
+/* CUSTOM MOD (rekordbox-skin): Rekordbox Light theme for local Mixxx build
+   Minimal light Rekordbox-style stylesheet.
+   Canvas #EBEBEB, white containers #FFFFFF, 1px grey borders #CCCCCC,
+   rounded (border-radius 4px), blue accent #00a0e9. Button states drawn by
+   graphics/btn.svg + graphics/btn_active.svg (referenced from skin XML),
+   but recolored as light-card variants in Step 2. AI-generated. */
 
 WWidget {
-  background-color: #1a1a1a;
+  background-color: #EBEBEB;
+}
+
+/* Global white card containers for Decks / Mixer / FX panels */
+#SkinContainer,
+#RbRowBeatFx,
+#RbRowCfx,
+#RbRowDecks,
+#RbRowMixer,
+#RbRowPadFx,
+#RbMasterPanel,
+RbDeckCard,
+#RbDeckCard {
+  background-color: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  border-radius: 4px;
 }
 
 WLabel {
-  color: #ffffff;
+  color: #1a1a1a;
   background-color: transparent;
   font-size: 11px;
 }
@@ -18,18 +34,18 @@ WLabel {
 #RbCfxHeader,
 #RbDeckTitle,
 #RbPadFxHeader {
-  color: #ffffff;
+  color: #1a1a1a;
   font-size: 12px;
   font-weight: bold;
 }
 
 #RbMixerChanLabel {
-  color: #ffffff;
+  color: #1a1a1a;
   font-size: 10px;
 }
 
 WPushButton {
-  color: #ffffff;
+  color: #1a1a1a;
   background-color: transparent;
   border: none;
   font-size: 10px;
@@ -54,23 +70,47 @@ WPushButton {
 #RbPadEditButton,
 #RbRateReset,
 #RbCueHeadButton {
-  color: #e8e8e8;
+  color: #333333;
 }
 
+/* Light EffectSelector / chain buttons (CFX & Beat FX panels) */
 WEffectSelector {
-  background-color: #262626;
-  color: #ffffff;
-  border: 1px solid #3c3c3c;
+  background-color: #F5F5F5;
+  color: #1a1a1a;
+  border: 1px solid #CCCCCC;
   font-size: 10px;
 }
 
 WEffectChainPresetButton {
-  background-color: #262626;
-  color: #ffffff;
-  border: 1px solid #3c3c3c;
+  background-color: #F5F5F5;
+  color: #1a1a1a;
+  border: 1px solid #CCCCCC;
   font-size: 10px;
 }
 
 WSplitter::handle {
-  background-color: #101010;
+  background-color: #CCCCCC;
 }
+
+/* Library: light sidebar + table */
+WTreeWidget {
+  background-color: #FFFFFF;
+  color: #1a1a1a;
+  border: 1px solid #CCCCCC;
+  font-size: 11px;
+}
+
+QTableView {
+  background-color: #FFFFFF;
+  color: #1a1a1a;
+  gridline-color: #E0E0E0;
+  font-size: 11px;
+}
+
+QHeaderView {
+  background-color: #F5F5F5;
+  color: #1a1a1a;
+  font-size: 10px;
+  border: 1px solid #CCCCCC;
+}
+

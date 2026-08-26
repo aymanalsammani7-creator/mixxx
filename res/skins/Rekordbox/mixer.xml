@@ -125,14 +125,14 @@
             <State>
               <Number>0</Number>
               <Text>CUE</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <State>
               <Number>1</Number>
               <Text>CUE</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <Connection>
               <ConfigKey><Variable name="Group"/>,pfl</ConfigKey>
@@ -146,3 +146,4 @@
     </Children>
   </WidgetGroup>
 </Template>
+

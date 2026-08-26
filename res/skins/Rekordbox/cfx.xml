@@ -54,8 +54,8 @@
             <State>
               <Number>0</Number>
               <Text>DEFAULT</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <Connection>
               <ConfigKey><Variable name="QuickEffectSlot"/>,clear</ConfigKey>
@@ -74,8 +74,8 @@
             <State>
               <Number>0</Number>
               <Text>SPACE</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <Connection>
               <ConfigKey><Variable name="QuickEffectSlot"/>,loaded_effect</ConfigKey>
@@ -92,8 +92,8 @@
             <State>
               <Number>0</Number>
               <Text>DUB ECHO</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <Connection>
               <ConfigKey><Variable name="QuickEffectSlot"/>,loaded_effect</ConfigKey>
@@ -110,8 +110,8 @@
             <State>
               <Number>0</Number>
               <Text>FLANGER</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <Connection>
               <ConfigKey><Variable name="QuickEffectSlot"/>,loaded_effect</ConfigKey>
@@ -128,8 +128,8 @@
             <State>
               <Number>0</Number>
               <Text>CRUSH</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <Connection>
               <ConfigKey><Variable name="QuickEffectSlot"/>,loaded_effect</ConfigKey>
@@ -169,14 +169,14 @@
             <State>
               <Number>0</Number>
               <Text>FX ON</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <State>
               <Number>1</Number>
               <Text>FX ON</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <Connection>
               <ConfigKey><Variable name="QuickEffectRack"/>,enabled</ConfigKey>
@@ -189,3 +189,4 @@
     </Children>
   </WidgetGroup>
 </Template>
+

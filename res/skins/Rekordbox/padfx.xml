@@ -34,14 +34,14 @@
             <State>
               <Number>0</Number>
               <Text>SPACE</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <State>
               <Number>1</Number>
               <Text>SPACE</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <Connection>
               <ConfigKey>[EffectRack1_EffectUnit4_Effect1],enabled</ConfigKey>
@@ -58,14 +58,14 @@
             <State>
               <Number>0</Number>
               <Text>REVERB</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <State>
               <Number>1</Number>
               <Text>REVERB</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <Connection>
               <ConfigKey>[EffectRack1_EffectUnit4_Effect2],enabled</ConfigKey>
@@ -73,7 +73,7 @@
             </Connection>
           </PushButton>
 
-          <PushButton><!-- Unit4 Effect3 -->
+<PushButton><!-- Unit4 Effect3 -->
             <TooltipId>EffectSlot_enabled</TooltipId>
             <ObjectName>RbPadButton</ObjectName>
             <Size>52f,24f</Size>
@@ -82,14 +82,14 @@
             <State>
               <Number>0</Number>
               <Text>FLANGER</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <State>
               <Number>1</Number>
               <Text>FLANGER</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <Connection>
               <ConfigKey>[EffectRack1_EffectUnit4_Effect3],enabled</ConfigKey>
@@ -97,10 +97,34 @@
             </Connection>
           </PushButton>
 
+          <PushButton><!-- Unit4 Effect4: Gate/Comp (Rekordbox 4th CFX slot) -->
+            <TooltipId>EffectSlot_enabled</TooltipId>
+            <ObjectName>RbPadButton</ObjectName>
+            <Size>52f,24f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>GATE</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>GATE</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[EffectRack1_EffectUnit4_Effect4],enabled</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+
         </Children>
       </WidgetGroup>
 
-      <WidgetGroup><!-- routing + edit mode -->
+      <WidgetGroup><!-- routing (4-deck: each pad FX routes to its own isolated deck) -->
         <Layout>horizontal</Layout>
         <SizePolicy>min,min</SizePolicy>
         <Children>
@@ -114,14 +138,14 @@
             <State>
               <Number>0</Number>
               <Text>D1</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <State>
               <Number>1</Number>
               <Text>D1</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <Connection>
               <ConfigKey>[EffectRack1_EffectUnit4],group_[Channel1]_enable</ConfigKey>
@@ -138,17 +162,65 @@
             <State>
               <Number>0</Number>
               <Text>D2</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <State>
               <Number>1</Number>
               <Text>D2</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <Connection>
               <ConfigKey>[EffectRack1_EffectUnit4],group_[Channel2]_enable</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+
+          <PushButton><!-- route unit 4 to deck 3 (layered swap target) -->
+            <TooltipId>EffectUnit_group_enabled</TooltipId>
+            <ObjectName>RbPadRouteButton</ObjectName>
+            <Size>36f,22f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>D3</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>D3</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[EffectRack1_EffectUnit4],group_[Channel3]_enable</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+
+          <PushButton><!-- route unit 4 to deck 4 (layered swap target) -->
+            <TooltipId>EffectUnit_group_enabled</TooltipId>
+            <ObjectName>RbPadRouteButton</ObjectName>
+            <Size>36f,22f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>D4</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>D4</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[EffectRack1_EffectUnit4],group_[Channel4]_enable</ConfigKey>
               <ButtonState>LeftButton</ButtonState>
             </Connection>
           </PushButton>
@@ -161,14 +233,14 @@
             <State>
               <Number>0</Number>
               <Text>EDIT</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <State>
               <Number>1</Number>
               <Text>EDIT</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <Connection>
               <ConfigKey>[Controls],PadFxEditMode</ConfigKey>
@@ -182,3 +254,4 @@
     </Children>
   </WidgetGroup>
 </Template>
+

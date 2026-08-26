@@ -40,14 +40,14 @@
                 <State>
                   <Number>0</Number>
                   <Text>&#160;</Text>
-                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
                 </State>
                 <State>
                   <Number>1</Number>
                   <Text>ON</Text>
-                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
-                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
                 </State>
                 <Connection>
                   <ConfigKey><Variable name="FxUnitGroup"/>_Effect1,enabled</ConfigKey>
@@ -93,14 +93,14 @@
                 <State>
                   <Number>0</Number>
                   <Text>&#160;</Text>
-                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
                 </State>
                 <State>
                   <Number>1</Number>
                   <Text>ON</Text>
-                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
-                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
                 </State>
                 <Connection>
                   <ConfigKey><Variable name="FxUnitGroup"/>_Effect2,enabled</ConfigKey>
@@ -146,14 +146,14 @@
                 <State>
                   <Number>0</Number>
                   <Text>&#160;</Text>
-                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
                 </State>
                 <State>
                   <Number>1</Number>
                   <Text>ON</Text>
-                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
-                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
                 </State>
                 <Connection>
                   <ConfigKey><Variable name="FxUnitGroup"/>_Effect3,enabled</ConfigKey>
@@ -235,3 +235,4 @@
     </Children>
   </WidgetGroup>
 </Template>
+

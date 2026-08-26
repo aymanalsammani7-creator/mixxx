@@ -15,10 +15,10 @@
 <!DOCTYPE skin>
 <skin>
   <manifest>
-    <title>Rekordbox</title>
+    <title>Rekordbox Light</title>
     <author>Kilo (AI-assisted local mod)</author>
-    <version>1.0.0</version>
-    <description>Rekordbox-style dark 4-deck skin with Beat FX rack, CFX quick-effect buttons and Pad FX panel.</description>
+    <version>1.1.0</version>
+    <description>Rekordbox-style LIGHT 4-deck skin with Beat FX rack, CFX quick-effect buttons and Pad FX panel. Off-white canvas #EBEBEE, white card containers with 1px #CCCCCC rounded borders.</description>
     <language>en</language>
     <license>GPLv2+ (derived from LateNight layout patterns)</license>
     <attributes>

@@ -1,7 +1,7 @@
 <!-- CUSTOM MOD (rekordbox-skin): Rekordbox-style layout for local Mixxx build -->
 <!--
-  Rekordbox-style deck pod: overview waveform, transport, rate fader and a
-  single row of 4 hotcue pads.
+  Rekordbox-style deck pod: deck card header (deck + artist/title | BPM | time),
+  overview waveform, transport, rate fader and a 2x4 hotcue grid (A..H).
   Variables:
     ChanNum : 1..4
 -->
@@ -14,28 +14,105 @@
     <SizePolicy>i,min</SizePolicy>
     <Children>
 
-      <WidgetGroup><!-- title row -->
+      <!-- deck card header: DECK + artist/title | BPM | time/status -->
+      <WidgetGroup>
         <Layout>horizontal</Layout>
-        <SizePolicy>me,min</SizePolicy>
+        <SizePolicy>me,me</SizePolicy>
         <Children>
-          <Label>
-            <ObjectName>RbDeckTitle</ObjectName>
-            <Size>me,16f</Size>
-            <Text>DECK&#8202;<Variable name="ChanNum"/></Text>
-          </Label>
+
+          <WidgetGroup>
+            <Layout>vertical</Layout>
+            <Children>
+              <Label>
+                <ObjectName>RbDeckTitle</ObjectName>
+                <Size>90f,14f</Size>
+                <Text>DECK&#8202;<Variable name="ChanNum"/></Text>
+              </Label>
+              <Label>
+                <TooltipId>songauthor</TooltipId>
+                <ObjectName>RbDeckArtist</ObjectName>
+                <Size>90f,11f</Size>
+                <Text>Artist</Text>
+                <Connection>
+                  <ConfigKey><Variable name="Group"/>,track_author</ConfigKey>
+                  <ConnectValueFromWidget>false</ConnectValueFromWidget>
+                </Connection>
+              </Label>
+              <Label>
+                <TooltipId>songtitle</TooltipId>
+                <ObjectName>RbDeckTrack</ObjectName>
+                <Size>90f,11f</Size>
+                <Text>Title</Text>
+                <Connection>
+                  <ConfigKey><Variable name="Group"/>,track_title</ConfigKey>
+                  <ConnectValueFromWidget>false</ConnectValueFromWidget>
+                </Connection>
+              </Label>
+            </Children>
+          </WidgetGroup>
+
+          <WidgetGroup>
+            <Layout>horizontal</Layout>
+            <SizePolicy>me,me</SizePolicy>
+            <Children>
+              <Label>
+                <Text>BPM</Text>
+              </Label>
+              <ValueLabel>
+                <TooltipId>beats</TooltipId>
+                <ObjectName>RbBpmValue</ObjectName>
+                <Size>48f,14f</Size>
+                <Precision>0</Precision>
+                <Connection>
+                  <ConfigKey><Variable name="Group"/>,bpm</ConfigKey>
+                </Connection>
+              </ValueLabel>
+            </Children>
+          </WidgetGroup>
+
+          <WidgetGroup>
+            <Layout>horizontal</Layout>
+            <SizePolicy>min,me</SizePolicy>
+            <Children>
+              <ValueLabel>
+                <TooltipId>time</TooltipId>
+                <ObjectName>RbRemainingTime</ObjectName>
+                <Size>70f,14f</Size>
+                <Precision>2</Precision>
+                <Connection>
+                  <ConfigKey><Variable name="Group"/>,playposition</ConfigKey>
+                  <ConnectValueFromWidget>false</ConnectValueFromWidget>
+                  <TransformFunction>ElapsedBeatsToEmittedTime</TransformFunction>
+                </Connection>
+              </ValueLabel>
+              <Label>
+                <TooltipId>duration</TooltipId>
+                <ObjectName>RbTotalTime</ObjectName>
+                <Size>70f,14f</Size>
+                <Text>-0:00.0</Text>
+                <Connection>
+                  <ConfigKey><Variable name="Group"/>,duration</ConfigKey>
+                  <ConnectValueFromWidget>false</ConnectValueFromWidget>
+                  <TransformFunction>DurationToClock</TransformFunction>
+                </Connection>
+              </Label>
+            </Children>
+          </WidgetGroup>
+
         </Children>
       </WidgetGroup>
 
-      <Overview><!-- scrolling waveform overview -->
+      <!-- overview waveform (light background) -->
+      <Overview>
         <TooltipId>waveform_overview</TooltipId>
-        <Size>-1me,64f</Size>
+        <Size>-1me,60f</Size>
         <Group><Variable name="Group"/></Group>
-        <BgColor>#1a1a1a</BgColor>
-        <SignalColor>#d0d0d0</SignalColor>
-        <SignalHighColor></SignalHighColor>
-        <SignalMidColor></SignalMidColor>
-        <SignalLowColor></SignalLowColor>
-        <PlayPosColor>#00c6ff</PlayPosColor>
+        <BgColor>#FFFFFF</BgColor>
+        <SignalColor>#6a6a6a</SignalColor>
+        <SignalHighColor>#4a90d9</SignalHighColor>
+        <SignalMidColor>#9b59b6</SignalMidColor>
+        <SignalLowColor>#e67e22</SignalLowColor>
+        <PlayPosColor>#00a0e9</PlayPosColor>
         <CueColor>#ff7a01</CueColor>
         <LoopColor>#00b400</LoopColor>
         <PlayedOverlayColor>#dd151515</PlayedOverlayColor>
@@ -43,7 +120,7 @@
         <DefaultMark>
           <Align>bottom|right</Align>
           <Color>#FF0000</Color>
-          <TextColor>#FFFFFF</TextColor>
+          <TextColor>#1a1a1a</TextColor>
           <Text> %1 </Text>
         </DefaultMark>
         <Mark>
@@ -51,15 +128,15 @@
           <Text>C</Text>
           <Align>top|right</Align>
           <Color>#ff7a01</Color>
-          <TextColor>#FFFFFF</TextColor>
+          <TextColor>#1a1a1a</TextColor>
         </Mark>
         <MarkRange>
           <StartControl>loop_start_position</StartControl>
           <EndControl>loop_end_position</EndControl>
           <EnabledControl>loop_enabled</EnabledControl>
           <Color>#00b400</Color>
-          <Opacity>0.7</Opacity>
-          <DisabledColor>#FFFFFF</DisabledColor>
+          <Opacity>0.8</Opacity>
+          <DisabledColor>#1a1a1a</DisabledColor>
           <DisabledOpacity>0.6</DisabledOpacity>
         </MarkRange>
         <Connection>
@@ -67,7 +144,8 @@
         </Connection>
       </Overview>
 
-      <WidgetGroup><!-- transport -->
+      <!-- transport -->
+      <WidgetGroup>
         <Layout>horizontal</Layout>
         <SizePolicy>me,min</SizePolicy>
         <Children>
@@ -81,14 +159,14 @@
             <State>
               <Number>0</Number>
               <Text>PLAY</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <State>
               <Number>1</Number>
               <Text>PAUSE</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <Connection>
               <ConfigKey><Variable name="Group"/>,play</ConfigKey>
@@ -106,14 +184,14 @@
             <State>
               <Number>0</Number>
               <Text>CUE</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <State>
               <Number>1</Number>
               <Text>CUE</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <Connection>
               <ConfigKey><Variable name="Group"/>,cue_default</ConfigKey>
@@ -138,14 +216,14 @@
             <State>
               <Number>0</Number>
               <Text>SYNC</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <State>
               <Number>1</Number>
               <Text>SYNC</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <Connection>
               <ConfigKey><Variable name="Group"/>,sync_enabled</ConfigKey>
@@ -156,7 +234,8 @@
         </Children>
       </WidgetGroup>
 
-      <WidgetGroup><!-- horizontal rate fader -->
+      <!-- horizontal rate fader -->
+      <WidgetGroup>
         <Layout>horizontal</Layout>
         <SizePolicy>me,min</SizePolicy>
         <Children>
@@ -176,15 +255,15 @@
               <ConfigKey><Variable name="Group"/>,rate</ConfigKey>
             </Connection>
           </SliderComposed>
-          <PushButton><!-- rate reset (no stock tooltip id for rate_set_default) -->
+          <PushButton><!-- rate reset -->
             <ObjectName>RbRateReset</ObjectName>
             <Size>30f,24f</Size>
             <NumberStates>1</NumberStates>
             <State>
               <Number>0</Number>
               <Text>R</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <Connection>
               <ConfigKey><Variable name="Group"/>,rate_set_default</ConfigKey>
@@ -194,118 +273,113 @@
         </Children>
       </WidgetGroup>
 
-      <WidgetGroup><!-- hotcue pad row 1-4 -->
-        <Layout>horizontal</Layout>
+      <!-- hotcue pad grid 2x4 (1..8) -->
+      <WidgetGroup>
+        <Layout>vertical</Layout>
         <SizePolicy>me,min</SizePolicy>
         <Children>
 
-          <HotcueButton>
-            <TooltipId>hotcue</TooltipId>
-            <ObjectName>RbHotcueButton</ObjectName>
-            <Size>36f,26f</Size>
-            <Group><Variable name="Group"/></Group>
-            <Hotcue>1</Hotcue>
-            <NumberStates>3</NumberStates>
-            <State>
-              <Number>0</Number>
-              <Text>1</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
-            </State>
-            <State>
-              <Number>1</Number>
-              <Text>1</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
-            </State>
-            <State>
-              <Number>2</Number>
-              <Text>1</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
-            </State>
-          </HotcueButton>
+          <WidgetGroup><!-- row 1: hotcues 1-4 -->
+            <Layout>horizontal</Layout>
+            <SizePolicy>me,min</SizePolicy>
+            <Children>
+              <HotcueButton>
+                <TooltipId>hotcue</TooltipId>
+                <ObjectName>RbHotcueButton</ObjectName>
+                <Size>36f,26f</Size>
+                <Group><Variable name="Group"/></Group>
+                <Hotcue>1</Hotcue>
+                <NumberStates>3</NumberStates>
+                <State><Number>0</Number><Text>1</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+                <State><Number>1</Number><Text>1</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+                <State><Number>2</Number><Text>1</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+              </HotcueButton>
+              <HotcueButton>
+                <TooltipId>hotcue</TooltipId>
+                <ObjectName>RbHotcueButton</ObjectName>
+                <Size>36f,26f</Size>
+                <Group><Variable name="Group"/></Group>
+                <Hotcue>2</Hotcue>
+                <NumberStates>3</NumberStates>
+                <State><Number>0</Number><Text>2</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+                <State><Number>1</Number><Text>2</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+                <State><Number>2</Number><Text>2</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+              </HotcueButton>
+              <HotcueButton>
+                <TooltipId>hotcue</TooltipId>
+                <ObjectName>RbHotcueButton</ObjectName>
+                <Size>36f,26f</Size>
+                <Group><Variable name="Group"/></Group>
+                <Hotcue>3</Hotcue>
+                <NumberStates>3</NumberStates>
+                <State><Number>0</Number><Text>3</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+                <State><Number>1</Number><Text>3</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+                <State><Number>2</Number><Text>3</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+              </HotcueButton>
+              <HotcueButton>
+                <TooltipId>hotcue</TooltipId>
+                <ObjectName>RbHotcueButton</ObjectName>
+                <Size>36f,26f</Size>
+                <Group><Variable name="Group"/></Group>
+                <Hotcue>4</Hotcue>
+                <NumberStates>3</NumberStates>
+                <State><Number>0</Number><Text>4</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+                <State><Number>1</Number><Text>4</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+                <State><Number>2</Number><Text>4</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+              </HotcueButton>
+            </Children>
+          </WidgetGroup>
 
-          <HotcueButton>
-            <TooltipId>hotcue</TooltipId>
-            <ObjectName>RbHotcueButton</ObjectName>
-            <Size>36f,26f</Size>
-            <Group><Variable name="Group"/></Group>
-            <Hotcue>2</Hotcue>
-            <NumberStates>3</NumberStates>
-            <State>
-              <Number>0</Number>
-              <Text>2</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
-            </State>
-            <State>
-              <Number>1</Number>
-              <Text>2</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
-            </State>
-            <State>
-              <Number>2</Number>
-              <Text>2</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
-            </State>
-          </HotcueButton>
-
-          <HotcueButton>
-            <TooltipId>hotcue</TooltipId>
-            <ObjectName>RbHotcueButton</ObjectName>
-            <Size>36f,26f</Size>
-            <Group><Variable name="Group"/></Group>
-            <Hotcue>3</Hotcue>
-            <NumberStates>3</NumberStates>
-            <State>
-              <Number>0</Number>
-              <Text>3</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
-            </State>
-            <State>
-              <Number>1</Number>
-              <Text>3</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
-            </State>
-            <State>
-              <Number>2</Number>
-              <Text>3</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
-            </State>
-          </HotcueButton>
-
-          <HotcueButton>
-            <TooltipId>hotcue</TooltipId>
-            <ObjectName>RbHotcueButton</ObjectName>
-            <Size>36f,26f</Size>
-            <Group><Variable name="Group"/></Group>
-            <Hotcue>4</Hotcue>
-            <NumberStates>3</NumberStates>
-            <State>
-              <Number>0</Number>
-              <Text>4</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
-            </State>
-            <State>
-              <Number>1</Number>
-              <Text>4</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
-            </State>
-            <State>
-              <Number>2</Number>
-              <Text>4</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_active.svg</Pressed>
-            </State>
-          </HotcueButton>
+          <WidgetGroup><!-- row 2: hotcues 5-8 -->
+            <Layout>horizontal</Layout>
+            <SizePolicy>me,min</SizePolicy>
+            <Children>
+              <HotcueButton>
+                <TooltipId>hotcue</TooltipId>
+                <ObjectName>RbHotcueButton</ObjectName>
+                <Size>36f,26f</Size>
+                <Group><Variable name="Group"/></Group>
+                <Hotcue>5</Hotcue>
+                <NumberStates>3</NumberStates>
+                <State><Number>0</Number><Text>5</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+                <State><Number>1</Number><Text>5</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+                <State><Number>2</Number><Text>5</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+              </HotcueButton>
+              <HotcueButton>
+                <TooltipId>hotcue</TooltipId>
+                <ObjectName>RbHotcueButton</ObjectName>
+                <Size>36f,26f</Size>
+                <Group><Variable name="Group"/></Group>
+                <Hotcue>6</Hotcue>
+                <NumberStates>3</NumberStates>
+                <State><Number>0</Number><Text>6</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+                <State><Number>1</Number><Text>6</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+                <State><Number>2</Number><Text>6</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+              </HotcueButton>
+              <HotcueButton>
+                <TooltipId>hotcue</TooltipId>
+                <ObjectName>RbHotcueButton</ObjectName>
+                <Size>36f,26f</Size>
+                <Group><Variable name="Group"/></Group>
+                <Hotcue>7</Hotcue>
+                <NumberStates>3</NumberStates>
+                <State><Number>0</Number><Text>7</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+                <State><Number>1</Number><Text>7</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+                <State><Number>2</Number><Text>7</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+              </HotcueButton>
+              <HotcueButton>
+                <TooltipId>hotcue</TooltipId>
+                <ObjectName>RbHotcueButton</ObjectName>
+                <Size>36f,26f</Size>
+                <Group><Variable name="Group"/></Group>
+                <Hotcue>8</Hotcue>
+                <NumberStates>3</NumberStates>
+                <State><Number>0</Number><Text>8</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+                <State><Number>1</Number><Text>8</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+                <State><Number>2</Number><Text>8</Text><Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed><Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed></State>
+              </HotcueButton>
+            </Children>
+          </WidgetGroup>
 
         </Children>
       </WidgetGroup>
