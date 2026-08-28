@@ -1256,6 +1256,21 @@ NumarkMixtrack3.PadModeButton = function(channel, control, value, status, group)
     var deck = NumarkMixtrack3.deckFromGroup(group);
     deck.PADMode = false;
 
+    // === CUSTOM MOD (merge-fx): SHIFT+PAD MODE enables MERGE FX mode ===
+    if (deck.shiftKey) {
+        if (value === DOWN) {
+            deck.mergeFxMode = true;
+            NumarkMixtrack3.mergeFxState[1].active = true;
+            NumarkMixtrack3.mergeFxState[2].active = true;
+        } else if (value === OFF) {
+            deck.mergeFxMode = false;
+            NumarkMixtrack3.mergeFxState[1].active = false;
+            NumarkMixtrack3.mergeFxState[2].active = false;
+        }
+        return;
+    }
+
+
     if (value === DOWN) {
         deck.PADMode = true;
         //ensure all LEDs are ON (default)
@@ -1642,7 +1657,18 @@ NumarkMixtrack3.padFxPad = function(deck, pad, value) {
 NumarkMixtrack3.HotCueButton = function(channel, control, value, status, group) {
     var deck = NumarkMixtrack3.deckFromGroup(group);
 
-    if (deck.PADMode) {
+    // === CUSTOM MOD (merge-fx): MERGE FX pad mode handling ===
+    if (deck.mergeFxMode) {
+        var padIndex = control - 0x1B + 1;
+        var unit = deck.decknum <= 2 ? 1 : 2;
+        if (value === DOWN) {
+            NumarkMixtrack3.mergeFxBuild(unit, 127);
+        } else if (value === OFF) {
+            NumarkMixtrack3.mergeFxRelease(unit, deck.group);
+        }
+        return;
+    }
+if (deck.PADMode) {
         if (deck.shiftKey) {
             var keyShifts = [-7, -5, -3, -1, 1, 3, 5, 7];
             var padIndex = control - 0x1B;
@@ -1676,6 +1702,14 @@ NumarkMixtrack3.HotCueButton = function(channel, control, value, status, group) 
             engine.spinback(deck.decknum, value === DOWN);
         }
     } else {
+        // === CUSTOM MOD (release-fx): track pad state for Release FX ===
+        if (value === DOWN) {
+            NumarkMixtrack3.releaseFxState.padPressed[hotCue - 1] = true;
+            NumarkMixtrack3.releaseFxState.padPressTime[hotCue - 1] = Date.now();
+        } else if (value === OFF && NumarkMixtrack3.releaseFxState.padPressed[hotCue - 1]) {
+            NumarkMixtrack3.releaseFxState.padPressed[hotCue - 1] = false;
+            NumarkMixtrack3.triggerReleaseFx(deck, hotCue - 1);
+        }
         engine.setValue(deck.group, "hotcue_" + hotCue + "_activate", value === DOWN);
     }
 };
@@ -1704,7 +1738,11 @@ NumarkMixtrack3.SamplerButton = function(channel, control, value, status, group)
     var deck = NumarkMixtrack3.deckFromGroup("[Channel" + decknum + "]");
 
     if (value === DOWN) {
-        sampler.PADSampleButtonHold.buttonDown(channel, control, value, status, group);
+        // === CUSTOM MOD (sequencer): record step when sequencer is recording ===
+        if (NumarkMixtrack3.sequencer.recording) {
+            NumarkMixtrack3.sequencerRecordStep();
+        }
+sampler.PADSampleButtonHold.buttonDown(channel, control, value, status, group);
 
         if (!isPlaying) {
             if (deck.shiftKey) {
@@ -2233,6 +2271,9 @@ NumarkMixtrack3.OnPlaypositionChange = function(value, group, control) {
     var deck = NumarkMixtrack3.deckFromGroup(group);
     var duration = engine.getValue(group, "duration");
 
+    // === CUSTOM MOD (jog-display): update jog display with hot cue countdown ===
+    NumarkMixtrack3.updateJogDisplay(deck);
+
     if (deck.trackLoaded() && TrackEndWarning) {
         var timeRemaining = duration * (1 - value);
 
@@ -2257,4 +2298,196 @@ NumarkMixtrack3.OnPlaypositionChange = function(value, group, control) {
 NumarkMixtrack3.OnPlayIndicatorChange = function(value, group, control) {
     var deck = NumarkMixtrack3.deckFromGroup(group);
     deck.LEDs.play.onOff((value) ? ON : OFF);
+};
+
+// === CUSTOM MOD (merge-fx): MERGE FX state management ===
+NumarkMixtrack3.mergeFxState = {
+    1: { active: false, buildLevel: 0, releaseActive: false },
+    2: { active: false, buildLevel: 0, releaseActive: false }
+};
+
+// === CUSTOM MOD (merge-fx): MERGE FX Build control - ramps effect in ===
+NumarkMixtrack3.mergeFxBuild = function(unit, value) {
+    var fxUnit = "[EffectRack1_EffectUnit" + (unit === 1 ? 3 : 4) + "]";
+    var mergeGroup = "[EffectRack1_MergeFX" + unit + "]";
+    var param = value / 127;
+
+    engine.setValue(mergeGroup, "parameter", param);
+    engine.setValue(fxUnit, "super1", param);
+
+    // Enable the unit when parameter > 0
+    if (param > 0.01) {
+        engine.setValue(mergeGroup, "enabled", 1);
+        engine.setValue(fxUnit, "enabled", 1);
+    } else {
+        engine.setValue(mergeGroup, "enabled", 0);
+    }
+};
+
+// === CUSTOM MOD (merge-fx): MERGE FX Release - apply effect burst on release ===
+NumarkMixtrack3.mergeFxRelease = function(unit, deckGroup) {
+    var fxUnit = "[EffectRack1_EffectUnit" + (unit === 1 ? 3 : 4) + "]";
+    var mergeGroup = "[EffectRack1_MergeFX" + unit + "]";
+
+    // Ramp to full then decay
+    engine.setValue(fxUnit, "super1", 1.0);
+    engine.setValue(mergeGroup, "parameter", 1.0);
+
+    // Schedule decay after 2 seconds
+    var decayTimer = engine.beginTimer(2000, function() {
+        engine.setValue(fxUnit, "super1", 0.0);
+        engine.setValue(mergeGroup, "parameter", 0.0);
+        engine.stopTimer(decayTimer);
+    }, true);
+};
+
+// === CUSTOM MOD (merge-fx): MERGE FX Drop Sample - trigger one-shot sample ===
+NumarkMixtrack3.mergeFxDropSample = function(unit) {
+    var samplerNum = unit === 1 ? 1 : 5; // Sampler 1 for MFX1, Sampler 5 for MFX2
+    engine.setValue("[Sampler" + samplerNum + "]", "cue_gotoandplay", 1);
+};
+
+// === CUSTOM MOD (release-fx): Release FX state ===
+NumarkMixtrack3.releaseFxState = {
+    padPressed: [false, false, false, false, false, false, false, false],
+    padPressTime: [0, 0, 0, 0, 0, 0, 0, 0]
+};
+
+// === CUSTOM MOD (release-fx): Release FX trigger - called on pad release ===
+NumarkMixtrack3.triggerReleaseFx = function(deck, padIndex) {
+    var quickSlot = "[QuickEffectRack1_" + deck.group + "_EffectSlot1]";
+    var cfxName = engine.getValue(quickSlot, "loaded_effect_name");
+
+    if (!cfxName || cfxName === "") return;
+
+    // Ramp CFX parameter to max then decay
+    engine.setValue(quickSlot, "parameter1", 1.0);
+
+    // Decay after effect-specific time
+    var decayTime = 2000; // default 2s
+    if (cfxName === "Echo" || cfxName === "Dub Echo") decayTime = 1000;
+    else if (cfxName === "Filter" || cfxName === "Sweep") decayTime = 500;
+
+    var decayTimer = engine.beginTimer(decayTime, function() {
+        engine.setValue(quickSlot, "parameter1", 0.0);
+        engine.stopTimer(decayTimer);
+    }, true);
+};
+
+// === CUSTOM MOD (sequencer): Sequencer state ===
+NumarkMixtrack3.sequencer = {
+    recording: false,
+    playing: false,
+    currentSequence: 0,
+    sequences: [[], [], [], [], [], [], [], []], // 8 sequences
+    currentStep: 0,
+    stepTimer: 0,
+    bpm: 120,
+    beatInterval: 500 // ms per beat
+};
+
+// === CUSTOM MOD (sequencer): Toggle sequencer recording ===
+NumarkMixtrack3.toggleSequencerRecord = function() {
+    NumarkMixtrack3.sequencer.recording = !NumarkMixtrack3.sequencer.recording;
+    if (NumarkMixtrack3.sequencer.recording) {
+        NumarkMixtrack3.sequencer.sequences[NumarkMixtrack3.sequencer.currentSequence] = [];
+        print("Sequencer: recording to sequence " + NumarkMixtrack3.sequencer.currentSequence);
+    } else {
+        print("Sequencer: stopped recording, " +
+            NumarkMixtrack3.sequencer.sequences[NumarkMixtrack3.sequencer.currentSequence].length + " steps");
+    }
+};
+
+// === CUSTOM MOD (sequencer): Toggle sequencer playback ===
+NumarkMixtrack3.toggleSequencerPlay = function() {
+    NumarkMixtrack3.sequencer.playing = !NumarkMixtrack3.sequencer.playing;
+    if (NumarkMixtrack3.sequencer.playing) {
+        NumarkMixtrack3.sequencer.currentStep = 0;
+        NumarkMixtrack3.sequencerStep();
+        print("Sequencer: playing sequence " + NumarkMixtrack3.sequencer.currentSequence);
+    } else {
+        if (NumarkMixtrack3.sequencer.stepTimer) {
+            engine.stopTimer(NumarkMixtrack3.sequencer.stepTimer);
+            NumarkMixtrack3.sequencer.stepTimer = 0;
+        }
+        print("Sequencer: stopped");
+    }
+};
+
+// === CUSTOM MOD (sequencer): Sequencer step ===
+NumarkMixtrack3.sequencerStep = function() {
+    var seq = NumarkMixtrack3.sequencer.sequences[NumarkMixtrack3.sequencer.currentSequence];
+    if (!seq || seq.length === 0) return;
+
+    var step = seq[NumarkMixtrack3.sequencer.currentStep];
+    if (step) {
+        for (var i = 0; i < step.length; i++) {
+            if (step[i]) {
+                engine.setValue("[Sampler" + (i + 1) + "]", "cue_gotoandplay", 1);
+            }
+        }
+    }
+
+    NumarkMixtrack3.sequencer.currentStep = (NumarkMixtrack3.sequencer.currentStep + 1) % seq.length;
+
+    if (NumarkMixtrack3.sequencer.playing) {
+        NumarkMixtrack3.sequencer.stepTimer = engine.beginTimer(
+            NumarkMixtrack3.sequencer.beatInterval,
+            NumarkMixtrack3.sequencerStep,
+            true
+        );
+    }
+};
+
+// === CUSTOM MOD (sequencer): Record a step (call this on each beat when recording) ===
+NumarkMixtrack3.sequencerRecordStep = function() {
+    if (!NumarkMixtrack3.sequencer.recording) return;
+
+    var step = [];
+    for (var i = 1; i <= 8; i++) {
+        step.push(engine.getValue("[Sampler" + i + "]", "play") === 1);
+    }
+    NumarkMixtrack3.sequencer.sequences[NumarkMixtrack3.sequencer.currentSequence].push(step);
+};
+
+// === CUSTOM MOD (jog-display): JOG display - hot cue countdown ===
+NumarkMixtrack3.updateJogDisplay = function(deck) {
+    if (!deck.trackLoaded()) return;
+
+    var playPos = engine.getValue(deck.group, "playposition");
+    var duration = engine.getValue(deck.group, "duration");
+    if (duration <= 0) return;
+
+    // Find nearest hot cue
+    var nearestCue = -1;
+    var nearestDist = Infinity;
+    for (var i = 1; i <= 8; i++) {
+        var cuePos = engine.getValue(deck.group, "hotcue_" + i + "_position");
+        if (cuePos >= 0) {
+            var dist = Math.abs(cuePos - playPos);
+            if (dist < nearestDist) {
+                nearestDist = dist;
+                nearestCue = i;
+            }
+        }
+    }
+
+    // If within 5 laps (approx 10 seconds), flash the jog LED
+    if (nearestCue >= 0 && nearestDist * duration < 10) {
+        deck.LEDs.jogWheelsInScratchMode.flashOn(200, ON, 200);
+    }
+};
+
+// === CUSTOM MOD (recording): Recording control ===
+NumarkMixtrack3.toggleRecording = function() {
+    var recState = engine.getValue("[Recording]", "record");
+    engine.setValue("[Recording]", "record", recState ? 0 : 1);
+    print("Recording: " + (recState ? "stopped" : "started"));
+};
+
+// === CUSTOM MOD (automix): Automix control ===
+NumarkMixtrack3.toggleAutomix = function() {
+    var automixState = engine.getValue("[Automix]", "enable");
+    engine.setValue("[Automix]", "enable", automixState ? 0 : 1);
+    print("Automix: " + (automixState ? "disabled" : "enabled"));
 };

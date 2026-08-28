@@ -115,7 +115,7 @@
         <SignalHighColor>#00a0e9</SignalHighColor>
         <SignalMidColor>#9b59b6</SignalMidColor>
         <SignalLowColor>#e67e22</SignalLowColor>
-        <PlayPosColor>#00a0e9</PlayPosColor>
+        <PlayPosColor>#00FF00</PlayPosColor>
         <CueColor>#ff7a01</CueColor>
         <LoopColor>#00b400</LoopColor>
         <PlayedOverlayColor>#dd151515</PlayedOverlayColor>
@@ -294,6 +294,157 @@
         </Children>
       </WidgetGroup>
 
+      <!-- key shift + beat jump + stems row -->
+      <WidgetGroup><!-- key shift, beat jump, stems -->
+        <Layout>horizontal</Layout>
+        <SizePolicy>me,min</SizePolicy>
+        <Children>
+
+          <PushButton><!-- pitch adjust up -->
+            <TooltipId>pitch_adjust_up</TooltipId>
+            <ObjectName>RbKeyShiftUp</ObjectName>
+            <Size>28f,24f</Size>
+            <NumberStates>1</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>KEY +</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,pitch_adjust_up</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <PushButton><!-- pitch adjust down -->
+            <TooltipId>pitch_adjust_down</TooltipId>
+            <ObjectName>RbKeyShiftDown</ObjectName>
+            <Size>28f,24f</Size>
+            <NumberStates>1</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>KEY -</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,pitch_adjust_down</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <Label><Text></Text><Size>8f,24f</Size></Label>
+          <PushButton><!-- beat jump backward -->
+            <TooltipId>beatjump_backward</TooltipId>
+            <ObjectName>RbBeatJumpBackward</ObjectName>
+            <Size>24f,24f</Size>
+            <NumberStates>1</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>&lt;&lt;</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,beatjump_backward</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <ValueLabel><!-- beat jump size -->
+            <TooltipId>beatjump_size</TooltipId>
+            <ObjectName>RbBeatJumpSize</ObjectName>
+            <Size>40f,24f</Size>
+            <Precision>0</Precision>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,beatjump_size</ConfigKey>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
+            </Connection>
+          </ValueLabel>
+          <PushButton><!-- beat jump forward -->
+            <TooltipId>beatjump_forward</TooltipId>
+            <ObjectName>RbBeatJumpForward</ObjectName>
+            <Size>24f,24f</Size>
+            <NumberStates>1</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>&gt;&gt;</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,beatjump_forward</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <Label><Text></Text><Size>8f,24f</Size></Label>
+          <PushButton><!-- stem: instrumental -->
+            <TooltipId>stem_inst</TooltipId>
+            <ObjectName>RbStemInst</ObjectName>
+            <Size>34f,24f</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>INST</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>INST</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,stem_inst</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <PushButton><!-- stem: vocal -->
+            <TooltipId>stem_vocal</TooltipId>
+            <ObjectName>RbStemVocal</ObjectName>
+            <Size>34f,24f</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>VOCAL</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>VOCAL</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,stem_vocal</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <PushButton><!-- stem: drums -->
+            <TooltipId>stem_drums</TooltipId>
+            <ObjectName>RbStemDrums</ObjectName>
+            <Size>34f,24f</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>DRUMS</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>DRUMS</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,stem_drums</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+
+        </Children>
+      </WidgetGroup>
       <!-- horizontal rate fader -->
       <WidgetGroup>
         <Layout>horizontal</Layout>

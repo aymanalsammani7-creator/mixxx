@@ -1,17 +1,9 @@
-<!-- CUSTOM MOD (rekordbox-skin): Rekordbox-style layout for local Mixxx build -->
+<!-- CUSTOM MOD (rekordbox-skin): Rekordbox-style CFX row -->
 <!--
-  Rekordbox-style CFX mini panel for one deck.
-  Loads named effects into that deck's quick effect slot via
-  [<QuickEffectRack1_[ChannelN]_EffectSlot1>],load_effect_by_name (string).
-  DEFAULT unloads the slot via the "clear" ControlPushButton.
+  Per-deck Sound Color FX mini panel.
   Variables:
     ChanNum : 1..4
-
-  INDEX SCHEME: effects are loaded by display name, so the order of the
-  visible-effects list no longer matters. This is stable across effect
-  registration changes.
 -->
-
 <Template>
   <SetVariable name="Group">[Channel<Variable name="ChanNum"/>]</SetVariable>
   <SetVariable name="QuickEffectRack">[QuickEffectRack1_<Variable name="Group"/>]</SetVariable>
@@ -23,25 +15,38 @@
     <SizePolicy>me,min</SizePolicy>
     <Children>
 
-      <Label>
-        <ObjectName>RbCfxHeader</ObjectName>
-        <Size>me,16f</Size>
-        <Text>CFX&#8202;<Variable name="ChanNum"/></Text>
-      </Label>
-
-      <WidgetGroup><!-- effect selector buttons -->
+      <WidgetGroup>
         <Layout>horizontal</Layout>
         <SizePolicy>min,min</SizePolicy>
         <Children>
-
-          <PushButton><!-- unload quick effect -->
-            <TooltipId>EffectSlot_enabled</TooltipId>
-            <ObjectName>RbCfxButton</ObjectName>
-            <Size>44f,20f</Size>
+          <Label>
+            <ObjectName>RbCfxHeader</ObjectName>
+            <Size>30f,16f</Size>
+            <Text>CFX&#8202;<Variable name="ChanNum"/></Text>
+          </Label>
+          <PushButton>
+            <ObjectName>RbCfxMulti</ObjectName>
+            <Size>20f,16f</Size>
             <NumberStates>1</NumberStates>
             <State>
               <Number>0</Number>
-              <Text>DEFAULT</Text>
+              <Text>•••</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="QuickEffectSlot"/>,load_effect_by_name</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+              <Transform><Add>Filter</Add></Transform>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>RbCfxDot</ObjectName>
+            <Size>20f,16f</Size>
+            <NumberStates>1</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>•</Text>
               <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
               <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
@@ -50,83 +55,230 @@
               <ButtonState>LeftButton</ButtonState>
             </Connection>
           </PushButton>
+        </Children>
+      </WidgetGroup>
 
-          <!-- Reverb: load by display name -->
+      <WidgetGroup>
+        <Layout>horizontal</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+          <PushButton>
+            <ObjectName>RbCfxDefault</ObjectName>
+            <Size>40f,20f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>DEFAULT</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>DEFAULT</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="QuickEffectSlot"/>,clear</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>RbCfxUser</ObjectName>
+            <Size>40f,20f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>USER</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>USER</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="QuickEffectRack"/>,user_mode</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+        </Children>
+      </WidgetGroup>
+
+      <WidgetGroup>
+        <Layout>horizontal</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+
+          <PushButton>
+            <TooltipId>QuickEffectRack_enabled</TooltipId>
+            <ObjectName>RbCfxGate</ObjectName>
+            <Size>44f,20f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>FILTER</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>FILTER</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="QuickEffectRack"/>,enabled</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+
+          <KnobComposed>
+            <TooltipId>QuickEffectRack_super1</TooltipId>
+            <ObjectName>RbCfxParamKnob</ObjectName>
+            <Size>30f,26f</Size>
+            <Knob>skins:Rekordbox/graphics/knobs/knob_indicator_small_green.svg</Knob>
+            <BackPath>skins:Rekordbox/graphics/knobs/knob_bg_small.svg</BackPath>
+            <MinAngle>-130</MinAngle>
+            <MaxAngle>130</MaxAngle>
+            <ArcRadius>10.0</ArcRadius>
+            <ArcUnipolar>true</ArcUnipolar>
+            <ArcColor>#00a0e9</ArcColor>
+            <ArcThickness>2</ArcThickness>
+            <Connection>
+              <ConfigKey><Variable name="QuickEffectRack"/>,super1</ConfigKey>
+            </Connection>
+          </KnobComposed>
+
+          <ValueLabel>
+            <ObjectName>RbCfxParamValue</ObjectName>
+            <Size>30f,20f</Size>
+            <Connection>
+              <ConfigKey><Variable name="QuickEffectRack"/>,super1</ConfigKey>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
+            </Connection>
+          </ValueLabel>
+
+        </Children>
+      </WidgetGroup>
+
+      <!-- Per-channel CFX knobs: S 3 1 2 4 M -->
+      <WidgetGroup>
+        <Layout>horizontal</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+          <KnobComposed>
+            <TooltipId>EffectUnit_sampler_enabled</TooltipId>
+            <ObjectName>RbCfxChannelKnob</ObjectName>
+            <Size>20f,20f</Size>
+            <Knob>skins:Rekordbox/graphics/knobs/knob_indicator_small_green.svg</Knob>
+            <BackPath>skins:Rekordbox/graphics/knobs/knob_bg_small.svg</BackPath>
+            <MinAngle>-130</MinAngle>
+            <MaxAngle>130</MaxAngle>
+            <ArcRadius>8.0</ArcRadius>
+            <ArcUnipolar>true</ArcUnipolar>
+            <ArcColor>#00a0e9</ArcColor>
+            <ArcThickness>2</ArcThickness>
+            <Connection>
+              <ConfigKey><Variable name="FxUnitGroup"/>,group_Sampler_enable</ConfigKey>
+            </Connection>
+          </KnobComposed>
+          <KnobComposed>
+            <TooltipId>EffectUnit_deck_enabled</TooltipId>
+            <ObjectName>RbCfxChannelKnob</ObjectName>
+            <Size>20f,20f</Size>
+            <Knob>skins:Rekordbox/graphics/knobs/knob_indicator_small_green.svg</Knob>
+            <BackPath>skins:Rekordbox/graphics/knobs/knob_bg_small.svg</BackPath>
+            <MinAngle>-130</MinAngle>
+            <MaxAngle>130</MaxAngle>
+            <ArcRadius>8.0</ArcRadius>
+            <ArcUnipolar>true</ArcUnipolar>
+            <ArcColor>#00a0e9</ArcColor>
+            <ArcThickness>2</ArcThickness>
+            <Connection>
+              <ConfigKey><Variable name="FxUnitGroup"/>,group_Channel3_enable</ConfigKey>
+            </Connection>
+          </KnobComposed>
+          <KnobComposed>
+            <TooltipId>EffectUnit_deck_enabled</TooltipId>
+            <ObjectName>RbCfxChannelKnob</ObjectName>
+            <Size>20f,20f</Size>
+            <Knob>skins:Rekordbox/graphics/knobs/knob_indicator_small_green.svg</Knob>
+            <BackPath>skins:Rekordbox/graphics/knobs/knob_bg_small.svg</BackPath>
+            <MinAngle>-130</MinAngle>
+            <MaxAngle>130</MaxAngle>
+            <ArcRadius>8.0</ArcRadius>
+            <ArcUnipolar>true</ArcUnipolar>
+            <ArcColor>#00a0e9</ArcColor>
+            <ArcThickness>2</ArcThickness>
+            <Connection>
+              <ConfigKey><Variable name="FxUnitGroup"/>,group_Channel1_enable</ConfigKey>
+            </Connection>
+          </KnobComposed>
+          <KnobComposed>
+            <TooltipId>EffectUnit_deck_enabled</TooltipId>
+            <ObjectName>RbCfxChannelKnob</ObjectName>
+            <Size>20f,20f</Size>
+            <Knob>skins:Rekordbox/graphics/knobs/knob_indicator_small_green.svg</Knob>
+            <BackPath>skins:Rekordbox/graphics/knobs/knob_bg_small.svg</BackPath>
+            <MinAngle>-130</MinAngle>
+            <MaxAngle>130</MaxAngle>
+            <ArcRadius>8.0</ArcRadius>
+            <ArcUnipolar>true</ArcUnipolar>
+            <ArcColor>#00a0e9</ArcColor>
+            <ArcThickness>2</ArcThickness>
+            <Connection>
+              <ConfigKey><Variable name="FxUnitGroup"/>,group_Channel2_enable</ConfigKey>
+            </Connection>
+          </KnobComposed>
+          <KnobComposed>
+            <TooltipId>EffectUnit_deck_enabled</TooltipId>
+            <ObjectName>RbCfxChannelKnob</ObjectName>
+            <Size>20f,20f</Size>
+            <Knob>skins:Rekordbox/graphics/knobs/knob_indicator_small_green.svg</Knob>
+            <BackPath>skins:Rekordbox/graphics/knobs/knob_bg_small.svg</BackPath>
+            <MinAngle>-130</MinAngle>
+            <MaxAngle>130</MaxAngle>
+            <ArcRadius>8.0</ArcRadius>
+            <ArcUnipolar>true</ArcUnipolar>
+            <ArcColor>#00a0e9</ArcColor>
+            <ArcThickness>2</ArcThickness>
+            <Connection>
+              <ConfigKey><Variable name="FxUnitGroup"/>,group_Channel4_enable</ConfigKey>
+            </Connection>
+          </KnobComposed>
+          <KnobComposed>
+            <TooltipId>EffectUnit_master_enabled</TooltipId>
+            <ObjectName>RbCfxChannelKnob</ObjectName>
+            <Size>20f,20f</Size>
+            <Knob>skins:Rekordbox/graphics/knobs/knob_indicator_small_green.svg</Knob>
+            <BackPath>skins:Rekordbox/graphics/knobs/knob_bg_small.svg</BackPath>
+            <MinAngle>-130</MinAngle>
+            <MaxAngle>130</MaxAngle>
+            <ArcRadius>8.0</ArcRadius>
+            <ArcUnipolar>true</ArcUnipolar>
+            <ArcColor>#00a0e9</ArcColor>
+            <ArcThickness>2</ArcThickness>
+            <Connection>
+              <ConfigKey><Variable name="FxUnitGroup"/>,group_Master_enable</ConfigKey>
+            </Connection>
+          </KnobComposed>
+        </Children>
+      </WidgetGroup>
+
+      <!-- CFX type selector buttons (9 types) -->
+      <WidgetGroup>
+        <Layout>horizontal</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
           <PushButton>
             <TooltipId>EffectSlot_enabled</TooltipId>
-            <ObjectName>RbCfxButton</ObjectName>
-            <Size>44f,20f</Size>
-            <NumberStates>1</NumberStates>
-            <State>
-              <Number>0</Number>
-              <Text>SPACE</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
-            </State>
-            <Connection>
-              <ConfigKey><Variable name="QuickEffectSlot"/>,load_effect_by_name</ConfigKey>
-              <ButtonState>LeftButton</ButtonState>
-              <Transform><Add>Reverb</Add></Transform>
-            </Connection>
-          </PushButton>
-
-          <PushButton><!-- Echo = load by display name -->
-            <TooltipId>EffectSlot_enabled</TooltipId>
-            <ObjectName>RbCfxButton</ObjectName>
-            <Size>44f,20f</Size>
-            <NumberStates>1</NumberStates>
-            <State>
-              <Number>0</Number>
-              <Text>DUB ECHO</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
-            </State>
-            <Connection>
-              <ConfigKey><Variable name="QuickEffectSlot"/>,load_effect_by_name</ConfigKey>
-              <ButtonState>LeftButton</ButtonState>
-              <Transform><Add>Echo</Add></Transform>
-            </Connection>
-          </PushButton>
-
-          <PushButton><!-- Flanger = load by display name -->
-            <TooltipId>EffectSlot_enabled</TooltipId>
-            <ObjectName>RbCfxButton</ObjectName>
-            <Size>44f,20f</Size>
-            <NumberStates>1</NumberStates>
-            <State>
-              <Number>0</Number>
-              <Text>FLANGER</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
-            </State>
-            <Connection>
-              <ConfigKey><Variable name="QuickEffectSlot"/>,load_effect_by_name</ConfigKey>
-              <ButtonState>LeftButton</ButtonState>
-              <Transform><Add>Flanger</Add></Transform>
-            </Connection>
-          </PushButton>
-
-          <PushButton><!-- Bitcrusher = load by display name -->
-            <TooltipId>EffectSlot_enabled</TooltipId>
-            <ObjectName>RbCfxButton</ObjectName>
-            <Size>44f,20f</Size>
-            <NumberStates>1</NumberStates>
-            <State>
-              <Number>0</Number>
-              <Text>CRUSH</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
-            </State>
-            <Connection>
-              <ConfigKey><Variable name="QuickEffectSlot"/>,load_effect_by_name</ConfigKey>
-              <ButtonState>LeftButton</ButtonState>
-              <Transform><Add>Bitcrusher</Add></Transform>
-            </Connection>
-          </PushButton>
-
-          <PushButton><!-- Filter = load by display name -->
-            <TooltipId>EffectSlot_enabled</TooltipId>
-            <ObjectName>RbCfxButton</ObjectName>
+            <ObjectName>RbCfxTypeButton</ObjectName>
             <Size>44f,20f</Size>
             <NumberStates>1</NumberStates>
             <State>
@@ -141,10 +293,77 @@
               <Transform><Add>Filter</Add></Transform>
             </Connection>
           </PushButton>
-
-          <PushButton><!-- Sweep = load by display name -->
+          <PushButton>
             <TooltipId>EffectSlot_enabled</TooltipId>
-            <ObjectName>RbCfxButton</ObjectName>
+            <ObjectName>RbCfxTypeButton</ObjectName>
+            <Size>44f,20f</Size>
+            <NumberStates>1</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>NOISE</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="QuickEffectSlot"/>,load_effect_by_name</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+              <Transform><Add>WhiteNoise</Add></Transform>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <TooltipId>EffectSlot_enabled</TooltipId>
+            <ObjectName>RbCfxTypeButton</ObjectName>
+            <Size>44f,20f</Size>
+            <NumberStates>1</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>CRUSH</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="QuickEffectSlot"/>,load_effect_by_name</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+              <Transform><Add>Bitcrusher</Add></Transform>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <TooltipId>EffectSlot_enabled</TooltipId>
+            <ObjectName>RbCfxTypeButton</ObjectName>
+            <Size>44f,20f</Size>
+            <NumberStates>1</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>SPACE</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="QuickEffectSlot"/>,load_effect_by_name</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+              <Transform><Add>Reverb</Add></Transform>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <TooltipId>EffectSlot_enabled</TooltipId>
+            <ObjectName>RbCfxTypeButton</ObjectName>
+            <Size>44f,20f</Size>
+            <NumberStates>1</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>DUB ECHO</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="QuickEffectSlot"/>,load_effect_by_name</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+              <Transform><Add>Echo</Add></Transform>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <TooltipId>EffectSlot_enabled</TooltipId>
+            <ObjectName>RbCfxTypeButton</ObjectName>
             <Size>44f,20f</Size>
             <NumberStates>1</NumberStates>
             <State>
@@ -159,73 +378,55 @@
               <Transform><Add>Sweep</Add></Transform>
             </Connection>
           </PushButton>
-
-        </Children>
-      </WidgetGroup>
-
-      <WidgetGroup><!-- macro knob + quick enable -->
-        <Layout>horizontal</Layout>
-        <SizePolicy>min,min</SizePolicy>
-        <Children>
-          <KnobComposed>
-            <TooltipId>QuickEffectRack_super1</TooltipId>
-            <Size>30f,26f</Size>
-            <Knob>skins:Rekordbox/graphics/knobs/knob_indicator_small_green.svg</Knob>
-            <BackPath>skins:Rekordbox/graphics/knobs/knob_bg_small.svg</BackPath>
-            <MinAngle>-130</MinAngle>
-            <MaxAngle>130</MaxAngle>
-            <ArcRadius>10.0</ArcRadius>
-            <ArcUnipolar>true</ArcUnipolar>
-            <ArcColor>#00a0e9</ArcColor>
-            <ArcThickness>2</ArcThickness>
-            <Connection>
-              <ConfigKey><Variable name="QuickEffectRack"/>,super1</ConfigKey>
-            </Connection>
-          </KnobComposed>
-          <PushButton><!-- momentary quick effect gate -->
-            <TooltipId>QuickEffectRack_enabled</TooltipId>
-            <ObjectName>RbCfxGate</ObjectName>
+          <PushButton>
+            <TooltipId>EffectSlot_enabled</TooltipId>
+            <ObjectName>RbCfxTypeButton</ObjectName>
             <Size>44f,20f</Size>
-            <NumberStates>2</NumberStates>
-            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <NumberStates>1</NumberStates>
             <State>
               <Number>0</Number>
-              <Text>FX ON</Text>
+              <Text>PITCH</Text>
               <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
               <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
-            <State>
-              <Number>1</Number>
-              <Text>FX ON</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
-            </State>
             <Connection>
-              <ConfigKey><Variable name="QuickEffectRack"/>,enabled</ConfigKey>
+              <ConfigKey><Variable name="QuickEffectSlot"/>,load_effect_by_name</ConfigKey>
               <ButtonState>LeftButton</ButtonState>
+              <Transform><Add>PitchShift</Add></Transform>
             </Connection>
           </PushButton>
-          <PushButton><!-- release fx toggle -->
-            <TooltipId>release_fx</TooltipId>
-            <ObjectName>RbCfxRelease</ObjectName>
+          <PushButton>
+            <TooltipId>EffectSlot_enabled</TooltipId>
+            <ObjectName>RbCfxTypeButton</ObjectName>
             <Size>44f,20f</Size>
-            <NumberStates>2</NumberStates>
-            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <NumberStates>1</NumberStates>
             <State>
               <Number>0</Number>
-              <Text>REL</Text>
+              <Text>JET</Text>
               <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
               <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
+            <Connection>
+              <ConfigKey><Variable name="QuickEffectSlot"/>,load_effect_by_name</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+              <Transform><Add>Flanger</Add></Transform>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <TooltipId>EffectSlot_enabled</TooltipId>
+            <ObjectName>RbCfxTypeButton</ObjectName>
+            <Size>44f,20f</Size>
+            <NumberStates>1</NumberStates>
             <State>
-              <Number>1</Number>
-              <Text>REL</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Number>0</Number>
+              <Text>GATE</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
               <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
             <Connection>
-              <ConfigKey><Variable name="QuickEffectRack"/>,release_fx_enabled</ConfigKey>
+              <ConfigKey><Variable name="QuickEffectSlot"/>,load_effect_by_name</ConfigKey>
               <ButtonState>LeftButton</ButtonState>
+              <Transform><Add>GateComp</Add></Transform>
             </Connection>
           </PushButton>
         </Children>
@@ -234,4 +435,3 @@
     </Children>
   </WidgetGroup>
 </Template>
-

@@ -1,0 +1,28 @@
+<!-- CUSTOM MOD (rekordbox-skin): Rekordbox-style zoomed waveform -->
+<!--
+  Full-width zoomed per-beat waveform per deck.
+  Variables:
+    ChanNum : 1..4
+-->
+<Template>
+  <SetVariable name="Group">[Channel<Variable name="ChanNum"/>]</SetVariable>
+
+  <Waveform>
+    <TooltipId>waveform</TooltipId>
+    <Size>-1me,80f</Size>
+    <Group><Variable name="Group"/></Group>
+    <BgColor>#0B0B10</BgColor>
+    <SignalColor>#4a4a4a</SignalColor>
+    <SignalHighColor>#4FC3F7</SignalHighColor>
+    <SignalMidColor>#4FC3F7</SignalMidColor>
+    <SignalLowColor>#F5A623</SignalLowColor>
+    <PlayPosColor>#00a0e9</PlayPosColor>
+    <CueColor>#ff7a01</CueColor>
+    <LoopColor>#00b400</LoopColor>
+    <PlayedOverlayColor>#dd151515</PlayedOverlayColor>
+    <EndOfTrackColor>#f856e7</EndOfTrackColor>
+    <Connection>
+      <ConfigKey><Variable name="Group"/>,playposition</ConfigKey>
+    </Connection>
+  </Waveform>
+</Template>

@@ -1,0 +1,185 @@
+<!-- CUSTOM MOD (rekordbox-skin): Rekordbox-style deck header row -->
+<!--
+  Per-deck header with artwork placeholder, title, BPM, key, times,
+  KEY SYNC ±0 stepper, BEAT SYNC, MASTER button.
+  Variables:
+    ChanNum : 1..4
+-->
+<Template>
+  <SetVariable name="Group">[Channel<Variable name="ChanNum"/>]</SetVariable>
+
+  <WidgetGroup>
+    <ObjectName>RbDeckHeader</ObjectName>
+    <Layout>horizontal</Layout>
+    <SizePolicy>me,min</SizePolicy>
+    <Children>
+
+      <WidgetGroup>
+        <Layout>horizontal</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+          <Label>
+            <ObjectName>RbDeckTitle</ObjectName>
+            <Size>90f,14f</Size>
+            <Text>DECK <Variable name="ChanNum"/></Text>
+          </Label>
+          <Label>
+            <TooltipId>songauthor</TooltipId>
+            <ObjectName>RbDeckArtist</ObjectName>
+            <Size>90f,11f</Size>
+            <Text>Artist</Text>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,track_author</ConfigKey>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
+            </Connection>
+          </Label>
+          <Label>
+            <TooltipId>songtitle</TooltipId>
+            <ObjectName>RbDeckTrack</ObjectName>
+            <Size>90f,11f</Size>
+            <Text>Title</Text>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,track_title</ConfigKey>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
+            </Connection>
+          </Label>
+        </Children>
+      </WidgetGroup>
+
+      <WidgetGroup>
+        <Layout>horizontal</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+          <Label>
+            <Text>BPM</Text>
+          </Label>
+          <ValueLabel>
+            <TooltipId>beats</TooltipId>
+            <ObjectName>RbBpmValue</ObjectName>
+            <Size>48f,14f</Size>
+            <Precision>1</Precision>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,bpm</ConfigKey>
+            </Connection>
+          </ValueLabel>
+          <Label>
+            <ObjectName>RbKeyValue</ObjectName>
+            <Size>30f,14f</Size>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,key</ConfigKey>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
+            </Connection>
+          </Label>
+        </Children>
+      </WidgetGroup>
+
+      <WidgetGroup>
+        <Layout>horizontal</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+          <ValueLabel>
+            <TooltipId>time</TooltipId>
+            <ObjectName>RbRemainingTime</ObjectName>
+            <Size>70f,14f</Size>
+            <Precision>2</Precision>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,playposition</ConfigKey>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
+            </Connection>
+          </ValueLabel>
+          <Label>
+            <TooltipId>duration</TooltipId>
+            <ObjectName>RbTotalTime</ObjectName>
+            <Size>70f,14f</Size>
+            <Text>-0:00.0</Text>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,duration</ConfigKey>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
+              <TransformFunction>DurationToClock</TransformFunction>
+            </Connection>
+          </Label>
+        </Children>
+      </WidgetGroup>
+
+      <WidgetGroup>
+        <Layout>horizontal</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+
+          <PushButton>
+            <TooltipId>sync_enabled</TooltipId>
+            <ObjectName>RbSyncButton</ObjectName>
+            <Size>42f,26f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>SYNC</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>SYNC</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,sync_enabled</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+
+          <PushButton>
+            <TooltipId>keylock</TooltipId>
+            <ObjectName>RbKeylockButton</ObjectName>
+            <Size>30f,24f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>MT</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>MT</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,keylock</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+
+          <PushButton>
+            <ObjectName>RbMasterButton</ObjectName>
+            <Size>40f,24f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>MASTER</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>MASTER</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,master</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+
+        </Children>
+      </WidgetGroup>
+
+    </Children>
+  </WidgetGroup>
+</Template>

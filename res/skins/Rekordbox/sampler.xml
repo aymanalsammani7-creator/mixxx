@@ -3,14 +3,12 @@
   <WidgetGroup>
     <ObjectName>RbSamplerDeck</ObjectName>
     <Layout>vertical</Layout>
-    <Size>1280,100</Size>
+    <Size>1280,140</Size>
     <Children>
-
       <WidgetGroup>
         <Layout>horizontal</Layout>
         <SizePolicy>me,min</SizePolicy>
         <Children>
-
           <PushButton>
             <TooltipId>sampler_bank</TooltipId>
             <ObjectName>RbSamplerBank</ObjectName>
@@ -27,7 +25,6 @@
               <ButtonState>LeftButton</ButtonState>
             </Connection>
           </PushButton>
-
           <PushButton>
             <TooltipId>sampler_playmode</TooltipId>
             <ObjectName>RbSamplerPlayMode</ObjectName>
@@ -44,7 +41,6 @@
               <ButtonState>LeftButton</ButtonState>
             </Connection>
           </PushButton>
-
           <PushButton>
             <TooltipId>sampler_quantize</TooltipId>
             <ObjectName>RbSamplerQuantize</ObjectName>
@@ -67,7 +63,6 @@
               <ButtonState>LeftButton</ButtonState>
             </Connection>
           </PushButton>
-
           <PushButton>
             <TooltipId>sampler_sync</TooltipId>
             <ObjectName>RbSamplerSync</ObjectName>
@@ -90,15 +85,12 @@
               <ButtonState>LeftButton</ButtonState>
             </Connection>
           </PushButton>
-
         </Children>
       </WidgetGroup>
-
       <WidgetGroup>
         <Layout>horizontal</Layout>
         <SizePolicy>me,min</SizePolicy>
         <Children>
-
           <PushButton>
             <ObjectName>RbSamplerSlot1</ObjectName>
             <Size>60,40</Size>
@@ -120,7 +112,6 @@
               <ButtonState>LeftButton</ButtonState>
             </Connection>
           </PushButton>
-
           <PushButton>
             <ObjectName>RbSamplerSlot2</ObjectName>
             <Size>60,40</Size>
@@ -142,7 +133,6 @@
               <ButtonState>LeftButton</ButtonState>
             </Connection>
           </PushButton>
-
           <PushButton>
             <ObjectName>RbSamplerSlot3</ObjectName>
             <Size>60,40</Size>
@@ -164,7 +154,6 @@
               <ButtonState>LeftButton</ButtonState>
             </Connection>
           </PushButton>
-
           <PushButton>
             <ObjectName>RbSamplerSlot4</ObjectName>
             <Size>60,40</Size>
@@ -186,7 +175,6 @@
               <ButtonState>LeftButton</ButtonState>
             </Connection>
           </PushButton>
-
           <PushButton>
             <ObjectName>RbSamplerSlot5</ObjectName>
             <Size>60,40</Size>
@@ -208,7 +196,6 @@
               <ButtonState>LeftButton</ButtonState>
             </Connection>
           </PushButton>
-
           <PushButton>
             <ObjectName>RbSamplerSlot6</ObjectName>
             <Size>60,40</Size>
@@ -230,7 +217,6 @@
               <ButtonState>LeftButton</ButtonState>
             </Connection>
           </PushButton>
-
           <PushButton>
             <ObjectName>RbSamplerSlot7</ObjectName>
             <Size>60,40</Size>
@@ -252,7 +238,6 @@
               <ButtonState>LeftButton</ButtonState>
             </Connection>
           </PushButton>
-
           <PushButton>
             <ObjectName>RbSamplerSlot8</ObjectName>
             <Size>60,40</Size>
@@ -274,10 +259,275 @@
               <ButtonState>LeftButton</ButtonState>
             </Connection>
           </PushButton>
-
         </Children>
       </WidgetGroup>
-
+      <WidgetGroup>
+        <Layout>horizontal</Layout>
+        <SizePolicy>me,min</SizePolicy>
+        <Children>
+          <PushButton>
+            <ObjectName>RbSeqSlot1</ObjectName>
+            <Size>60,30</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>1</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>1</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[Master],sequence1</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>RbSeqSlot2</ObjectName>
+            <Size>60,30</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>2</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>2</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[Master],sequence2</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>RbSeqSlot3</ObjectName>
+            <Size>60,30</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>3</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>3</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[Master],sequence3</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>RbSeqSlot4</ObjectName>
+            <Size>60,30</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>4</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>4</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[Master],sequence4</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>RbSeqSlot5</ObjectName>
+            <Size>60,30</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>5</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>5</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[Master],sequence5</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>RbSeqSlot6</ObjectName>
+            <Size>60,30</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>6</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>6</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[Master],sequence6</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>RbSeqSlot7</ObjectName>
+            <Size>60,30</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>7</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>7</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[Master],sequence7</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>RbSeqSlot8</ObjectName>
+            <Size>60,30</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>8</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>8</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[Master],sequence8</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>RbSeqRecord</ObjectName>
+            <Size>60,30</Size>
+            <NumberStates>1</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>REC</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[Master],sequence_record</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>RbSeqPlay</ObjectName>
+            <Size>60,30</Size>
+            <NumberStates>1</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>PLAY</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[Master],sequence_play</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>RbSeqMute</ObjectName>
+            <Size>60,30</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>MUTE</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>MUTE</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[Master],sequence_mute</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>RbSeqErase</ObjectName>
+            <Size>60,30</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>ERASE</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>ERASE</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[Master],sequence_erase</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>RbSeqMetronome</ObjectName>
+            <Size>70,30</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>METRO</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>METRO</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[Master],metronome</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+        </Children>
+      </WidgetGroup>
     </Children>
   </WidgetGroup>
 </Template>

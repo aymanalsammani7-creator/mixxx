@@ -1,13 +1,12 @@
-<!-- CUSTOM MOD (rekordbox-skin): Rekordbox-style layout for local Mixxx build -->
+<!-- CUSTOM MOD (rekordbox-skin): Rekordbox-style Pad FX panel -->
 <!--
-  Rekordbox-style Pad FX panel for EffectUnit4 (performance pad FX).
-  Effect enable buttons + per-deck routing + EDIT mode toggle.
-  [Controls],PadFxEditMode belongs to parallel C++ work; binding a missing CO
-  is harmless (connection is skipped until the control lands).
+  Mode-dependent pad grid for EffectUnit4.
   Variables:
     ChanNum : deck whose label is shown (1 or 2)
 -->
 <Template>
+  <SetVariable name="Group">[Channel<Variable name="ChanNum"/>]</SetVariable>
+
   <WidgetGroup>
     <ObjectName>RbPadFxPanel</ObjectName>
     <Layout>vertical</Layout>
@@ -20,238 +19,704 @@
         <Text>PAD FX D&#8202;<Variable name="ChanNum"/></Text>
       </Label>
 
-      <WidgetGroup><!-- instant pad FX toggles -->
+      <!-- Pad mode selector -->
+      <WidgetGroup>
+        <Layout>horizontal</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+          <PushButton>
+            <ObjectName>RbPadModeSelect</ObjectName>
+            <Size>60,20</Size>
+            <NumberStates>1</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>PAD FX</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,pad_mode</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>RbPadBank1</ObjectName>
+            <Size>20,20</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>1</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>1</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,pad_fx_bank</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>RbPadBank2</ObjectName>
+            <Size>20,20</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>2</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>2</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,pad_fx_bank</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+        </Children>
+      </WidgetGroup>
+
+      <!-- 8-slot pad FX grid with parameter steppers -->
+      <WidgetGroup>
         <Layout>horizontal</Layout>
         <SizePolicy>min,min</SizePolicy>
         <Children>
 
-          <PushButton><!-- Unit4 Effect1 -->
-            <TooltipId>EffectSlot_enabled</TooltipId>
-            <ObjectName>RbPadButton</ObjectName>
-            <Size>52f,24f</Size>
-            <NumberStates>2</NumberStates>
-            <RightClickIsPushButton>false</RightClickIsPushButton>
-            <State>
-              <Number>0</Number>
-              <Text>SPACE</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
-            </State>
-            <State>
-              <Number>1</Number>
-              <Text>SPACE</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
-            </State>
-            <Connection>
-              <ConfigKey>[EffectRack1_EffectUnit4_Effect1],enabled</ConfigKey>
-              <ButtonState>LeftButton</ButtonState>
-            </Connection>
-          </PushButton>
+          <WidgetGroup><!-- Pad 1 -->
+            <Layout>vertical</Layout>
+            <SizePolicy>min,min</SizePolicy>
+            <Children>
+              <PushButton>
+                <ObjectName>RbPadSlot1</ObjectName>
+                <Size>52f,24f</Size>
+                <NumberStates>2</NumberStates>
+                <RightClickIsPushButton>false</RightClickIsPushButton>
+                <State>
+                  <Number>0</Number>
+                  <Text>1</Text>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                </State>
+                <State>
+                  <Number>1</Number>
+                  <Text>1</Text>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                </State>
+                <Connection>
+                  <ConfigKey><Variable name="Group"/>,pad_fx_slot1_enabled</ConfigKey>
+                  <ButtonState>LeftButton</ButtonState>
+                </Connection>
+              </PushButton>
+              <WidgetGroup>
+                <Layout>horizontal</Layout>
+                <SizePolicy>min,min</SizePolicy>
+                <Children>
+                  <PushButton>
+                    <ObjectName>RbPadSlot1Down</ObjectName>
+                    <Size>16f,16f</Size>
+                    <NumberStates>1</NumberStates>
+                    <State>
+                      <Number>0</Number>
+                      <Text>&lt;</Text>
+                      <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                      <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                    </State>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot1_param1</ConfigKey>
+                      <ButtonState>LeftButton</ButtonState>
+                      <Transform><Add>-1</Add></Transform>
+                    </Connection>
+                  </PushButton>
+                  <ValueLabel>
+                    <ObjectName>RbPadSlot1Param</ObjectName>
+                    <Size>20f,16f</Size>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot1_param1</ConfigKey>
+                      <ConnectValueFromWidget>false</ConnectValueFromWidget>
+                    </Connection>
+                  </ValueLabel>
+                  <PushButton>
+                    <ObjectName>RbPadSlot1Up</ObjectName>
+                    <Size>16f,16f</Size>
+                    <NumberStates>1</NumberStates>
+                    <State>
+                      <Number>0</Number>
+                      <Text>&gt;</Text>
+                      <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                      <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                    </State>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot1_param1</ConfigKey>
+                      <ButtonState>LeftButton</ButtonState>
+                      <Transform><Add>1</Add></Transform>
+                    </Connection>
+                  </PushButton>
+                </Children>
+              </WidgetGroup>
+            </Children>
+          </WidgetGroup>
 
-          <PushButton><!-- Unit4 Effect2 -->
-            <TooltipId>EffectSlot_enabled</TooltipId>
-            <ObjectName>RbPadButton</ObjectName>
-            <Size>52f,24f</Size>
-            <NumberStates>2</NumberStates>
-            <RightClickIsPushButton>false</RightClickIsPushButton>
-            <State>
-              <Number>0</Number>
-              <Text>REVERB</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
-            </State>
-            <State>
-              <Number>1</Number>
-              <Text>REVERB</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
-            </State>
-            <Connection>
-              <ConfigKey>[EffectRack1_EffectUnit4_Effect2],enabled</ConfigKey>
-              <ButtonState>LeftButton</ButtonState>
-            </Connection>
-          </PushButton>
+          <WidgetGroup><!-- Pad 2 -->
+            <Layout>vertical</Layout>
+            <SizePolicy>min,min</SizePolicy>
+            <Children>
+              <PushButton>
+                <ObjectName>RbPadSlot2</ObjectName>
+                <Size>52f,24f</Size>
+                <NumberStates>2</NumberStates>
+                <RightClickIsPushButton>false</RightClickIsPushButton>
+                <State>
+                  <Number>0</Number>
+                  <Text>2</Text>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                </State>
+                <State>
+                  <Number>1</Number>
+                  <Text>2</Text>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                </State>
+                <Connection>
+                  <ConfigKey><Variable name="Group"/>,pad_fx_slot2_enabled</ConfigKey>
+                  <ButtonState>LeftButton</ButtonState>
+                </Connection>
+              </PushButton>
+              <WidgetGroup>
+                <Layout>horizontal</Layout>
+                <SizePolicy>min,min</SizePolicy>
+                <Children>
+                  <PushButton>
+                    <ObjectName>RbPadSlot2Down</ObjectName>
+                    <Size>16f,16f</Size>
+                    <NumberStates>1</NumberStates>
+                    <State>
+                      <Number>0</Number>
+                      <Text>&lt;</Text>
+                      <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                      <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                    </State>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot2_param1</ConfigKey>
+                      <ButtonState>LeftButton</ButtonState>
+                      <Transform><Add>-1</Add></Transform>
+                    </Connection>
+                  </PushButton>
+                  <ValueLabel>
+                    <ObjectName>RbPadSlot2Param</ObjectName>
+                    <Size>20f,16f</Size>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot2_param1</ConfigKey>
+                      <ConnectValueFromWidget>false</ConnectValueFromWidget>
+                    </Connection>
+                  </ValueLabel>
+                  <PushButton>
+                    <ObjectName>RbPadSlot2Up</ObjectName>
+                    <Size>16f,16f</Size>
+                    <NumberStates>1</NumberStates>
+                    <State>
+                      <Number>0</Number>
+                      <Text>&gt;</Text>
+                      <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                      <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                    </State>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot2_param1</ConfigKey>
+                      <ButtonState>LeftButton</ButtonState>
+                      <Transform><Add>1</Add></Transform>
+                    </Connection>
+                  </PushButton>
+                </Children>
+              </WidgetGroup>
+            </Children>
+          </WidgetGroup>
 
-<PushButton><!-- Unit4 Effect3 -->
-            <TooltipId>EffectSlot_enabled</TooltipId>
-            <ObjectName>RbPadButton</ObjectName>
-            <Size>52f,24f</Size>
-            <NumberStates>2</NumberStates>
-            <RightClickIsPushButton>false</RightClickIsPushButton>
-            <State>
-              <Number>0</Number>
-              <Text>FLANGER</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
-            </State>
-            <State>
-              <Number>1</Number>
-              <Text>FLANGER</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
-            </State>
-            <Connection>
-              <ConfigKey>[EffectRack1_EffectUnit4_Effect3],enabled</ConfigKey>
-              <ButtonState>LeftButton</ButtonState>
-            </Connection>
-          </PushButton>
+          <WidgetGroup><!-- Pad 3 -->
+            <Layout>vertical</Layout>
+            <SizePolicy>min,min</SizePolicy>
+            <Children>
+              <PushButton>
+                <ObjectName>RbPadSlot3</ObjectName>
+                <Size>52f,24f</Size>
+                <NumberStates>2</NumberStates>
+                <RightClickIsPushButton>false</RightClickIsPushButton>
+                <State>
+                  <Number>0</Number>
+                  <Text>3</Text>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                </State>
+                <State>
+                  <Number>1</Number>
+                  <Text>3</Text>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                </State>
+                <Connection>
+                  <ConfigKey><Variable name="Group"/>,pad_fx_slot3_enabled</ConfigKey>
+                  <ButtonState>LeftButton</ButtonState>
+                </Connection>
+              </PushButton>
+              <WidgetGroup>
+                <Layout>horizontal</Layout>
+                <SizePolicy>min,min</SizePolicy>
+                <Children>
+                  <PushButton>
+                    <ObjectName>RbPadSlot3Down</ObjectName>
+                    <Size>16f,16f</Size>
+                    <NumberStates>1</NumberStates>
+                    <State>
+                      <Number>0</Number>
+                      <Text>&lt;</Text>
+                      <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                      <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                    </State>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot3_param1</ConfigKey>
+                      <ButtonState>LeftButton</ButtonState>
+                      <Transform><Add>-1</Add></Transform>
+                    </Connection>
+                  </PushButton>
+                  <ValueLabel>
+                    <ObjectName>RbPadSlot3Param</ObjectName>
+                    <Size>20f,16f</Size>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot3_param1</ConfigKey>
+                      <ConnectValueFromWidget>false</ConnectValueFromWidget>
+                    </Connection>
+                  </ValueLabel>
+                  <PushButton>
+                    <ObjectName>RbPadSlot3Up</ObjectName>
+                    <Size>16f,16f</Size>
+                    <NumberStates>1</NumberStates>
+                    <State>
+                      <Number>0</Number>
+                      <Text>&gt;</Text>
+                      <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                      <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                    </State>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot3_param1</ConfigKey>
+                      <ButtonState>LeftButton</ButtonState>
+                      <Transform><Add>1</Add></Transform>
+                    </Connection>
+                  </PushButton>
+                </Children>
+              </WidgetGroup>
+            </Children>
+          </WidgetGroup>
 
-          <PushButton><!-- Unit4 Effect4: Gate/Comp (Rekordbox 4th CFX slot) -->
-            <TooltipId>EffectSlot_enabled</TooltipId>
-            <ObjectName>RbPadButton</ObjectName>
-            <Size>52f,24f</Size>
-            <NumberStates>2</NumberStates>
-            <RightClickIsPushButton>false</RightClickIsPushButton>
-            <State>
-              <Number>0</Number>
-              <Text>GATE</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
-            </State>
-            <State>
-              <Number>1</Number>
-              <Text>GATE</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
-            </State>
-            <Connection>
-              <ConfigKey>[EffectRack1_EffectUnit4_Effect4],enabled</ConfigKey>
-              <ButtonState>LeftButton</ButtonState>
-            </Connection>
-          </PushButton>
+          <WidgetGroup><!-- Pad 4 -->
+            <Layout>vertical</Layout>
+            <SizePolicy>min,min</SizePolicy>
+            <Children>
+              <PushButton>
+                <ObjectName>RbPadSlot4</ObjectName>
+                <Size>52f,24f</Size>
+                <NumberStates>2</NumberStates>
+                <RightClickIsPushButton>false</RightClickIsPushButton>
+                <State>
+                  <Number>0</Number>
+                  <Text>4</Text>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                </State>
+                <State>
+                  <Number>1</Number>
+                  <Text>4</Text>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                </State>
+                <Connection>
+                  <ConfigKey><Variable name="Group"/>,pad_fx_slot4_enabled</ConfigKey>
+                  <ButtonState>LeftButton</ButtonState>
+                </Connection>
+              </PushButton>
+              <WidgetGroup>
+                <Layout>horizontal</Layout>
+                <SizePolicy>min,min</SizePolicy>
+                <Children>
+                  <PushButton>
+                    <ObjectName>RbPadSlot4Down</ObjectName>
+                    <Size>16f,16f</Size>
+                    <NumberStates>1</NumberStates>
+                    <State>
+                      <Number>0</Number>
+                      <Text>&lt;</Text>
+                      <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                      <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                    </State>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot4_param1</ConfigKey>
+                      <ButtonState>LeftButton</ButtonState>
+                      <Transform><Add>-1</Add></Transform>
+                    </Connection>
+                  </PushButton>
+                  <ValueLabel>
+                    <ObjectName>RbPadSlot4Param</ObjectName>
+                    <Size>20f,16f</Size>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot4_param1</ConfigKey>
+                      <ConnectValueFromWidget>false</ConnectValueFromWidget>
+                    </Connection>
+                  </ValueLabel>
+                  <PushButton>
+                    <ObjectName>RbPadSlot4Up</ObjectName>
+                    <Size>16f,16f</Size>
+                    <NumberStates>1</NumberStates>
+                    <State>
+                      <Number>0</Number>
+                      <Text>&gt;</Text>
+                      <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                      <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                    </State>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot4_param1</ConfigKey>
+                      <ButtonState>LeftButton</ButtonState>
+                      <Transform><Add>1</Add></Transform>
+                    </Connection>
+                  </PushButton>
+                </Children>
+              </WidgetGroup>
+            </Children>
+          </WidgetGroup>
+
+          <WidgetGroup><!-- Pad 5 -->
+            <Layout>vertical</Layout>
+            <SizePolicy>min,min</SizePolicy>
+            <Children>
+              <PushButton>
+                <ObjectName>RbPadSlot5</ObjectName>
+                <Size>52f,24f</Size>
+                <NumberStates>2</NumberStates>
+                <RightClickIsPushButton>false</RightClickIsPushButton>
+                <State>
+                  <Number>0</Number>
+                  <Text>5</Text>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                </State>
+                <State>
+                  <Number>1</Number>
+                  <Text>5</Text>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                </State>
+                <Connection>
+                  <ConfigKey><Variable name="Group"/>,pad_fx_slot5_enabled</ConfigKey>
+                  <ButtonState>LeftButton</ButtonState>
+                </Connection>
+              </PushButton>
+              <WidgetGroup>
+                <Layout>horizontal</Layout>
+                <SizePolicy>min,min</SizePolicy>
+                <Children>
+                  <PushButton>
+                    <ObjectName>RbPadSlot5Down</ObjectName>
+                    <Size>16f,16f</Size>
+                    <NumberStates>1</NumberStates>
+                    <State>
+                      <Number>0</Number>
+                      <Text>&lt;</Text>
+                      <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                      <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                    </State>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot5_param1</ConfigKey>
+                      <ButtonState>LeftButton</ButtonState>
+                      <Transform><Add>-1</Add></Transform>
+                    </Connection>
+                  </PushButton>
+                  <ValueLabel>
+                    <ObjectName>RbPadSlot5Param</ObjectName>
+                    <Size>20f,16f</Size>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot5_param1</ConfigKey>
+                      <ConnectValueFromWidget>false</ConnectValueFromWidget>
+                    </Connection>
+                  </ValueLabel>
+                  <PushButton>
+                    <ObjectName>RbPadSlot5Up</ObjectName>
+                    <Size>16f,16f</Size>
+                    <NumberStates>1</NumberStates>
+                    <State>
+                      <Number>0</Number>
+                      <Text>&gt;</Text>
+                      <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                      <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                    </State>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot5_param1</ConfigKey>
+                      <ButtonState>LeftButton</ButtonState>
+                      <Transform><Add>1</Add></Transform>
+                    </Connection>
+                  </PushButton>
+                </Children>
+              </WidgetGroup>
+            </Children>
+          </WidgetGroup>
+
+          <WidgetGroup><!-- Pad 6 -->
+            <Layout>vertical</Layout>
+            <SizePolicy>min,min</SizePolicy>
+            <Children>
+              <PushButton>
+                <ObjectName>RbPadSlot6</ObjectName>
+                <Size>52f,24f</Size>
+                <NumberStates>2</NumberStates>
+                <RightClickIsPushButton>false</RightClickIsPushButton>
+                <State>
+                  <Number>0</Number>
+                  <Text>6</Text>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                </State>
+                <State>
+                  <Number>1</Number>
+                  <Text>6</Text>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                </State>
+                <Connection>
+                  <ConfigKey><Variable name="Group"/>,pad_fx_slot6_enabled</ConfigKey>
+                  <ButtonState>LeftButton</ButtonState>
+                </Connection>
+              </PushButton>
+              <WidgetGroup>
+                <Layout>horizontal</Layout>
+                <SizePolicy>min,min</SizePolicy>
+                <Children>
+                  <PushButton>
+                    <ObjectName>RbPadSlot6Down</ObjectName>
+                    <Size>16f,16f</Size>
+                    <NumberStates>1</NumberStates>
+                    <State>
+                      <Number>0</Number>
+                      <Text>&lt;</Text>
+                      <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                      <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                    </State>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot6_param1</ConfigKey>
+                      <ButtonState>LeftButton</ButtonState>
+                      <Transform><Add>-1</Add></Transform>
+                    </Connection>
+                  </PushButton>
+                  <ValueLabel>
+                    <ObjectName>RbPadSlot6Param</ObjectName>
+                    <Size>20f,16f</Size>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot6_param1</ConfigKey>
+                      <ConnectValueFromWidget>false</ConnectValueFromWidget>
+                    </Connection>
+                  </ValueLabel>
+                  <PushButton>
+                    <ObjectName>RbPadSlot6Up</ObjectName>
+                    <Size>16f,16f</Size>
+                    <NumberStates>1</NumberStates>
+                    <State>
+                      <Number>0</Number>
+                      <Text>&gt;</Text>
+                      <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                      <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                    </State>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot6_param1</ConfigKey>
+                      <ButtonState>LeftButton</ButtonState>
+                      <Transform><Add>1</Add></Transform>
+                    </Connection>
+                  </PushButton>
+                </Children>
+              </WidgetGroup>
+            </Children>
+          </WidgetGroup>
+
+          <WidgetGroup><!-- Pad 7 -->
+            <Layout>vertical</Layout>
+            <SizePolicy>min,min</SizePolicy>
+            <Children>
+              <PushButton>
+                <ObjectName>RbPadSlot7</ObjectName>
+                <Size>52f,24f</Size>
+                <NumberStates>2</NumberStates>
+                <RightClickIsPushButton>false</RightClickIsPushButton>
+                <State>
+                  <Number>0</Number>
+                  <Text>7</Text>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                </State>
+                <State>
+                  <Number>1</Number>
+                  <Text>7</Text>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                </State>
+                <Connection>
+                  <ConfigKey><Variable name="Group"/>,pad_fx_slot7_enabled</ConfigKey>
+                  <ButtonState>LeftButton</ButtonState>
+                </Connection>
+              </PushButton>
+              <WidgetGroup>
+                <Layout>horizontal</Layout>
+                <SizePolicy>min,min</SizePolicy>
+                <Children>
+                  <PushButton>
+                    <ObjectName>RbPadSlot7Down</ObjectName>
+                    <Size>16f,16f</Size>
+                    <NumberStates>1</NumberStates>
+                    <State>
+                      <Number>0</Number>
+                      <Text>&lt;</Text>
+                      <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                      <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                    </State>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot7_param1</ConfigKey>
+                      <ButtonState>LeftButton</ButtonState>
+                      <Transform><Add>-1</Add></Transform>
+                    </Connection>
+                  </PushButton>
+                  <ValueLabel>
+                    <ObjectName>RbPadSlot7Param</ObjectName>
+                    <Size>20f,16f</Size>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot7_param1</ConfigKey>
+                      <ConnectValueFromWidget>false</ConnectValueFromWidget>
+                    </Connection>
+                  </ValueLabel>
+                  <PushButton>
+                    <ObjectName>RbPadSlot7Up</ObjectName>
+                    <Size>16f,16f</Size>
+                    <NumberStates>1</NumberStates>
+                    <State>
+                      <Number>0</Number>
+                      <Text>&gt;</Text>
+                      <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                      <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                    </State>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot7_param1</ConfigKey>
+                      <ButtonState>LeftButton</ButtonState>
+                      <Transform><Add>1</Add></Transform>
+                    </Connection>
+                  </PushButton>
+                </Children>
+              </WidgetGroup>
+            </Children>
+          </WidgetGroup>
+
+          <!-- Pad 8: Release FX with R prefix -->
+          <WidgetGroup>
+            <Layout>vertical</Layout>
+            <SizePolicy>min,min</SizePolicy>
+            <Children>
+              <PushButton>
+                <ObjectName>RbPadSlot8Release</ObjectName>
+                <Size>52f,24f</Size>
+                <NumberStates>2</NumberStates>
+                <RightClickIsPushButton>false</RightClickIsPushButton>
+                <State>
+                  <Number>0</Number>
+                  <Text>R 8</Text>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                </State>
+                <State>
+                  <Number>1</Number>
+                  <Text>R 8</Text>
+                  <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+                  <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                </State>
+                <Connection>
+                  <ConfigKey><Variable name="Group"/>,pad_fx_slot8_release</ConfigKey>
+                  <ButtonState>LeftButton</ButtonState>
+                </Connection>
+              </PushButton>
+              <WidgetGroup>
+                <Layout>horizontal</Layout>
+                <SizePolicy>min,min</SizePolicy>
+                <Children>
+                  <PushButton>
+                    <ObjectName>RbPadSlot8Down</ObjectName>
+                    <Size>16f,16f</Size>
+                    <NumberStates>1</NumberStates>
+                    <State>
+                      <Number>0</Number>
+                      <Text>&lt;</Text>
+                      <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                      <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                    </State>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot8_param1</ConfigKey>
+                      <ButtonState>LeftButton</ButtonState>
+                      <Transform><Add>-1</Add></Transform>
+                    </Connection>
+                  </PushButton>
+                  <ValueLabel>
+                    <ObjectName>RbPadSlot8Param</ObjectName>
+                    <Size>20f,16f</Size>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot8_param1</ConfigKey>
+                      <ConnectValueFromWidget>false</ConnectValueFromWidget>
+                    </Connection>
+                  </ValueLabel>
+                  <PushButton>
+                    <ObjectName>RbPadSlot8Up</ObjectName>
+                    <Size>16f,16f</Size>
+                    <NumberStates>1</NumberStates>
+                    <State>
+                      <Number>0</Number>
+                      <Text>&gt;</Text>
+                      <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+                      <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+                    </State>
+                    <Connection>
+                      <ConfigKey><Variable name="Group"/>,pad_fx_slot8_param1</ConfigKey>
+                      <ButtonState>LeftButton</ButtonState>
+                      <Transform><Add>1</Add></Transform>
+                    </Connection>
+                  </PushButton>
+                </Children>
+              </WidgetGroup>
+            </Children>
+          </WidgetGroup>
 
         </Children>
       </WidgetGroup>
 
-      <WidgetGroup><!-- routing (4-deck: each pad FX routes to its own isolated deck) -->
+      <!-- Gear icon + PAD FX dropdown -->
+      <WidgetGroup>
         <Layout>horizontal</Layout>
         <SizePolicy>min,min</SizePolicy>
         <Children>
-
-          <PushButton><!-- route unit 4 to deck 1 -->
-            <TooltipId>EffectUnit_group_enabled</TooltipId>
-            <ObjectName>RbPadRouteButton</ObjectName>
-            <Size>36f,22f</Size>
-            <NumberStates>2</NumberStates>
-            <RightClickIsPushButton>false</RightClickIsPushButton>
+          <PushButton>
+            <ObjectName>RbPadSettings</ObjectName>
+            <Size>20,20</Size>
+            <NumberStates>1</NumberStates>
             <State>
               <Number>0</Number>
-              <Text>D1</Text>
+              <Text>⚙</Text>
               <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
               <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
             </State>
-            <State>
-              <Number>1</Number>
-              <Text>D1</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
-            </State>
             <Connection>
-              <ConfigKey>[EffectRack1_EffectUnit4],group_[Channel1]_enable</ConfigKey>
+              <ConfigKey><Variable name="Group"/>,pad_fx_settings</ConfigKey>
               <ButtonState>LeftButton</ButtonState>
             </Connection>
           </PushButton>
-
-          <PushButton><!-- route unit 4 to deck 2 -->
-            <TooltipId>EffectUnit_group_enabled</TooltipId>
-            <ObjectName>RbPadRouteButton</ObjectName>
-            <Size>36f,22f</Size>
-            <NumberStates>2</NumberStates>
-            <RightClickIsPushButton>false</RightClickIsPushButton>
-            <State>
-              <Number>0</Number>
-              <Text>D2</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
-            </State>
-            <State>
-              <Number>1</Number>
-              <Text>D2</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
-            </State>
-            <Connection>
-              <ConfigKey>[EffectRack1_EffectUnit4],group_[Channel2]_enable</ConfigKey>
-              <ButtonState>LeftButton</ButtonState>
-            </Connection>
-          </PushButton>
-
-          <PushButton><!-- route unit 4 to deck 3 (layered swap target) -->
-            <TooltipId>EffectUnit_group_enabled</TooltipId>
-            <ObjectName>RbPadRouteButton</ObjectName>
-            <Size>36f,22f</Size>
-            <NumberStates>2</NumberStates>
-            <RightClickIsPushButton>false</RightClickIsPushButton>
-            <State>
-              <Number>0</Number>
-              <Text>D3</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
-            </State>
-            <State>
-              <Number>1</Number>
-              <Text>D3</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
-            </State>
-            <Connection>
-              <ConfigKey>[EffectRack1_EffectUnit4],group_[Channel3]_enable</ConfigKey>
-              <ButtonState>LeftButton</ButtonState>
-            </Connection>
-          </PushButton>
-
-          <PushButton><!-- route unit 4 to deck 4 (layered swap target) -->
-            <TooltipId>EffectUnit_group_enabled</TooltipId>
-            <ObjectName>RbPadRouteButton</ObjectName>
-            <Size>36f,22f</Size>
-            <NumberStates>2</NumberStates>
-            <RightClickIsPushButton>false</RightClickIsPushButton>
-            <State>
-              <Number>0</Number>
-              <Text>D4</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
-            </State>
-            <State>
-              <Number>1</Number>
-              <Text>D4</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
-            </State>
-            <Connection>
-              <ConfigKey>[EffectRack1_EffectUnit4],group_[Channel4]_enable</ConfigKey>
-              <ButtonState>LeftButton</ButtonState>
-            </Connection>
-          </PushButton>
-
-          <PushButton><!-- pad FX edit mode (CO from parallel C++ work) -->
-            <ObjectName>RbPadEditButton</ObjectName>
-            <Size>44f,22f</Size>
-            <NumberStates>2</NumberStates>
-            <RightClickIsPushButton>false</RightClickIsPushButton>
-            <State>
-              <Number>0</Number>
-              <Text>EDIT</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
-            </State>
-            <State>
-              <Number>1</Number>
-              <Text>EDIT</Text>
-              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
-              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
-            </State>
-            <Connection>
-              <ConfigKey>[Controls],PadFxEditMode</ConfigKey>
-              <ButtonState>LeftButton</ButtonState>
-            </Connection>
-          </PushButton>
-
         </Children>
       </WidgetGroup>
 
     </Children>
   </WidgetGroup>
 </Template>
-

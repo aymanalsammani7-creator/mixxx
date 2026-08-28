@@ -1,0 +1,139 @@
+<!-- CUSTOM MOD (rekordbox-skin): Rekordbox-style jog wheel cluster -->
+<!--
+  Per-deck jog wheel area with BPM readout, pitch %, CUE/SLIP/Q labels,
+  and play/pause button.
+  Variables:
+    ChanNum : 1..4
+-->
+<Template>
+  <SetVariable name="Group">[Channel<Variable name="ChanNum"/>]</SetVariable>
+
+  <WidgetGroup>
+    <ObjectName>RbJogCluster</ObjectName>
+    <Layout>vertical</Layout>
+    <SizePolicy>min,min</SizePolicy>
+    <Children>
+
+      <WidgetGroup>
+        <Layout>horizontal</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+          <PushButton>
+            <ObjectName>RbCueButton</ObjectName>
+            <Size>30f,20f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>CUE</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>CUE</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,cue_indicator</ConfigKey>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
+            </Connection>
+          </PushButton>
+
+          <Label>
+            <ObjectName>RbBpmReadout</ObjectName>
+            <Size>60f,24f</Size>
+            <Precision>2</Precision>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,bpm</ConfigKey>
+            </Connection>
+          </Label>
+
+          <PushButton>
+            <ObjectName>RbSlipButton</ObjectName>
+            <Size>30f,20f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>SLIP</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>SLIP</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,slip_enabled</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+        </Children>
+      </WidgetGroup>
+
+      <KnobComposed>
+        <TooltipId>rate</TooltipId>
+        <ObjectName>RbJogWheel</ObjectName>
+        <Size>80f,80f</Size>
+        <Knob>skins:Rekordbox/graphics/knobs/knob_jog.svg</Knob>
+        <BackPath>skins:Rekordbox/graphics/knobs/knob_jog_bg.svg</BackPath>
+        <MinAngle>-130</MinAngle>
+        <MaxAngle>130</MaxAngle>
+        <ArcRadius>30.0</ArcRadius>
+        <ArcUnipolar>false</ArcUnipolar>
+        <ArcColor>#00a0e9</ArcColor>
+        <ArcThickness>2</ArcThickness>
+        <Connection>
+          <ConfigKey><Variable name="Group"/>,rate</ConfigKey>
+        </Connection>
+      </KnobComposed>
+
+      <WidgetGroup>
+        <Layout>horizontal</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+          <ValueLabel>
+            <ObjectName>RbPitchPercent</ObjectName>
+            <Size>50f,14f</Size>
+            <Precision>1</Precision>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,rate</ConfigKey>
+            </Connection>
+          </ValueLabel>
+          <Label>
+            <Text>±6%</Text>
+          </Label>
+        </Children>
+      </WidgetGroup>
+
+      <PushButton>
+        <TooltipId>play</TooltipId>
+        <ObjectName>RbPlayButton</ObjectName>
+        <Size>56f,26f</Size>
+        <NumberStates>2</NumberStates>
+        <RightClickIsPushButton>false</RightClickIsPushButton>
+        <State>
+          <Number>0</Number>
+          <Text>PLAY</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <State>
+          <Number>1</Number>
+          <Text>PAUSE</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <Connection>
+          <ConfigKey><Variable name="Group"/>,play</ConfigKey>
+          <ButtonState>LeftButton</ButtonState>
+        </Connection>
+      </PushButton>
+
+    </Children>
+  </WidgetGroup>
+</Template>

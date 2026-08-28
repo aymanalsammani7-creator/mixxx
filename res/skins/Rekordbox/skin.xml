@@ -1,26 +1,26 @@
-<!-- CUSTOM MOD (rekordbox-skin): Rekordbox-style layout for local Mixxx build -->
+<!-- CUSTOM MOD (rekordbox-skin): Rekordbox 7.x Performance Mode layout for Mixxx -->
 <!--
-  Rekordbox-style legacy skin for Mixxx 2.7 (local build).
-  Structure and widget usage patterns adapted from res/skins/LateNight (GPL).
-  Layout (single vertical WidgetStack):
-    ROW 1: Beat FX racks (EffectUnit1 + EffectUnit2 panels)
-    ROW 2: CFX row (one mini panel per deck)
-    ROW 3: Deck pods x4 (overview, transport, rate, hotcues)
-    ROW 4: Center mixer (4 channels + crossfader/master)
-    ROW 5: Pad FX panels (EffectUnit4) left/right
-    Library at the bottom
-  Note: the legacy skin format has no <Window> element; window placement is
-  app-level (like LateNight). The main layout expands to the window.
+  Band order (top ? bottom) matching spec §1.1:
+    ROW 1: Beat FX (FX1 + FX2)
+    ROW 2: CFX row (4 decks)
+    ROW 3: MERGE FX row (MFX1/MFX2)
+    ROW 4: Waveform overview (full-width, 4 decks)
+    ROW 5: Waveform zoomed (full-width, 4 decks)
+    ROW 6: Deck headers + mini-waveform + stems (4 decks)
+    ROW 7: Jog wheels + mixer cluster (4 decks + master)
+    ROW 8: Pad FX (4 decks)
+    ROW 9: Recording + Automix
+    ROW 10: Library
 -->
 <!DOCTYPE skin>
 <skin>
   <manifest>
-    <title>Rekordbox Light</title>
+    <title>Rekordbox Dark</title>
     <author>Kilo (AI-assisted local mod)</author>
-    <version>1.1.0</version>
-    <description>Rekordbox-style LIGHT 4-deck skin with Beat FX rack, CFX quick-effect buttons and Pad FX panel. Off-white canvas #EBEBEE, white card containers with 1px #CCCCCC rounded borders.</description>
+    <version>1.2.0</version>
+    <description>Rekordbox 7.x Performance Mode dark skin for Mixxx. 4-deck layout with Beat FX, CFX, Merge FX, waveforms, deck headers, jog wheels, mixer, and Pad FX.</description>
     <language>en</language>
-    <license>GPLv2+ (derived from LateNight layout patterns)</license>
+    <license>GPLv2+</license>
     <attributes>
       <attribute config_key="[App],num_decks">4</attribute>
       <attribute config_key="[App],num_samplers">4</attribute>
@@ -34,136 +34,158 @@
   <Layout>vertical</Layout>
   <Children>
 
+    <!-- ROW 1: Beat FX racks -->
     <WidgetGroup>
-      <ObjectName>SkinContainer</ObjectName>
-      <Layout>vertical</Layout>
-      <SizePolicy>me,me</SizePolicy>
+      <ObjectName>RbRowBeatFx</ObjectName>
+      <Layout>horizontal</Layout>
+      <Size>1280,100</Size>
       <Children>
+        <Template src="skins:Rekordbox/fxunit.xml">
+          <SetVariable name="FxUnit">1</SetVariable>
+        </Template>
+        <Template src="skins:Rekordbox/fxunit.xml">
+          <SetVariable name="FxUnit">2</SetVariable>
+        </Template>
+      </Children>
+    </WidgetGroup>
 
-        <!-- ROW 1: Beat FX racks -->
-        <WidgetGroup>
-          <ObjectName>RbRowBeatFx</ObjectName>
-          <Layout>horizontal</Layout>
-          <!-- === CUSTOM MOD (rekordbox-fix): explicit size for stable layout === -->
-          <Size>1280,100</Size>
-          <Children>
-            <Template src="skins:Rekordbox/fxunit.xml">
-              <SetVariable name="FxUnit">1</SetVariable>
-            </Template>
-            <Template src="skins:Rekordbox/fxunit.xml">
-              <SetVariable name="FxUnit">2</SetVariable>
-            </Template>
-          </Children>
-        </WidgetGroup>
+    <!-- ROW 2: CFX row -->
+    <WidgetGroup>
+      <ObjectName>RbRowCfx</ObjectName>
+      <Layout>horizontal</Layout>
+      <Size>1280,60</Size>
+      <Children>
+        <Template src="skins:Rekordbox/cfx.xml">
+          <SetVariable name="ChanNum">1</SetVariable>
+        </Template>
+        <Template src="skins:Rekordbox/cfx.xml">
+          <SetVariable name="ChanNum">2</SetVariable>
+        </Template>
+        <Template src="skins:Rekordbox/cfx.xml">
+          <SetVariable name="ChanNum">3</SetVariable>
+        </Template>
+        <Template src="skins:Rekordbox/cfx.xml">
+          <SetVariable name="ChanNum">4</SetVariable>
+        </Template>
+      </Children>
+    </WidgetGroup>
 
-        <!-- ROW 2: CFX row -->
+    <!-- ROW 3: MERGE FX row -->
+    <WidgetGroup>
+      <ObjectName>RbRowMergeFx</ObjectName>
+      <Layout>horizontal</Layout>
+      <Size>1280,100</Size>
+      <Children>
+        <Template src="skins:Rekordbox/mergefx.xml"/>
+      </Children>
+    </WidgetGroup>
+
+    <!-- ROW 4: Waveform overview (full-width) -->
+    <WidgetGroup>
+      <ObjectName>RbRowWaveformOverview</ObjectName>
+      <Layout>horizontal</Layout>
+      <Size>1280,80</Size>
+      <Children>
+        <Template src="skins:Rekordbox/waveform_overview.xml">
+          <SetVariable name="ChanNum">1</SetVariable>
+        </Template>
+        <Template src="skins:Rekordbox/waveform_overview.xml">
+          <SetVariable name="ChanNum">2</SetVariable>
+        </Template>
+        <Template src="skins:Rekordbox/waveform_overview.xml">
+          <SetVariable name="ChanNum">3</SetVariable>
+        </Template>
+        <Template src="skins:Rekordbox/waveform_overview.xml">
+          <SetVariable name="ChanNum">4</SetVariable>
+        </Template>
+      </Children>
+    </WidgetGroup>
+
+    <!-- ROW 5: Waveform zoomed (full-width) -->
+    <WidgetGroup>
+      <ObjectName>RbRowWaveformZoomed</ObjectName>
+      <Layout>horizontal</Layout>
+      <Size>1280,80</Size>
+      <Children>
+        <Template src="skins:Rekordbox/waveform_zoomed.xml">
+          <SetVariable name="ChanNum">1</SetVariable>
+        </Template>
+        <Template src="skins:Rekordbox/waveform_zoomed.xml">
+          <SetVariable name="ChanNum">2</SetVariable>
+        </Template>
+        <Template src="skins:Rekordbox/waveform_zoomed.xml">
+          <SetVariable name="ChanNum">3</SetVariable>
+        </Template>
+        <Template src="skins:Rekordbox/waveform_zoomed.xml">
+          <SetVariable name="ChanNum">4</SetVariable>
+        </Template>
+      </Children>
+    </WidgetGroup>
+
+    <!-- ROW 6: Deck headers + mini-waveform + stems -->
+    <WidgetGroup>
+      <ObjectName>RbRowDeckHeaders</ObjectName>
+      <Layout>horizontal</Layout>
+      <Size>1280,60</Size>
+      <Children>
+        <Template src="skins:Rekordbox/deckheader.xml">
+          <SetVariable name="ChanNum">1</SetVariable>
+        </Template>
+        <Template src="skins:Rekordbox/deckheader.xml">
+          <SetVariable name="ChanNum">2</SetVariable>
+        </Template>
+        <Template src="skins:Rekordbox/deckheader.xml">
+          <SetVariable name="ChanNum">3</SetVariable>
+        </Template>
+        <Template src="skins:Rekordbox/deckheader.xml">
+          <SetVariable name="ChanNum">4</SetVariable>
+        </Template>
+      </Children>
+    </WidgetGroup>
+
+    <!-- ROW 7: Jog wheels + mixer cluster -->
+    <WidgetGroup>
+      <ObjectName>RbRowJogMixer</ObjectName>
+      <Layout>horizontal</Layout>
+      <Size>1280,280</Size>
+      <Children>
+        <Template src="skins:Rekordbox/jogwheel.xml">
+          <SetVariable name="ChanNum">1</SetVariable>
+        </Template>
+        <Template src="skins:Rekordbox/jogwheel.xml">
+          <SetVariable name="ChanNum">2</SetVariable>
+        </Template>
+        <Template src="skins:Rekordbox/jogwheel.xml">
+          <SetVariable name="ChanNum">3</SetVariable>
+        </Template>
+        <Template src="skins:Rekordbox/jogwheel.xml">
+          <SetVariable name="ChanNum">4</SetVariable>
+        </Template>
+        <!-- Center mixer -->
         <WidgetGroup>
-          <ObjectName>RbRowCfx</ObjectName>
-          <Layout>horizontal</Layout>
-          <!-- === CUSTOM MOD (rekordbox-fix): explicit size for stable layout === -->
-          <Size>1280,40</Size>
+          <ObjectName>RbCenterMixer</ObjectName>
+          <Layout>vertical</Layout>
+          <SizePolicy>min,min</SizePolicy>
           <Children>
-            <Template src="skins:Rekordbox/cfx.xml">
+            <Template src="skins:Rekordbox/channelstrip.xml">
               <SetVariable name="ChanNum">1</SetVariable>
             </Template>
-            <Template src="skins:Rekordbox/cfx.xml">
+            <Template src="skins:Rekordbox/channelstrip.xml">
               <SetVariable name="ChanNum">2</SetVariable>
             </Template>
-            <Template src="skins:Rekordbox/cfx.xml">
+            <Template src="skins:Rekordbox/channelstrip.xml">
               <SetVariable name="ChanNum">3</SetVariable>
             </Template>
-            <Template src="skins:Rekordbox/cfx.xml">
+            <Template src="skins:Rekordbox/channelstrip.xml">
               <SetVariable name="ChanNum">4</SetVariable>
             </Template>
-          </Children>
-        </WidgetGroup>
-
-        <!-- ROW 2.5: MERGE FX row -->
-        <WidgetGroup>
-          <ObjectName>RbRowMergeFx</ObjectName>
-          <Layout>horizontal</Layout>
-          <Size>1280,100</Size>
-          <Children>
-            <Template src="skins:Rekordbox/mergefx.xml"/>
-          </Children>
-        </WidgetGroup>
-
-        <!-- ROW 3: deck pods -->
-        <WidgetGroup>
-          <ObjectName>RbRowDecks</ObjectName>
-          <Layout>horizontal</Layout>
-          <!-- === CUSTOM MOD (rekordbox-fix): me,me so row expands to fill === -->
-          <SizePolicy>me,me</SizePolicy>
-          <Children>
-            <Template src="skins:Rekordbox/deckpod.xml">
-              <SetVariable name="ChanNum">1</SetVariable>
-            </Template>
-            <Template src="skins:Rekordbox/deckpod.xml">
-              <SetVariable name="ChanNum">2</SetVariable>
-            </Template>
-            <Template src="skins:Rekordbox/deckpod.xml">
-              <SetVariable name="ChanNum">3</SetVariable>
-            </Template>
-            <Template src="skins:Rekordbox/deckpod.xml">
-              <SetVariable name="ChanNum">4</SetVariable>
-            </Template>
-          </Children>
-        </WidgetGroup>
-
-        <!-- ROW 3.5: beat jump -->
-        <WidgetGroup>
-          <ObjectName>RbRowBeatJump</ObjectName>
-          <Layout>horizontal</Layout>
-          <Size>1280,24</Size>
-          <Children>
-            <Template src="skins:Rekordbox/beatjump.xml">
-              <SetVariable name="ChanNum">1</SetVariable>
-            </Template>
-            <Template src="skins:Rekordbox/beatjump.xml">
-              <SetVariable name="ChanNum">2</SetVariable>
-            </Template>
-            <Template src="skins:Rekordbox/beatjump.xml">
-              <SetVariable name="ChanNum">3</SetVariable>
-            </Template>
-            <Template src="skins:Rekordbox/beatjump.xml">
-              <SetVariable name="ChanNum">4</SetVariable>
-            </Template>
-          </Children>
-        </WidgetGroup>
-
-        <!-- ROW 4: center mixer -->
-        <WidgetGroup>
-          <ObjectName>RbRowMixer</ObjectName>
-          <Layout>horizontal</Layout>
-          <!-- === CUSTOM MOD (rekordbox-fix): explicit size for stable layout === -->
-          <Size>1280,140</Size>
-          <Children>
-
-            <Template src="skins:Rekordbox/mixer.xml">
-              <SetVariable name="ChanNum">1</SetVariable>
-            </Template>
-            <Template src="skins:Rekordbox/mixer.xml">
-              <SetVariable name="ChanNum">2</SetVariable>
-            </Template>
-            <Template src="skins:Rekordbox/mixer.xml">
-              <SetVariable name="ChanNum">3</SetVariable>
-            </Template>
-            <Template src="skins:Rekordbox/mixer.xml">
-              <SetVariable name="ChanNum">4</SetVariable>
-            </Template>
-
-            <!-- master section -->
+            <!-- Master + crossfader -->
             <WidgetGroup>
-              <ObjectName>RbMasterPanel</ObjectName>
-              <Layout>vertical</Layout>
+              <ObjectName>RbMasterSection</ObjectName>
+              <Layout>horizontal</Layout>
               <SizePolicy>min,min</SizePolicy>
               <Children>
-                <Label>
-                  <ObjectName>RbMixerChanLabel</ObjectName>
-                  <Size>me,14f</Size>
-                  <Text>MASTER</Text>
-                </Label>
-                <SliderComposed><!-- master volume -->
+                <SliderComposed>
                   <TooltipId>main_gain</TooltipId>
                   <Size>42f,110f</Size>
                   <Handle scalemode="STRETCH_ASPECT">skins:Rekordbox/graphics/sliders/knob_volume_deck.svg</Handle>
@@ -178,7 +200,7 @@
                     <ConfigKey>[Master],gain</ConfigKey>
                   </Connection>
                 </SliderComposed>
-                <SliderComposed><!-- crossfader -->
+                <SliderComposed>
                   <TooltipId>crossfader</TooltipId>
                   <Size>190f,30f</Size>
                   <Handle scalemode="STRETCH_ASPECT">skins:Rekordbox/graphics/sliders/knob_crossfader.svg</Handle>
@@ -194,32 +216,39 @@
                 </SliderComposed>
               </Children>
             </WidgetGroup>
-
-          </Children>
+          </WidgetGroup>
         </WidgetGroup>
-
-        <!-- ROW 5: pad FX -->
-        <WidgetGroup>
-          <ObjectName>RbRowPadFx</ObjectName>
-          <Layout>horizontal</Layout>
-          <!-- === CUSTOM MOD (rekordbox-fix): explicit size for stable layout === -->
-          <Size>1280,60</Size>
-          <Children>
-            <Template src="skins:Rekordbox/padfx.xml">
-              <SetVariable name="ChanNum">1</SetVariable>
-            </Template>
-            <WidgetGroup><SizePolicy>min,me</SizePolicy></WidgetGroup>
-            <Template src="skins:Rekordbox/padfx.xml">
-              <SetVariable name="ChanNum">2</SetVariable>
-            </Template>
-          </Children>
-        </WidgetGroup>
-
-        <!-- Library -->
-        <Template src="skins:Rekordbox/library.xml"/>
-
       </Children>
     </WidgetGroup>
+
+    <!-- ROW 8: Pad FX (below jog/mixer) -->
+    <WidgetGroup>
+      <ObjectName>RbRowPadFx</ObjectName>
+      <Layout>horizontal</Layout>
+      <Size>1280,80</Size>
+      <Children>
+        <Template src="skins:Rekordbox/padfx.xml">
+          <SetVariable name="ChanNum">1</SetVariable>
+        </Template>
+        <Template src="skins:Rekordbox/padfx.xml">
+          <SetVariable name="ChanNum">2</SetVariable>
+        </Template>
+      </Children>
+    </WidgetGroup>
+
+    <!-- ROW 9: Recording + Automix -->
+    <WidgetGroup>
+        <ObjectName>RbRowRecordingAutomix</ObjectName>
+        <Layout>horizontal</Layout>
+        <Size>1280,100</Size>
+        <Children>
+            <Template src="skins:Rekordbox/recording.xml"/>
+            <Template src="skins:Rekordbox/automix.xml"/>
+        </Children>
+    </WidgetGroup>
+
+    <!-- ROW 10: Library -->
+    <Template src="skins:Rekordbox/library.xml"/>
 
   </Children>
 </skin>

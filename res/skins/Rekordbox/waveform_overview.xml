@@ -1,0 +1,51 @@
+<!-- CUSTOM MOD (rekordbox-skin): Rekordbox-style waveform overview -->
+<!--
+  Full-width waveform overview strip per deck.
+  Dual-tone: amber bass + cyan mid/high, dark background.
+  Variables:
+    ChanNum : 1..4
+-->
+<Template>
+  <SetVariable name="Group">[Channel<Variable name="ChanNum"/>]</SetVariable>
+
+  <Overview>
+    <TooltipId>waveform_overview</TooltipId>
+    <Size>-1me,80f</Size>
+    <Group><Variable name="Group"/></Group>
+    <BgColor>#0B0B10</BgColor>
+    <SignalColor>#4a4a4a</SignalColor>
+    <SignalHighColor>#4FC3F7</SignalHighColor>
+    <SignalMidColor>#4FC3F7</SignalMidColor>
+    <SignalLowColor>#F5A623</SignalLowColor>
+    <PlayPosColor>#00a0e9</PlayPosColor>
+    <CueColor>#ff7a01</CueColor>
+    <LoopColor>#00b400</LoopColor>
+    <PlayedOverlayColor>#dd151515</PlayedOverlayColor>
+    <EndOfTrackColor>#f856e7</EndOfTrackColor>
+    <DefaultMark>
+      <Align>bottom|right</Align>
+      <Color>#FF0000</Color>
+      <TextColor>#F2F2F5</TextColor>
+      <Text> %1 </Text>
+    </DefaultMark>
+    <Mark>
+      <Control>cue_point</Control>
+      <Text>C</Text>
+      <Align>top|right</Align>
+      <Color>#ff7a01</Color>
+      <TextColor>#1a1a1a</TextColor>
+    </Mark>
+    <MarkRange>
+      <StartControl>loop_start_position</StartControl>
+      <EndControl>loop_end_position</EndControl>
+      <EnabledControl>loop_enabled</EnabledControl>
+      <Color>#00b400</Color>
+      <Opacity>0.8</Opacity>
+      <DisabledColor>#1a1a1a</DisabledColor>
+      <DisabledOpacity>0.6</DisabledOpacity>
+    </MarkRange>
+    <Connection>
+      <ConfigKey><Variable name="Group"/>,playposition</ConfigKey>
+    </Connection>
+  </Overview>
+</Template>

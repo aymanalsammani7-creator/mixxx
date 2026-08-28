@@ -1,10 +1,8 @@
-<!-- CUSTOM MOD (rekordbox-skin): Rekordbox-style layout for local Mixxx build -->
+<!-- CUSTOM MOD (rekordbox-skin): Rekordbox-style Beat FX rack (FX1/FX2) -->
 <!--
-  Compact Rekordbox-style Beat FX rack panel for one effect unit.
-  Adapted from LateNight's fx/unit.xml + fx/slot_controls.xml mechanism
-  (fixed "collapsed" layout, no expand/collapse, no singletons).
+  Mirrored module: FX1 for left side, FX2 for right.
   Variables:
-    FxUnit : 1..4
+    FxUnit : 1..2
 -->
 <Template>
   <SetVariable name="FxUnitGroup">[EffectRack1_EffectUnit<Variable name="FxUnit"/>]</SetVariable>
@@ -18,16 +16,17 @@
       <Label>
         <ObjectName>RbFxUnitHeader</ObjectName>
         <Size>me,18f</Size>
-        <Text>FX&#8202;<Variable name="FxUnit"/></Text>
+        <Text>FX <Variable name="FxUnit"/></Text>
       </Label>
 
+      <!-- Channel-assign grid: 1 2 S / 3 4 M -->
       <WidgetGroup>
         <Layout>horizontal</Layout>
         <SizePolicy>min,min</SizePolicy>
         <Children>
           <PushButton>
             <TooltipId>EffectUnit_deck_enabled</TooltipId>
-            <ObjectName>RbFxDeck1</ObjectName>
+            <ObjectName>RbFxDeckAssign</ObjectName>
             <Size>20f,18f</Size>
             <NumberStates>2</NumberStates>
             <RightClickIsPushButton>false</RightClickIsPushButton>
@@ -50,7 +49,7 @@
           </PushButton>
           <PushButton>
             <TooltipId>EffectUnit_deck_enabled</TooltipId>
-            <ObjectName>RbFxDeck2</ObjectName>
+            <ObjectName>RbFxDeckAssign</ObjectName>
             <Size>20f,18f</Size>
             <NumberStates>2</NumberStates>
             <RightClickIsPushButton>false</RightClickIsPushButton>
@@ -72,8 +71,37 @@
             </Connection>
           </PushButton>
           <PushButton>
+            <TooltipId>EffectUnit_sampler_enabled</TooltipId>
+            <ObjectName>RbFxDeckAssign</ObjectName>
+            <Size>20f,18f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>S</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>S</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="FxUnitGroup"/>,group_Sampler_enable</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+        </Children>
+      </WidgetGroup>
+      <WidgetGroup>
+        <Layout>horizontal</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+          <PushButton>
             <TooltipId>EffectUnit_deck_enabled</TooltipId>
-            <ObjectName>RbFxDeck3</ObjectName>
+            <ObjectName>RbFxDeckAssign</ObjectName>
             <Size>20f,18f</Size>
             <NumberStates>2</NumberStates>
             <RightClickIsPushButton>false</RightClickIsPushButton>
@@ -96,7 +124,7 @@
           </PushButton>
           <PushButton>
             <TooltipId>EffectUnit_deck_enabled</TooltipId>
-            <ObjectName>RbFxDeck4</ObjectName>
+            <ObjectName>RbFxDeckAssign</ObjectName>
             <Size>20f,18f</Size>
             <NumberStates>2</NumberStates>
             <RightClickIsPushButton>false</RightClickIsPushButton>
@@ -117,10 +145,50 @@
               <ButtonState>LeftButton</ButtonState>
             </Connection>
           </PushButton>
+          <PushButton>
+            <TooltipId>EffectUnit_master_enabled</TooltipId>
+            <ObjectName>RbFxDeckAssign</ObjectName>
+            <Size>20f,18f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>M</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>M</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="FxUnitGroup"/>,group_Master_enable</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
         </Children>
       </WidgetGroup>
 
-      <!-- Effect slots 1..3: enable toggle, meta knob, selector -->
+      <!-- … more button -->
+      <PushButton>
+        <TooltipId>show_effects</TooltipId>
+        <ObjectName>RbFxMoreButton</ObjectName>
+        <Size>20f,18f</Size>
+        <NumberStates>1</NumberStates>
+        <State>
+          <Number>0</Number>
+          <Text>...</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <Connection>
+          <ConfigKey>[Skin],show_effectrack</ConfigKey>
+        </Connection>
+      </PushButton>
+
+      <!-- Three FX slots -->
       <WidgetGroup>
         <Layout>vertical</Layout>
         <SizePolicy>min,min</SizePolicy>
@@ -155,6 +223,7 @@
               </PushButton>
               <KnobComposed>
                 <TooltipId>EffectSlot_metaknob</TooltipId>
+                <ObjectName>RbFxParamKnob</ObjectName>
                 <Size>30f,26f</Size>
                 <Knob>skins:Rekordbox/graphics/knobs/knob_indicator_small_green.svg</Knob>
                 <BackPath>skins:Rekordbox/graphics/knobs/knob_bg_small.svg</BackPath>
@@ -176,6 +245,14 @@
                 <EffectUnit><Variable name="FxUnit"/></EffectUnit>
                 <Effect>1</Effect>
               </EffectSelector>
+              <ValueLabel>
+                <ObjectName>RbFxParamValue</ObjectName>
+                <Size>30f,20f</Size>
+                <Connection>
+                  <ConfigKey><Variable name="FxUnitGroup"/>_Effect1,meta</ConfigKey>
+                  <ConnectValueFromWidget>false</ConnectValueFromWidget>
+                </Connection>
+              </ValueLabel>
             </Children>
           </WidgetGroup>
 
@@ -208,6 +285,7 @@
               </PushButton>
               <KnobComposed>
                 <TooltipId>EffectSlot_metaknob</TooltipId>
+                <ObjectName>RbFxParamKnob</ObjectName>
                 <Size>30f,26f</Size>
                 <Knob>skins:Rekordbox/graphics/knobs/knob_indicator_small_green.svg</Knob>
                 <BackPath>skins:Rekordbox/graphics/knobs/knob_bg_small.svg</BackPath>
@@ -229,6 +307,14 @@
                 <EffectUnit><Variable name="FxUnit"/></EffectUnit>
                 <Effect>2</Effect>
               </EffectSelector>
+              <ValueLabel>
+                <ObjectName>RbFxParamValue</ObjectName>
+                <Size>30f,20f</Size>
+                <Connection>
+                  <ConfigKey><Variable name="FxUnitGroup"/>_Effect2,meta</ConfigKey>
+                  <ConnectValueFromWidget>false</ConnectValueFromWidget>
+                </Connection>
+              </ValueLabel>
             </Children>
           </WidgetGroup>
 
@@ -261,6 +347,7 @@
               </PushButton>
               <KnobComposed>
                 <TooltipId>EffectSlot_metaknob</TooltipId>
+                <ObjectName>RbFxParamKnob</ObjectName>
                 <Size>30f,26f</Size>
                 <Knob>skins:Rekordbox/graphics/knobs/knob_indicator_small_green.svg</Knob>
                 <BackPath>skins:Rekordbox/graphics/knobs/knob_bg_small.svg</BackPath>
@@ -282,13 +369,147 @@
                 <EffectUnit><Variable name="FxUnit"/></EffectUnit>
                 <Effect>3</Effect>
               </EffectSelector>
+              <ValueLabel>
+                <ObjectName>RbFxParamValue</ObjectName>
+                <Size>30f,20f</Size>
+                <Connection>
+                  <ConfigKey><Variable name="FxUnitGroup"/>_Effect3,meta</ConfigKey>
+                  <ConnectValueFromWidget>false</ConnectValueFromWidget>
+                </Connection>
+              </ValueLabel>
             </Children>
           </WidgetGroup>
 
         </Children>
       </WidgetGroup>
 
-      <!-- Unit-level controls: dry/wet, super, chain preset -->
+      <!-- BACK SPIN block -->
+      <WidgetGroup>
+        <Layout>horizontal</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+          <Label>
+            <Text>BACK SPIN</Text>
+          </Label>
+          <PushButton>
+            <ObjectName>RbBackSpinAuto</ObjectName>
+            <Size>30f,20f</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>AUTO</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>AUTO</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,backspin_auto</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>RbBackSpinTap</ObjectName>
+            <Size>30f,20f</Size>
+            <NumberStates>1</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>TAP</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,backspin_tap</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <ValueLabel>
+            <ObjectName>RbBackSpinBeats</ObjectName>
+            <Size>20f,20f</Size>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,backspin_beats</ConfigKey>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
+            </Connection>
+          </ValueLabel>
+        </Children>
+      </WidgetGroup>
+
+      <!-- Stems pills (FX2 only) -->
+      <WidgetGroup>
+        <Layout>horizontal</Layout>
+        <SizePolicy>min,min</SizePolicy>
+        <Children>
+          <PushButton>
+            <ObjectName>RbStemInst</ObjectName>
+            <Size>40f,20f</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>INST</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>INST</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,stem_inst</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>RbStemVocal</ObjectName>
+            <Size>40f,20f</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>VOCAL</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>VOCAL</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,stem_vocal</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>RbStemDrums</ObjectName>
+            <Size>40f,20f</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>DRUMS</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>DRUMS</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,stem_drums</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+        </Children>
+      </WidgetGroup>
+
+      <!-- Unit-level controls -->
       <WidgetGroup>
         <Layout>horizontal</Layout>
         <SizePolicy>me,min</SizePolicy>
@@ -334,4 +555,3 @@
     </Children>
   </WidgetGroup>
 </Template>
-
