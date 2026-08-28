@@ -58,10 +58,8 @@ EffectSlot::EffectSlot(const QString& group,
     m_pControlLoaded = std::make_unique<ControlObject>(ConfigKey(m_group, "loaded"));
     m_pControlLoaded->setReadOnly();
 
-    // === CUSTOM MOD (rekordbox-fix): loaded_effect_name for name-based CFX mapping ===
-    m_pControlLoadedEffectName = std::make_unique<ControlObject>(
-            ConfigKey(m_group, "loaded_effect_name"));
-    m_pControlLoadedEffectName->setReadOnly();
+    // === CUSTOM MOD (rekordbox-fix): loaded effect name stored as QString ===
+    m_loadedEffectName = QString();
 
     m_pControlNumParameters.insert(EffectParameterType::Knob,
             QSharedPointer<ControlObject>(
@@ -405,11 +403,11 @@ void EffectSlot::loadEffectInner(const EffectManifestPointer pManifest,
     // ControlObjects are 1-indexed
     m_pControlLoadedEffect->setAndConfirm(m_pVisibleEffects->indexOf(pManifest) + 1);
 
-    // === CUSTOM MOD (rekordbox-fix): emit loaded effect name for CFX mapping ===
+    // === CUSTOM MOD (rekordbox-fix): store loaded effect name for CFX mapping ===
     if (pManifest) {
-        m_pControlLoadedEffectName->setAndConfirm(pManifest->displayName());
+        m_loadedEffectName = pManifest->displayName();
     } else {
-        m_pControlLoadedEffectName->setAndConfirm(QString());
+        m_loadedEffectName = QString();
     }
 
     emit effectChanged();
@@ -424,7 +422,7 @@ void EffectSlot::unloadEffect() {
     m_pControlLoaded->forceSet(0.0);
     m_pControlLoadedEffect->setAndConfirm(0.0);
     // === CUSTOM MOD (rekordbox-fix): clear loaded effect name ===
-    m_pControlLoadedEffectName->setAndConfirm(QString());
+    m_loadedEffectName = QString();
     for (const auto& pControlNumParameters : std::as_const(m_pControlNumParameters)) {
         pControlNumParameters->forceSet(0.0);
     }

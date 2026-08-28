@@ -2157,21 +2157,9 @@ NumarkMixtrack3.FilterKnob = function(channel, control, value, status, group) {
         }
     } else {
         // === CUSTOM MOD (rekordbox-fix v3-cfx): the filter knob drives the per-deck
-        // quick effect parameter mapped to the currently loaded CFX effect name.
-        // This replaces the old super1-only mapping with per-effect parameter curves. ===
+        // quick effect parameter. Defaults to parameter1 for all effects. ===
         var quickSlot = "[QuickEffectRack1_[Channel" + decknum + "]_EffectSlot1]";
-        var cfxName = engine.getValue(quickSlot, "loaded_effect_name");
-        var cfxParamMap = {
-            "Reverb":      "parameter1",
-            "Echo":        "parameter2",
-            "Flanger":     "parameter1",
-            "Bitcrusher":  "parameter2",
-            "Filter":      "parameter1",
-            "Sweep":       "parameter1",
-            "Gate Comp":   "parameter1"
-        };
-        var param = cfxParamMap[cfxName] || "parameter1";
-        engine.setValue(quickSlot, param, value / 127);
+        engine.setValue(quickSlot, "parameter1", value / 127);
     }
 };
 
@@ -2356,19 +2344,12 @@ NumarkMixtrack3.releaseFxState = {
 // === CUSTOM MOD (release-fx): Release FX trigger - called on pad release ===
 NumarkMixtrack3.triggerReleaseFx = function(deck, padIndex) {
     var quickSlot = "[QuickEffectRack1_" + deck.group + "_EffectSlot1]";
-    var cfxName = engine.getValue(quickSlot, "loaded_effect_name");
-
-    if (!cfxName || cfxName === "") return;
 
     // Ramp CFX parameter to max then decay
     engine.setValue(quickSlot, "parameter1", 1.0);
 
-    // Decay after effect-specific time
-    var decayTime = 2000; // default 2s
-    if (cfxName === "Echo" || cfxName === "Dub Echo") decayTime = 1000;
-    else if (cfxName === "Filter" || cfxName === "Sweep") decayTime = 500;
-
-    var decayTimer = engine.beginTimer(decayTime, function() {
+    // Decay after 2 seconds
+    var decayTimer = engine.beginTimer(2000, function() {
         engine.setValue(quickSlot, "parameter1", 0.0);
         engine.stopTimer(decayTimer);
     }, true);
