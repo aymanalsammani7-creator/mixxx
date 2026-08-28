@@ -66,8 +66,9 @@ void VisibleEffectsList::readEffectsXml(
     for (const EffectManifestPointer& pManifest : std::as_const(manifests)) {
         if (!visibleEffects.contains(pManifest) &&
                 !hiddenEffects.contains(pManifest)) {
-            // prepend so un-hidden effects are discoverable
-            visibleEffects.prepend(pManifest);
+            // === CUSTOM MOD (rekordbox-fix): append instead of prepend so newly
+            // registered effects don't shift the indices of saved entries ===
+            visibleEffects.append(pManifest);
         }
     }
     setList(visibleEffects);

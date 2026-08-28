@@ -838,6 +838,85 @@ NumarkMixtrack3.deck.prototype.focusNextEffect = function() {
     this.focusEffect(nextEffect);
 };
 
+// === CUSTOM MOD (rekordbox-key): KEY SYNC / KEY SHIFT helpers =============
+// Parse a Mixxx visual_key string ("Am", "F#", "C", "Gm") into tonic (0-11) and mode.
+NumarkMixtrack3.parseKey = function(keyStr) {
+    if (!keyStr || keyStr.length < 1) {
+        return null;
+    }
+    var tonicMap = {
+        "C": 0, "C#": 1, "Db": 1, "D": 2, "D#": 3, "Eb": 3,
+        "E": 4, "F": 5, "F#": 6, "Gb": 6, "G": 7, "G#": 8,
+        "Ab": 8, "A": 9, "A#": 10, "Bb": 10, "B": 11
+    };
+    var tonic = -1;
+    var mode = "major";
+    var remainder = keyStr;
+
+    if (keyStr.length >= 2 && keyStr[1] === '#') {
+        tonic = tonicMap[keyStr.substring(0, 2)];
+        remainder = keyStr.substring(2);
+    } else if (keyStr.length >= 2 && keyStr[1] === 'b') {
+        tonic = tonicMap[keyStr.substring(0, 2)];
+        remainder = keyStr.substring(2);
+    } else {
+        tonic = tonicMap[keyStr[0]];
+        remainder = keyStr.substring(1);
+    }
+
+    if (tonic === -1) {
+        return null;
+    }
+
+    if (remainder.toLowerCase() === 'm' || remainder.toLowerCase() === 'min') {
+        mode = "minor";
+    }
+
+    return { tonic: tonic, mode: mode };
+};
+
+// Calculate the shortest semitone distance between two parsed keys.
+NumarkMixtrack3.keySemitoneDiff = function(src, dst) {
+    if (!src || !dst) {
+        return 0;
+    }
+    var diff = dst.tonic - src.tonic;
+    if (diff > 6) {
+        diff -= 12;
+    } else if (diff < -6) {
+        diff += 12;
+    }
+    return diff;
+};
+
+// Sync the key of this deck to match the target deck's key.
+NumarkMixtrack3.deck.prototype.keySyncTo = function(targetDeckNum) {
+    var targetGroup = "[Channel" + targetDeckNum + "]";
+    var srcKeyStr = engine.getValue(this.group, "visual_key");
+    var dstKeyStr = engine.getValue(targetGroup, "visual_key");
+    var srcKey = NumarkMixtrack3.parseKey(srcKeyStr);
+    var dstKey = NumarkMixtrack3.parseKey(dstKeyStr);
+    var diff = NumarkMixtrack3.keySemitoneDiff(srcKey, dstKey);
+    engine.setValue(this.group, "pitch_adjust", diff);
+    print("KEY SYNC: " + this.decknum + " (" + srcKeyStr + ") -> " + targetDeckNum + " (" + dstKeyStr + ") = " + diff + " semitones");
+};
+
+// Shift the key of this deck by semitones (-12 to +12).
+NumarkMixtrack3.deck.prototype.keyShift = function(semitones) {
+    var current = engine.getValue(this.group, "pitch_adjust");
+    var newValue = current + semitones;
+    newValue = Math.max(-12, Math.min(12, newValue));
+    engine.setValue(this.group, "pitch_adjust", newValue);
+    print("KEY SHIFT: deck " + this.decknum + " pitch_adjust = " + newValue);
+};
+
+// Reset the key of this deck to the original.
+NumarkMixtrack3.deck.prototype.keyReset = function() {
+    engine.setValue(this.group, "pitch_adjust", 0);
+    print("KEY RESET: deck " + this.decknum);
+};
+// ===========================================================================
+
 // ******************************************************************
 // Samplers - object
 // ******************************************************************
@@ -1304,7 +1383,8 @@ NumarkMixtrack3.SyncButton = function(channel, control, value, status, group) {
         }
     } else {
         if (value === DOWN) {
-            script.toggleControl(deck.group, "keylock");
+            var targetDeck = (deck.decknum % 2 === 1) ? deck.decknum + 1 : deck.decknum - 1;
+            deck.keySyncTo(targetDeck);
         }
     }
 };
@@ -1562,9 +1642,21 @@ NumarkMixtrack3.padFxPad = function(deck, pad, value) {
 NumarkMixtrack3.HotCueButton = function(channel, control, value, status, group) {
     var deck = NumarkMixtrack3.deckFromGroup(group);
 
-    // === CUSTOM MOD (v2-padfx): while PAD MODE is held, hotcue pads drive the Unit 4 Pad-FX stack
-    // (pads 1-3 = momentary slot gates, pad 4 = edit-mode toggle) ===
     if (deck.PADMode) {
+        if (deck.shiftKey) {
+            var keyShifts = [-7, -5, -3, -1, 1, 3, 5, 7];
+            var padIndex = control - 0x1B;
+            if (padIndex >= 0 && padIndex < keyShifts.length && value === DOWN) {
+                deck.keyShift(keyShifts[padIndex]);
+                if (padIndex < 4) {
+                    deck.LEDs["hotCue" + (padIndex + 1)].onOff(ON);
+                    setTimeout(function() {
+                        deck.LEDs["hotCue" + (padIndex + 1)].onOff(OFF);
+                    }, 200);
+                }
+            }
+            return;
+        }
         NumarkMixtrack3.padFxPad(deck, control - 0x1B + 1, value);
         return;
     }
@@ -2026,11 +2118,22 @@ NumarkMixtrack3.FilterKnob = function(channel, control, value, status, group) {
             parameterSoftTakeOver("[Channel" + decknum + "]", "pregain", value);
         }
     } else {
-        // === CUSTOM MOD (v2-cfx): the old Effect Unit 3 blend hack is superseded by per-deck
-        // QuickEffect CFX selection from the skin. The knob drives the per-deck quick effect
-        // super knob only: stock default = Filter (stock Rekordbox behavior); any CFX loaded
-        // via the skin's CFX selector = Rekordbox USER-mode color FX on this deck alone.
-        parameterSoftTakeOver("[QuickEffectRack1_[Channel" + decknum + "]]", "super1", value);
+        // === CUSTOM MOD (rekordbox-fix v3-cfx): the filter knob drives the per-deck
+        // quick effect parameter mapped to the currently loaded CFX effect name.
+        // This replaces the old super1-only mapping with per-effect parameter curves. ===
+        var quickSlot = "[QuickEffectRack1_[Channel" + decknum + "]_EffectSlot1]";
+        var cfxName = engine.getValue(quickSlot, "loaded_effect_name");
+        var cfxParamMap = {
+            "Reverb":      "parameter1",
+            "Echo":        "parameter2",
+            "Flanger":     "parameter1",
+            "Bitcrusher":  "parameter2",
+            "Filter":      "parameter1",
+            "Sweep":       "parameter1",
+            "Gate Comp":   "parameter1"
+        };
+        var param = cfxParamMap[cfxName] || "parameter1";
+        engine.setValue(quickSlot, param, value / 127);
     }
 };
 

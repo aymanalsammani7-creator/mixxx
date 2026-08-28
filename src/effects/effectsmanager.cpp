@@ -36,6 +36,54 @@ EffectsManager::EffectsManager(
             ConfigKey(QStringLiteral("[Controls]"), QStringLiteral("PadFxEditMode")));
     m_pPadFxEditMode->setButtonMode(mixxx::control::ButtonMode::Toggle);
 
+    // === CUSTOM MOD (rekordbox-mergefx): MERGE FX skin/controller COs ===
+    m_pControlMergeFX1Parameter = std::make_unique<ControlPotmeter>(
+            ConfigKey(QStringLiteral("[EffectRack1_MergeFX1]"), QStringLiteral("parameter")),
+            0.0, 1.0);
+    m_pControlMergeFX1Parameter->setDefaultValue(0.0);
+    m_pControlMergeFX1EffectSelect = std::make_unique<ControlObject>(
+            ConfigKey(QStringLiteral("[EffectRack1_MergeFX1]"), QStringLiteral("effect_select")));
+    m_pControlMergeFX1EffectSelect->setReadOnly();
+    m_pControlMergeFX1Enabled = std::make_unique<ControlPushButton>(
+            ConfigKey(QStringLiteral("[EffectRack1_MergeFX1]"), QStringLiteral("enabled")));
+    m_pControlMergeFX1Enabled->setButtonMode(mixxx::control::ButtonMode::Toggle);
+    m_pControlMergeFX1AssignDeck1 = std::make_unique<ControlPushButton>(
+            ConfigKey(QStringLiteral("[EffectRack1_MergeFX1]"), QStringLiteral("assign_deck1")));
+    m_pControlMergeFX1AssignDeck1->setButtonMode(mixxx::control::ButtonMode::Toggle);
+    m_pControlMergeFX1AssignDeck3 = std::make_unique<ControlPushButton>(
+            ConfigKey(QStringLiteral("[EffectRack1_MergeFX1]"), QStringLiteral("assign_deck3")));
+    m_pControlMergeFX1AssignDeck3->setButtonMode(mixxx::control::ButtonMode::Toggle);
+    m_pControlMergeFX1SelectNext = std::make_unique<ControlPushButton>(
+            ConfigKey(QStringLiteral("[EffectRack1_MergeFX1]"), QStringLiteral("select_next")));
+    m_pControlMergeFX1SelectBack = std::make_unique<ControlPushButton>(
+            ConfigKey(QStringLiteral("[EffectRack1_MergeFX1]"), QStringLiteral("select_back")));
+    m_pControlMergeFX1Cancel = std::make_unique<ControlPushButton>(
+            ConfigKey(QStringLiteral("[EffectRack1_MergeFX1]"), QStringLiteral("cancel")));
+
+    m_pControlMergeFX2Parameter = std::make_unique<ControlPotmeter>(
+            ConfigKey(QStringLiteral("[EffectRack1_MergeFX2]"), QStringLiteral("parameter")),
+            0.0, 1.0);
+    m_pControlMergeFX2Parameter->setDefaultValue(0.0);
+    m_pControlMergeFX2EffectSelect = std::make_unique<ControlObject>(
+            ConfigKey(QStringLiteral("[EffectRack1_MergeFX2]"), QStringLiteral("effect_select")));
+    m_pControlMergeFX2EffectSelect->setReadOnly();
+    m_pControlMergeFX2Enabled = std::make_unique<ControlPushButton>(
+            ConfigKey(QStringLiteral("[EffectRack1_MergeFX2]"), QStringLiteral("enabled")));
+    m_pControlMergeFX2Enabled->setButtonMode(mixxx::control::ButtonMode::Toggle);
+    m_pControlMergeFX2AssignDeck2 = std::make_unique<ControlPushButton>(
+            ConfigKey(QStringLiteral("[EffectRack1_MergeFX2]"), QStringLiteral("assign_deck2")));
+    m_pControlMergeFX2AssignDeck2->setButtonMode(mixxx::control::ButtonMode::Toggle);
+    m_pControlMergeFX2AssignDeck4 = std::make_unique<ControlPushButton>(
+            ConfigKey(QStringLiteral("[EffectRack1_MergeFX2]"), QStringLiteral("assign_deck4")));
+    m_pControlMergeFX2AssignDeck4->setButtonMode(mixxx::control::ButtonMode::Toggle);
+    m_pControlMergeFX2SelectNext = std::make_unique<ControlPushButton>(
+            ConfigKey(QStringLiteral("[EffectRack1_MergeFX2]"), QStringLiteral("select_next")));
+    m_pControlMergeFX2SelectBack = std::make_unique<ControlPushButton>(
+            ConfigKey(QStringLiteral("[EffectRack1_MergeFX2]"), QStringLiteral("select_back")));
+    m_pControlMergeFX2Cancel = std::make_unique<ControlPushButton>(
+            ConfigKey(QStringLiteral("[EffectRack1_MergeFX2]"), QStringLiteral("cancel")));
+    // ===========================================================================
+
     m_pBackendManager = EffectsBackendManagerPointer(new EffectsBackendManager());
 
     auto [requestPipe, responsePipe] = makeTwoWayMessagePipe<EffectsRequest*,

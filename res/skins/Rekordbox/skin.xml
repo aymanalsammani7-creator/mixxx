@@ -29,7 +29,7 @@
 
   <ObjectName>Mixxx</ObjectName>
   <Style src="skins:Rekordbox/qss/Rekordbox.qss"/>
-  <MinimumSize>1280,720</MinimumSize>
+  <MinimumSize>1280,800</MinimumSize>
   <SizePolicy>me,me</SizePolicy>
   <Layout>vertical</Layout>
   <Children>
@@ -44,7 +44,8 @@
         <WidgetGroup>
           <ObjectName>RbRowBeatFx</ObjectName>
           <Layout>horizontal</Layout>
-          <SizePolicy>me,min</SizePolicy>
+          <!-- === CUSTOM MOD (rekordbox-fix): explicit size for stable layout === -->
+          <Size>1280,100</Size>
           <Children>
             <Template src="skins:Rekordbox/fxunit.xml">
               <SetVariable name="FxUnit">1</SetVariable>
@@ -59,7 +60,8 @@
         <WidgetGroup>
           <ObjectName>RbRowCfx</ObjectName>
           <Layout>horizontal</Layout>
-          <SizePolicy>me,min</SizePolicy>
+          <!-- === CUSTOM MOD (rekordbox-fix): explicit size for stable layout === -->
+          <Size>1280,40</Size>
           <Children>
             <Template src="skins:Rekordbox/cfx.xml">
               <SetVariable name="ChanNum">1</SetVariable>
@@ -76,11 +78,22 @@
           </Children>
         </WidgetGroup>
 
+        <!-- ROW 2.5: MERGE FX row -->
+        <WidgetGroup>
+          <ObjectName>RbRowMergeFx</ObjectName>
+          <Layout>horizontal</Layout>
+          <Size>1280,100</Size>
+          <Children>
+            <Template src="skins:Rekordbox/mergefx.xml"/>
+          </Children>
+        </WidgetGroup>
+
         <!-- ROW 3: deck pods -->
         <WidgetGroup>
           <ObjectName>RbRowDecks</ObjectName>
           <Layout>horizontal</Layout>
-          <SizePolicy>me,min</SizePolicy>
+          <!-- === CUSTOM MOD (rekordbox-fix): me,me so row expands to fill === -->
+          <SizePolicy>me,me</SizePolicy>
           <Children>
             <Template src="skins:Rekordbox/deckpod.xml">
               <SetVariable name="ChanNum">1</SetVariable>
@@ -92,6 +105,27 @@
               <SetVariable name="ChanNum">3</SetVariable>
             </Template>
             <Template src="skins:Rekordbox/deckpod.xml">
+              <SetVariable name="ChanNum">4</SetVariable>
+            </Template>
+          </Children>
+        </WidgetGroup>
+
+        <!-- ROW 3.5: beat jump -->
+        <WidgetGroup>
+          <ObjectName>RbRowBeatJump</ObjectName>
+          <Layout>horizontal</Layout>
+          <Size>1280,24</Size>
+          <Children>
+            <Template src="skins:Rekordbox/beatjump.xml">
+              <SetVariable name="ChanNum">1</SetVariable>
+            </Template>
+            <Template src="skins:Rekordbox/beatjump.xml">
+              <SetVariable name="ChanNum">2</SetVariable>
+            </Template>
+            <Template src="skins:Rekordbox/beatjump.xml">
+              <SetVariable name="ChanNum">3</SetVariable>
+            </Template>
+            <Template src="skins:Rekordbox/beatjump.xml">
               <SetVariable name="ChanNum">4</SetVariable>
             </Template>
           </Children>
@@ -101,7 +135,8 @@
         <WidgetGroup>
           <ObjectName>RbRowMixer</ObjectName>
           <Layout>horizontal</Layout>
-          <SizePolicy>me,min</SizePolicy>
+          <!-- === CUSTOM MOD (rekordbox-fix): explicit size for stable layout === -->
+          <Size>1280,140</Size>
           <Children>
 
             <Template src="skins:Rekordbox/mixer.xml">
@@ -167,7 +202,8 @@
         <WidgetGroup>
           <ObjectName>RbRowPadFx</ObjectName>
           <Layout>horizontal</Layout>
-          <SizePolicy>me,min</SizePolicy>
+          <!-- === CUSTOM MOD (rekordbox-fix): explicit size for stable layout === -->
+          <Size>1280,60</Size>
           <Children>
             <Template src="skins:Rekordbox/padfx.xml">
               <SetVariable name="ChanNum">1</SetVariable>

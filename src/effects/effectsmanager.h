@@ -123,6 +123,26 @@ class EffectsManager {
     // === CUSTOM MOD (padfx-edit): ON = Unit-4 pad-FX depths editable; OFF = frozen for performance ===
     std::unique_ptr<ControlPushButton> m_pPadFxEditMode;
 
+    // === CUSTOM MOD (rekordbox-mergefx): MERGE FX ControlObjects for skin/controller ===
+    std::unique_ptr<ControlPotmeter> m_pControlMergeFX1Parameter;
+    std::unique_ptr<ControlObject> m_pControlMergeFX1EffectSelect;
+    std::unique_ptr<ControlPushButton> m_pControlMergeFX1Enabled;
+    std::unique_ptr<ControlPushButton> m_pControlMergeFX1AssignDeck1;
+    std::unique_ptr<ControlPushButton> m_pControlMergeFX1AssignDeck3;
+    std::unique_ptr<ControlPushButton> m_pControlMergeFX1SelectNext;
+    std::unique_ptr<ControlPushButton> m_pControlMergeFX1SelectBack;
+    std::unique_ptr<ControlPushButton> m_pControlMergeFX1Cancel;
+
+    std::unique_ptr<ControlPotmeter> m_pControlMergeFX2Parameter;
+    std::unique_ptr<ControlObject> m_pControlMergeFX2EffectSelect;
+    std::unique_ptr<ControlPushButton> m_pControlMergeFX2Enabled;
+    std::unique_ptr<ControlPushButton> m_pControlMergeFX2AssignDeck2;
+    std::unique_ptr<ControlPushButton> m_pControlMergeFX2AssignDeck4;
+    std::unique_ptr<ControlPushButton> m_pControlMergeFX2SelectNext;
+    std::unique_ptr<ControlPushButton> m_pControlMergeFX2SelectBack;
+    std::unique_ptr<ControlPushButton> m_pControlMergeFX2Cancel;
+    // ===========================================================================
+
     // This is set true when setup() is run. Then, the initial decks (their EQ
     // and QuickEffect chains) have been initialized, either with defaults or the
     // previous state read from effects.xml

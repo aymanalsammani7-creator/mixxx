@@ -739,6 +739,27 @@ EffectsXmlData EffectChainPresetManager::readEffectsXml(
         }
     }
 
+    // === CUSTOM MOD (rekordbox-fix): ensure standard chains have presets on fresh start.
+    // If effects.xml is empty or has fewer than kNumStandardEffectUnits entries,
+    // append defaults so the skin's FX widgets act on populated slots. ===
+    const QStringList defaultPresetNames = {
+        QStringLiteral("Filter Echo"),
+        QStringLiteral("Echoverb HP"),
+        QStringLiteral("Smooth Growl"),
+        QString(), // Unit 4 is Pad FX; leave empty by design
+    };
+    for (int i = standardEffectChainPresets.size(); i < kNumStandardEffectUnits; ++i) {
+        const QString& presetName = defaultPresetNames[i];
+        EffectChainPresetPointer pPreset;
+        if (!presetName.isEmpty()) {
+            pPreset = getPreset(presetName);
+        }
+        if (!pPreset) {
+            pPreset = createEmptyNamelessChainPreset();
+        }
+        standardEffectChainPresets.append(pPreset);
+    }
+
     QDomElement mainEqElement = XmlParse::selectElement(root, EffectXml::kMainEq);
     QDomNodeList mainEqs = mainEqElement.elementsByTagName(EffectXml::kChain);
     QDomNode mainEqChainNode = mainEqs.at(0);

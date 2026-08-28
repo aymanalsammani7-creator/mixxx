@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Template>
+  <WidgetGroup>
+    <ObjectName>RbAutomixPanel</ObjectName>
+    <Layout>vertical</Layout>
+    <Size>320,200</Size>
+    <Children>
+
+      <WidgetGroup>
+        <Layout>horizontal</Layout>
+        <SizePolicy>me,min</SizePolicy>
+        <Children>
+
+          <Label>
+            <ObjectName>RbAutomixLabel</ObjectName>
+            <Size>80,14</Size>
+            <Text>AUTOMIX</Text>
+          </Label>
+
+          <PushButton>
+            <TooltipId>automix_enable</TooltipId>
+            <ObjectName>RbAutomixEnable</ObjectName>
+            <Size>80,20</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>OFF</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>ON</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[Automix],enable</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+
+        </Children>
+      </WidgetGroup>
+
+      <WidgetGroup>
+        <Layout>horizontal</Layout>
+        <SizePolicy>me,min</SizePolicy>
+        <Children>
+
+          <Label>
+            <ObjectName>RbAutomixTransitionLabel</ObjectName>
+            <Size>80,14</Size>
+            <Text>TRANSITION</Text>
+          </Label>
+
+          <ComboBox>
+            <ObjectName>RbAutomixTransition</ObjectName>
+            <Size>120,20</Size>
+            <Connection>
+              <ConfigKey>[Automix],transition</ConfigKey>
+            </Connection>
+          </ComboBox>
+
+        </Children>
+      </WidgetGroup>
+
+      <TableView>
+        <ObjectName>RbAutomixList</ObjectName>
+        <Size>300,120</Size>
+      </TableView>
+
+    </Children>
+  </WidgetGroup>
+</Template>

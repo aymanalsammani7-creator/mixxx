@@ -26,7 +26,8 @@
               <Label>
                 <ObjectName>RbDeckTitle</ObjectName>
                 <Size>90f,14f</Size>
-                <Text>DECK&#8202;<Variable name="ChanNum"/></Text>
+                <!-- === CUSTOM MOD (rekordbox-fix): normal space between DECK and number === -->
+                <Text>DECK <Variable name="ChanNum"/></Text>
               </Label>
               <Label>
                 <TooltipId>songauthor</TooltipId>
@@ -62,7 +63,8 @@
                 <TooltipId>beats</TooltipId>
                 <ObjectName>RbBpmValue</ObjectName>
                 <Size>48f,14f</Size>
-                <Precision>0</Precision>
+                <!-- === CUSTOM MOD (rekordbox-fix): Precision=1 shows 128.0 like Rekordbox === -->
+                <Precision>1</Precision>
                 <Connection>
                   <ConfigKey><Variable name="Group"/>,bpm</ConfigKey>
                 </Connection>
@@ -78,11 +80,11 @@
                 <TooltipId>time</TooltipId>
                 <ObjectName>RbRemainingTime</ObjectName>
                 <Size>70f,14f</Size>
+                <!-- === CUSTOM MOD (rekordbox-fix): plain playposition with Precision=2 === -->
                 <Precision>2</Precision>
                 <Connection>
                   <ConfigKey><Variable name="Group"/>,playposition</ConfigKey>
                   <ConnectValueFromWidget>false</ConnectValueFromWidget>
-                  <TransformFunction>ElapsedBeatsToEmittedTime</TransformFunction>
                 </Connection>
               </ValueLabel>
               <Label>
@@ -108,8 +110,9 @@
         <Size>-1me,60f</Size>
         <Group><Variable name="Group"/></Group>
         <BgColor>#FFFFFF</BgColor>
-        <SignalColor>#6a6a6a</SignalColor>
-        <SignalHighColor>#4a90d9</SignalHighColor>
+        <!-- === CUSTOM MOD (rekordbox-fix): darker signal color for Rekordbox look === -->
+        <SignalColor>#4a4a4a</SignalColor>
+        <SignalHighColor>#00a0e9</SignalHighColor>
         <SignalMidColor>#9b59b6</SignalMidColor>
         <SignalLowColor>#e67e22</SignalLowColor>
         <PlayPosColor>#00a0e9</PlayPosColor>
@@ -231,6 +234,63 @@
             </Connection>
           </PushButton>
 
+          <PushButton><!-- quantize -->
+            <TooltipId>quantize</TooltipId>
+            <ObjectName>RbQuantizeButton</ObjectName>
+            <Size>30f,26f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>Q</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>Q</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,quantize</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+
+          <PushButton><!-- slip mode -->
+            <TooltipId>slip_enabled</TooltipId>
+            <ObjectName>RbSlipButton</ObjectName>
+            <Size>34f,26f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>SLIP</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>SLIP</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,slip_enabled</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <Label>
+            <ObjectName>RbSlipIndicator</ObjectName>
+            <Size>24f,26f</Size>
+            <Text></Text>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,slip_enabled</ConfigKey>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
+            </Connection>
+          </Label>
+
         </Children>
       </WidgetGroup>
 
@@ -255,6 +315,38 @@
               <ConfigKey><Variable name="Group"/>,rate</ConfigKey>
             </Connection>
           </SliderComposed>
+          <PushButton><!-- master tempo / keylock -->
+            <TooltipId>keylock</TooltipId>
+            <ObjectName>RbKeylockButton</ObjectName>
+            <Size>30f,24f</Size>
+            <NumberStates>2</NumberStates>
+            <RightClickIsPushButton>false</RightClickIsPushButton>
+            <State>
+              <Number>0</Number>
+              <Text>MT</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>MT</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,keylock</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+          <ValueLabel>
+            <ObjectName>RbKeyShiftValue</ObjectName>
+            <Size>30f,24f</Size>
+            <Precision>1</Precision>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,pitch_adjust</ConfigKey>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
+            </Connection>
+          </ValueLabel>
           <PushButton><!-- rate reset -->
             <ObjectName>RbRateReset</ObjectName>
             <Size>30f,24f</Size>

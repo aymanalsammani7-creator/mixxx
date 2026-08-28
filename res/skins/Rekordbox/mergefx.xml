@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Template>
+  <!-- MERGE FX Unit 1 (decks 1/3) -->
+  <WidgetGroup>
+    <ObjectName>RbMergeFx1</ObjectName>
+    <Layout>horizontal</Layout>
+    <Size>320,80</Size>
+    <SizePolicy>min,min</SizePolicy>
+    <Children>
+      <Label>
+        <ObjectName>RbMergeFx1Label</ObjectName>
+        <Size>60,16</Size>
+        <Text>MFX1</Text>
+      </Label>
+
+      <PushButton>
+        <TooltipId>mergefx_effect_select</TooltipId>
+        <ObjectName>RbMergeFx1Selector</ObjectName>
+        <Size>100,20</Size>
+        <NumberStates>1</NumberStates>
+        <State>
+          <Number>0</Number>
+          <Text>SINEWAVE</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <Connection>
+          <ConfigKey>[EffectRack1_MergeFX1],effect_select</ConfigKey>
+          <ButtonState>LeftButton</ButtonState>
+        </Connection>
+      </PushButton>
+
+      <KnobComposed>
+        <TooltipId>mergefx_parameter</TooltipId>
+        <Size>30f,26f</Size>
+        <Knob>skins:Rekordbox/graphics/knobs/knob_indicator_small_green.svg</Knob>
+        <BackPath>skins:Rekordbox/graphics/knobs/knob_bg_small.svg</BackPath>
+        <MinAngle>-130</MinAngle>
+        <MaxAngle>130</MaxAngle>
+        <ArcRadius>10.0</ArcRadius>
+        <ArcUnipolar>true</ArcUnipolar>
+        <ArcColor>#00a0e9</ArcColor>
+        <ArcThickness>2</ArcThickness>
+        <Connection>
+          <ConfigKey>[EffectRack1_EffectUnit3_Effect1],parameter1</ConfigKey>
+        </Connection>
+      </KnobComposed>
+
+      <PushButton>
+        <TooltipId>mergefx_enabled</TooltipId>
+        <ObjectName>RbMergeFx1On</ObjectName>
+        <Size>40,20</Size>
+        <NumberStates>2</NumberStates>
+        <State>
+          <Number>0</Number>
+          <Text>OFF</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <State>
+          <Number>1</Number>
+          <Text>ON</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <Connection>
+          <ConfigKey>[EffectRack1_EffectUnit3],enabled</ConfigKey>
+          <ButtonState>LeftButton</ButtonState>
+        </Connection>
+      </PushButton>
+
+      <PushButton>
+        <TooltipId>mergefx_deck1</TooltipId>
+        <ObjectName>RbMergeFx1Deck1</ObjectName>
+        <Size>30,20</Size>
+        <NumberStates>2</NumberStates>
+        <State>
+          <Number>0</Number>
+          <Text>1</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <State>
+          <Number>1</Number>
+          <Text>1</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <Connection>
+          <ConfigKey>[EffectRack1_EffectUnit3],group_Channel1_enable</ConfigKey>
+          <ButtonState>LeftButton</ButtonState>
+        </Connection>
+      </PushButton>
+
+      <PushButton>
+        <TooltipId>mergefx_deck3</TooltipId>
+        <ObjectName>RbMergeFx1Deck3</ObjectName>
+        <Size>30,20</Size>
+        <NumberStates>2</NumberStates>
+        <State>
+          <Number>0</Number>
+          <Text>3</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <State>
+          <Number>1</Number>
+          <Text>3</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <Connection>
+          <ConfigKey>[EffectRack1_EffectUnit3],group_Channel3_enable</ConfigKey>
+          <ButtonState>LeftButton</ButtonState>
+        </Connection>
+      </PushButton>
+
+      <PushButton>
+        <TooltipId>mergefx_select_next</TooltipId>
+        <ObjectName>RbMergeFx1Next</ObjectName>
+        <Size>30,20</Size>
+        <NumberStates>1</NumberStates>
+        <State>
+          <Number>0</Number>
+          <Text>&gt;</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <Connection>
+          <ConfigKey>[EffectRack1_EffectUnit3_Effect1],next_effect</ConfigKey>
+          <ButtonState>LeftButton</ButtonState>
+        </Connection>
+      </PushButton>
+
+      <PushButton>
+        <TooltipId>mergefx_select_back</TooltipId>
+        <ObjectName>RbMergeFx1Back</ObjectName>
+        <Size>30,20</Size>
+        <NumberStates>1</NumberStates>
+        <State>
+          <Number>0</Number>
+          <Text>&lt;</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <Connection>
+          <ConfigKey>[EffectRack1_EffectUnit3_Effect1],prev_effect</ConfigKey>
+          <ButtonState>LeftButton</ButtonState>
+        </Connection>
+      </PushButton>
+
+      <PushButton>
+        <TooltipId>mergefx_cancel</TooltipId>
+        <ObjectName>RbMergeFx1Cancel</ObjectName>
+        <Size>40,20</Size>
+        <NumberStates>1</NumberStates>
+        <State>
+          <Number>0</Number>
+          <Text>CANCEL</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <Connection>
+          <ConfigKey>[EffectRack1_EffectUnit3_Effect1],clear</ConfigKey>
+          <ButtonState>LeftButton</ButtonState>
+        </Connection>
+      </PushButton>
+
+    </Children>
+  </WidgetGroup>
+
+  <!-- MERGE FX Unit 2 (decks 2/4) - same structure with MergeFX2 prefix -->
+  <WidgetGroup>
+    <ObjectName>RbMergeFx2</ObjectName>
+    <Layout>horizontal</Layout>
+    <Size>320,80</Size>
+    <SizePolicy>min,min</SizePolicy>
+    <Children>
+      <Label>
+        <ObjectName>RbMergeFx2Label</ObjectName>
+        <Size>60,16</Size>
+        <Text>MFX2</Text>
+      </Label>
+
+      <PushButton>
+        <TooltipId>mergefx_effect_select</TooltipId>
+        <ObjectName>RbMergeFx2Selector</ObjectName>
+        <Size>100,20</Size>
+        <NumberStates>1</NumberStates>
+        <State>
+          <Number>0</Number>
+          <Text>SINEWAVE</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <Connection>
+          <ConfigKey>[EffectRack1_EffectUnit4_Effect1],next_effect</ConfigKey>
+          <ButtonState>LeftButton</ButtonState>
+        </Connection>
+      </PushButton>
+
+      <KnobComposed>
+        <TooltipId>mergefx_parameter</TooltipId>
+        <Size>30f,26f</Size>
+        <Knob>skins:Rekordbox/graphics/knobs/knob_indicator_small_green.svg</Knob>
+        <BackPath>skins:Rekordbox/graphics/knobs/knob_bg_small.svg</BackPath>
+        <MinAngle>-130</MinAngle>
+        <MaxAngle>130</MaxAngle>
+        <ArcRadius>10.0</ArcRadius>
+        <ArcUnipolar>true</ArcUnipolar>
+        <ArcColor>#00a0e9</ArcColor>
+        <ArcThickness>2</ArcThickness>
+        <Connection>
+          <ConfigKey>[EffectRack1_EffectUnit4_Effect1],parameter1</ConfigKey>
+        </Connection>
+      </KnobComposed>
+
+      <PushButton>
+        <TooltipId>mergefx_enabled</TooltipId>
+        <ObjectName>RbMergeFx2On</ObjectName>
+        <Size>40,20</Size>
+        <NumberStates>2</NumberStates>
+        <State>
+          <Number>0</Number>
+          <Text>OFF</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <State>
+          <Number>1</Number>
+          <Text>ON</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <Connection>
+          <ConfigKey>[EffectRack1_EffectUnit4],enabled</ConfigKey>
+          <ButtonState>LeftButton</ButtonState>
+        </Connection>
+      </PushButton>
+
+      <PushButton>
+        <TooltipId>mergefx_deck2</TooltipId>
+        <ObjectName>RbMergeFx2Deck2</ObjectName>
+        <Size>30,20</Size>
+        <NumberStates>2</NumberStates>
+        <State>
+          <Number>0</Number>
+          <Text>2</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <State>
+          <Number>1</Number>
+          <Text>2</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <Connection>
+          <ConfigKey>[EffectRack1_EffectUnit4],group_Channel2_enable</ConfigKey>
+          <ButtonState>LeftButton</ButtonState>
+        </Connection>
+      </PushButton>
+
+      <PushButton>
+        <TooltipId>mergefx_deck4</TooltipId>
+        <ObjectName>RbMergeFx2Deck4</ObjectName>
+        <Size>30,20</Size>
+        <NumberStates>2</NumberStates>
+        <State>
+          <Number>0</Number>
+          <Text>4</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <State>
+          <Number>1</Number>
+          <Text>4</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <Connection>
+          <ConfigKey>[EffectRack1_EffectUnit4],group_Channel4_enable</ConfigKey>
+          <ButtonState>LeftButton</ButtonState>
+        </Connection>
+      </PushButton>
+
+      <PushButton>
+        <TooltipId>mergefx_select_next</TooltipId>
+        <ObjectName>RbMergeFx2Next</ObjectName>
+        <Size>30,20</Size>
+        <NumberStates>1</NumberStates>
+        <State>
+          <Number>0</Number>
+          <Text>&gt;</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <Connection>
+          <ConfigKey>[EffectRack1_EffectUnit4_Effect1],next_effect</ConfigKey>
+          <ButtonState>LeftButton</ButtonState>
+        </Connection>
+      </PushButton>
+
+      <PushButton>
+        <TooltipId>mergefx_select_back</TooltipId>
+        <ObjectName>RbMergeFx2Back</ObjectName>
+        <Size>30,20</Size>
+        <NumberStates>1</NumberStates>
+        <State>
+          <Number>0</Number>
+          <Text>&lt;</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <Connection>
+          <ConfigKey>[EffectRack1_EffectUnit4_Effect1],prev_effect</ConfigKey>
+          <ButtonState>LeftButton</ButtonState>
+        </Connection>
+      </PushButton>
+
+      <PushButton>
+        <TooltipId>mergefx_cancel</TooltipId>
+        <ObjectName>RbMergeFx2Cancel</ObjectName>
+        <Size>40,20</Size>
+        <NumberStates>1</NumberStates>
+        <State>
+          <Number>0</Number>
+          <Text>CANCEL</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <Connection>
+          <ConfigKey>[EffectRack1_EffectUnit4_Effect1],clear</ConfigKey>
+          <ButtonState>LeftButton</ButtonState>
+        </Connection>
+      </PushButton>
+
+    </Children>
+  </WidgetGroup>
+</Template>

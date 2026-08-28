@@ -63,7 +63,9 @@ EffectChain::EffectChain(const QString& group,
 
     m_pControlChainMix = std::make_unique<ControlPotmeter>(
             ConfigKey(m_group, "mix"), 0.0, 1.0, false, true, false, true, 1.0);
-    m_pControlChainMix->setDefaultValue(0.0);
+    // === CUSTOM MOD (rekordbox-fix): default mix to 1.0 (full wet) so FX are audible
+    // when enabled, matching Rekordbox behavior ===
+    m_pControlChainMix->setDefaultValue(1.0);
     connect(m_pControlChainMix.get(),
             &ControlObject::valueChanged,
             this,

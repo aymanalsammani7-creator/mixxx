@@ -131,9 +131,12 @@ MixtrackProFX.EffectUnit = function(deckNumber) {
     // 0 - switch in the middle
     // 1 - switch up
     // 2 - switch down
+    // === CUSTOM MOD (rekordbox-fix): toggle type so the button latches on/off
+    // with the new engine Toggle mode instead of momentary push ===
     this.enableSwitch = new components.Button({
         group: "[EffectRack1_EffectUnit" + deckNumber + "_Effect1]",
-        inKey: "enabled"
+        inKey: "enabled",
+        type: components.Button.prototype.types.toggle
     });
 
     this.dryWetKnob = new components.Pot({

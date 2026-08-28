@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Template>
+  <SetVariable name="Group">[Channel<Variable name="ChanNum"/>]</SetVariable>
+
+  <WidgetGroup>
+    <ObjectName>RbBeatJump</ObjectName>
+    <Layout>horizontal</Layout>
+    <SizePolicy>me,min</SizePolicy>
+    <Children>
+
+      <PushButton>
+        <TooltipId>beatjump_backward</TooltipId>
+        <ObjectName>RbBeatJumpBack</ObjectName>
+        <Size>34f,20f</Size>
+        <NumberStates>1</NumberStates>
+        <State>
+          <Number>0</Number>
+          <Text>&lt;</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <Connection>
+          <ConfigKey><Variable name="Group"/>,beatjump_backward</ConfigKey>
+          <ButtonState>LeftButton</ButtonState>
+        </Connection>
+      </PushButton>
+
+      <Label>
+        <ObjectName>RbBeatJumpSize</ObjectName>
+        <Size>40f,20f</Size>
+        <Connection>
+          <ConfigKey><Variable name="Group"/>,beatjump_size</ConfigKey>
+          <ConnectValueFromWidget>false</ConnectValueFromWidget>
+        </Connection>
+      </Label>
+
+      <PushButton>
+        <TooltipId>beatjump_forward</TooltipId>
+        <ObjectName>RbBeatJumpForward</ObjectName>
+        <Size>34f,20f</Size>
+        <NumberStates>1</NumberStates>
+        <State>
+          <Number>0</Number>
+          <Text>&gt;</Text>
+          <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+          <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+        </State>
+        <Connection>
+          <ConfigKey><Variable name="Group"/>,beatjump_forward</ConfigKey>
+          <ButtonState>LeftButton</ButtonState>
+        </Connection>
+      </PushButton>
+
+    </Children>
+  </WidgetGroup>
+</Template>

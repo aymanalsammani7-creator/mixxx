@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Template>
+  <WidgetGroup>
+    <ObjectName>RbRecordingPanel</ObjectName>
+    <Layout>vertical</Layout>
+    <Size>320,100</Size>
+    <Children>
+
+      <WidgetGroup>
+        <Layout>horizontal</Layout>
+        <SizePolicy>me,min</SizePolicy>
+        <Children>
+
+          <Label>
+            <ObjectName>RbRecLabel</ObjectName>
+            <Size>60,14</Size>
+            <Text>RECORDING</Text>
+          </Label>
+
+          <PushButton>
+            <TooltipId>record</TooltipId>
+            <ObjectName>RbRecButton</ObjectName>
+            <Size>60,30</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>REC</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>STOP</Text>
+              <Unpressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Unpressed>
+              <Pressed scalemode="STRETCH">skins:Rekordbox/graphics/btn_light_active.svg</Pressed>
+            </State>
+            <Connection>
+              <ConfigKey>[Recording],record</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+            </Connection>
+          </PushButton>
+
+        </Children>
+      </WidgetGroup>
+
+      <WidgetGroup>
+        <Layout>horizontal</Layout>
+        <SizePolicy>me,min</SizePolicy>
+        <Children>
+
+          <Label>
+            <ObjectName>RbRecSourceLabel</ObjectName>
+            <Size>60,14</Size>
+            <Text>SOURCE</Text>
+          </Label>
+
+          <ComboBox>
+            <ObjectName>RbRecSource</ObjectName>
+            <Size>120,20</Size>
+            <Connection>
+              <ConfigKey>[Recording],source</ConfigKey>
+            </Connection>
+          </ComboBox>
+
+        </Children>
+      </WidgetGroup>
+
+      <WidgetGroup>
+        <Layout>horizontal</Layout>
+        <SizePolicy>me,min</SizePolicy>
+        <Children>
+
+          <Label>
+            <ObjectName>RbRecTimeLabel</ObjectName>
+            <Size>60,14</Size>
+            <Text>TIME</Text>
+          </Label>
+
+          <ValueLabel>
+            <ObjectName>RbRecTime</ObjectName>
+            <Size>80,20</Size>
+            <Precision>2</Precision>
+            <Connection>
+              <ConfigKey>[Recording],time</ConfigKey>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
+            </Connection>
+          </ValueLabel>
+
+        </Children>
+      </WidgetGroup>
+
+    </Children>
+  </WidgetGroup>
+</Template>

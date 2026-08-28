@@ -34,6 +34,7 @@
 #include "effects/backends/builtin/gaineffect.h"
 #include "effects/backends/builtin/tremoloeffect.h"
 #include "effects/backends/builtin/whitenoiseeffect.h"
+#include "effects/backends/builtin/sinewaveeffect.h"
 
 BuiltInBackend::BuiltInBackend() {
     // Keep this list in a reasonable order
@@ -75,6 +76,8 @@ BuiltInBackend::BuiltInBackend() {
     registerEffect<GainEffect>();
     // CUSTOM MOD (rekordbox-cfx): Sound Color FX processors
     registerEffect<SweepEffect>();
+    // CUSTOM MOD (rekordbox-mergefx): MERGE FX tone generator
+    registerEffect<SineWaveEffect>();
 }
 
 std::unique_ptr<EffectProcessor> BuiltInBackend::createProcessor(

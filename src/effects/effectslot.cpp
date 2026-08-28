@@ -58,6 +58,11 @@ EffectSlot::EffectSlot(const QString& group,
     m_pControlLoaded = std::make_unique<ControlObject>(ConfigKey(m_group, "loaded"));
     m_pControlLoaded->setReadOnly();
 
+    // === CUSTOM MOD (rekordbox-fix): loaded_effect_name for name-based CFX mapping ===
+    m_pControlLoadedEffectName = std::make_unique<ControlObject>(
+            ConfigKey(m_group, "loaded_effect_name"));
+    m_pControlLoadedEffectName->setReadOnly();
+
     m_pControlNumParameters.insert(EffectParameterType::Knob,
             QSharedPointer<ControlObject>(
                     new ControlObject(ConfigKey(m_group, "num_parameters"))));
@@ -80,8 +85,10 @@ EffectSlot::EffectSlot(const QString& group,
 
     // Default to disabled to prevent accidental activation of effects
     // at the beginning of a set.
+    // === CUSTOM MOD (rekordbox-fix): Toggle mode so controller buttons latch on/off
+    // instead of momentary PowerWindow behavior ===
     m_pControlEnabled = std::make_unique<ControlPushButton>(ConfigKey(m_group, "enabled"));
-    m_pControlEnabled->setButtonMode(mixxx::control::ButtonMode::PowerWindow);
+    m_pControlEnabled->setButtonMode(mixxx::control::ButtonMode::Toggle);
     connect(m_pControlEnabled.get(),
             &ControlObject::valueChanged,
             this,
@@ -106,6 +113,13 @@ EffectSlot::EffectSlot(const QString& group,
     m_pControlLoadedEffect->connectValueChangeRequest(
             this,
             &EffectSlot::slotLoadedEffectRequest);
+
+    // === CUSTOM MOD (rekordbox-fix): load effect by display name ===
+    m_pControlLoadEffectByName = std::make_unique<ControlObject>(
+            ConfigKey(m_group, "load_effect_by_name"));
+    m_pControlLoadEffectByName->connectValueChangeRequest(
+            this,
+            &EffectSlot::slotLoadEffectByName);
 
     connect(m_pVisibleEffects.get(),
             &VisibleEffectsList::visibleEffectsListChanged,
@@ -391,6 +405,13 @@ void EffectSlot::loadEffectInner(const EffectManifestPointer pManifest,
     // ControlObjects are 1-indexed
     m_pControlLoadedEffect->setAndConfirm(m_pVisibleEffects->indexOf(pManifest) + 1);
 
+    // === CUSTOM MOD (rekordbox-fix): emit loaded effect name for CFX mapping ===
+    if (pManifest) {
+        m_pControlLoadedEffectName->setAndConfirm(pManifest->displayName());
+    } else {
+        m_pControlLoadedEffectName->setAndConfirm(QString());
+    }
+
     emit effectChanged();
     updateEngineState();
 }
@@ -402,6 +423,8 @@ void EffectSlot::unloadEffect() {
 
     m_pControlLoaded->forceSet(0.0);
     m_pControlLoadedEffect->setAndConfirm(0.0);
+    // === CUSTOM MOD (rekordbox-fix): clear loaded effect name ===
+    m_pControlLoadedEffectName->setAndConfirm(QString());
     for (const auto& pControlNumParameters : std::as_const(m_pControlNumParameters)) {
         pControlNumParameters->forceSet(0.0);
     }
@@ -544,6 +567,27 @@ void EffectSlot::slotLoadedEffectRequest(double value) {
     }
     // loadEffectInner calls setAndConfirm
     loadEffectWithDefaults(m_pVisibleEffects->at(index));
+}
+
+// === CUSTOM MOD (rekordbox-fix): load effect by display name for CFX buttons ===
+void EffectSlot::slotLoadEffectByName(const QString& name) {
+    if (name.isEmpty()) {
+        return;
+    }
+    const auto& list = m_pVisibleEffects->getList();
+    for (const auto& pManifest : list) {
+        if (pManifest && pManifest->displayName() == name) {
+            loadEffectWithDefaults(pManifest);
+            return;
+        }
+    }
+    // Fallback: try matching by unique ID
+    for (const auto& pManifest : list) {
+        if (pManifest && pManifest->id() == name) {
+            loadEffectWithDefaults(pManifest);
+            return;
+        }
+    }
 }
 
 void EffectSlot::visibleEffectsListChanged() {
