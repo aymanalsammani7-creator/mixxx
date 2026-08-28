@@ -1,6 +1,6 @@
 <!-- CUSTOM MOD (rekordbox-skin): Rekordbox 7.x Performance Mode layout for Mixxx -->
 <!--
-  Band order (top ? bottom) matching spec §1.1:
+  Band order (top to bottom) matching spec v1.1:
     ROW 1: Beat FX (FX1 + FX2)
     ROW 2: CFX row (4 decks)
     ROW 3: MERGE FX row (MFX1/MFX2)
@@ -216,7 +216,7 @@
                 </SliderComposed>
               </Children>
             </WidgetGroup>
-          </WidgetGroup>
+          </Children>
         </WidgetGroup>
       </Children>
     </WidgetGroup>
