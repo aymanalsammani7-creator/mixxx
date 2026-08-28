@@ -112,13 +112,6 @@ EffectSlot::EffectSlot(const QString& group,
             this,
             &EffectSlot::slotLoadedEffectRequest);
 
-    // === CUSTOM MOD (rekordbox-fix): load effect by display name ===
-    m_pControlLoadEffectByName = std::make_unique<ControlObject>(
-            ConfigKey(m_group, "load_effect_by_name"));
-    m_pControlLoadEffectByName->connectValueChangeRequest(
-            this,
-            &EffectSlot::slotLoadEffectByName);
-
     connect(m_pVisibleEffects.get(),
             &VisibleEffectsList::visibleEffectsListChanged,
             this,
@@ -565,27 +558,6 @@ void EffectSlot::slotLoadedEffectRequest(double value) {
     }
     // loadEffectInner calls setAndConfirm
     loadEffectWithDefaults(m_pVisibleEffects->at(index));
-}
-
-// === CUSTOM MOD (rekordbox-fix): load effect by display name for CFX buttons ===
-void EffectSlot::slotLoadEffectByName(const QString& name) {
-    if (name.isEmpty()) {
-        return;
-    }
-    const auto& list = m_pVisibleEffects->getList();
-    for (const auto& pManifest : list) {
-        if (pManifest && pManifest->displayName() == name) {
-            loadEffectWithDefaults(pManifest);
-            return;
-        }
-    }
-    // Fallback: try matching by unique ID
-    for (const auto& pManifest : list) {
-        if (pManifest && pManifest->id() == name) {
-            loadEffectWithDefaults(pManifest);
-            return;
-        }
-    }
 }
 
 void EffectSlot::visibleEffectsListChanged() {

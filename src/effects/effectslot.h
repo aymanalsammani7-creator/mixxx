@@ -131,8 +131,6 @@ class EffectSlot : public QObject {
     void slotNextEffect(double v);
     void slotPrevEffect(double v);
     void slotLoadedEffectRequest(double value);
-    // === CUSTOM MOD (rekordbox-fix): load effect by display name for CFX ===
-    void slotLoadEffectByName(const QString& name);
     void slotClear(double v);
     void slotEffectSelector(double v);
     void slotPresetListVisibleChanged(bool visible);
@@ -192,8 +190,6 @@ class EffectSlot : public QObject {
     std::unique_ptr<ControlObject> m_pControlNextEffect;
     std::unique_ptr<ControlObject> m_pControlPrevEffect;
     std::unique_ptr<ControlObject> m_pControlLoadedEffect;
-    // === CUSTOM MOD (rekordbox-fix): load effect by display name (string CO) ===
-    std::unique_ptr<ControlObject> m_pControlLoadEffectByName;
     std::unique_ptr<ControlEncoder> m_pControlEffectSelector;
     std::unique_ptr<ControlObject> m_pControlClear;
     std::unique_ptr<ControlPotmeter> m_pControlMetaParameter;
