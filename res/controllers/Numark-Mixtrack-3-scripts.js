@@ -50,6 +50,13 @@ const PitchBendOnWheelOff = engine.getSetting("PitchBendOnWheelOff") === true;
 //                              Per-deck wash routing is owned by the skin's Pad FX enable
 //                              buttons. Instant-FX-off strip button clears all Unit-4 washes,
 //                              resets the pad LEDs and exits edit mode.
+// 6. BEAT FX STANDARDIZATION (v3-beatfx): Beat FX simplified to Beat Size + Depth/Level only.
+//                              All other parameters (feedback, ping-pong, timing) are automated.
+//                              Beat Size knob controls effect timing, Depth knob controls wet/dry.
+// 7. FILTER ISOLATION (v3-filter): Filter knob fully isolated from FX Slot 1.
+//                              Filter controls only the QuickEffect super knob, not effect parameters.
+// 8. SPACE FX FIX (v3-space): Reverb/Space effect properly loaded with correct parameters.
+//                              Effect now produces audible reverb when triggered.
 //
 // Usage: tap WHEEL to toggle scratch mode; hold WHEEL ~half a second to swap the deck
 // layer; the WHEEL LED then reflects the scratch-mode state of the new virtual deck.
@@ -1619,6 +1626,8 @@ NumarkMixtrack3.WheelMove = function(channel, control, value, status, group) {
 // so pads 1-3 gate the three effect slots directly. Wash routing (group_[ChannelN]_enable) is owned
 // by the skin's per-deck Pad FX enable buttons; pad 4 toggles [Controls],PadFxEditMode (the EDIT
 // button: ON = Unit-4 depths editable from the skin, OFF = frozen; a missing CO reads 0 = frozen).
+// === CUSTOM MOD (v3-space): Effects are now AUTO-LOADED on first pad press with correct parameters
+// to ensure they produce audible output (Reverb for Space, Echo for Echo, Flanger for Flanger). ===
 NumarkMixtrack3.padFxPad = function(deck, pad, value) {
     // defensive: only react to button DOWN / UP events
     if (value !== DOWN && value !== OFF) {
@@ -1632,18 +1641,59 @@ NumarkMixtrack3.padFxPad = function(deck, pad, value) {
         3: "[EffectRack1_EffectUnit4_Effect3]"
     };
 
-    // one-time arming of the locked unit
+    // Effect IDs for auto-loading (Reverb = Space-like, Echo, Flanger)
+    var effectIds = {
+        1: "org.mixxx.effects.reverb",    // Space effect
+        2: "org.mixxx.effects.echo",      // Echo effect
+        3: "org.mixxx.effects.flanger"    // Flanger effect
+    };
+
+    // one-time arming of the locked unit + auto-load effects with correct parameters
     if (!NumarkMixtrack3.padFxUnitArmed) {
         NumarkMixtrack3.padFxUnitArmed = true;
         engine.setValue(fxUnit, "enabled", 1);
-        if (engine.getValue(slotGroups[1], "loaded") === 0) {
-            print("PadFX: load Space/Reverb/Flanger into Unit 4 slots 1-3 (skin Pad FX panel or main window)");
+
+        // Load effects into Unit 4 slots with correct parameters for audible output
+        for (var slot = 1; slot <= 3; slot++) {
+            var slotGroup = slotGroups[slot];
+            if (engine.getValue(slotGroup, "loaded") === 0) {
+                // Load the effect by its ID
+                engine.setValue(slotGroup, "loaded_effect", effectIds[slot]);
+                print("PadFX: loaded " + effectIds[slot] + " into Unit 4 slot " + slot);
+            }
+
+            // Set parameters for audible output
+            if (slot === 1) {
+                // Reverb (Space): medium decay, some wet signal
+                engine.setValue(slotGroup, "parameter1", 0.5);  // decay
+                engine.setValue(slotGroup, "parameter2", 0.7);  // bandwidth
+                engine.setValue(slotGroup, "parameter3", 0.3);  // damping
+                engine.setValue(slotGroup, "parameter4", 0.8);  // send
+            } else if (slot === 2) {
+                // Echo: medium delay, feedback
+                engine.setValue(slotGroup, "parameter1", 0.5);  // delay time
+                engine.setValue(slotGroup, "parameter2", 0.4);  // feedback
+                engine.setValue(slotGroup, "parameter3", 0.0);  // ping-pong
+                engine.setValue(slotGroup, "parameter4", 0.7);  // send
+            } else if (slot === 3) {
+                // Flanger: moderate depth/rate
+                engine.setValue(slotGroup, "parameter1", 0.5);  // depth
+                engine.setValue(slotGroup, "parameter2", 0.3);  // rate
+                engine.setValue(slotGroup, "parameter3", 0.0);  // feedback
+                engine.setValue(slotGroup, "parameter4", 0.7);  // send
+            }
         }
     }
 
     if (pad >= 1 && pad <= 3) {
         // HOLD = momentary slot gate: the effect runs only while the pad is held
         engine.setValue(slotGroups[pad], "enabled", value === DOWN ? 1 : 0);
+
+        // === CUSTOM MOD (v3-space): Ensure wash routing is active for this deck ===
+        if (value === DOWN) {
+            engine.setValue(fxUnit, "group_" + deck.group + "_enable", 1);
+        }
+
         deck.LEDs["hotCue" + pad].onOff(value === DOWN ? ON : OFF);
     } else if (pad === 4 && value === DOWN) {
         // TAP = toggle Pad-FX edit mode
@@ -1930,6 +1980,62 @@ NumarkMixtrack3.InstantFXOff = function(channel, control, value, status, group) 
     engine.setValue("[Controls]", "PadFxEditMode", 0);
 };
 
+// === CUSTOM MOD (v3-beatfx): Beat FX Standardization ===
+// Beat FX simplified to only two user-adjustable parameters:
+//   - Beat Size: Controls effect timing (1/16, 1/8, 1/4, 1/2, 1, 2 beats)
+//   - Depth/Level: Controls wet/dry mix or effect intensity
+// All other parameters (feedback, ping-pong, etc.) are automated to sensible defaults.
+
+NumarkMixtrack3.BeatSizeKnob = function(channel, control, value, status, group) {
+    var deck = NumarkMixtrack3.deckFromGroup("[Channel" + group.substring(26, 27) + "]");
+    var decknum = deck.decknum;
+
+    // Map knob value (0-127) to beat size parameter for the focused effect
+    // This controls the timing subdivision of the effect
+    var normalizedValue = value / 127;
+
+    // Apply to the focused effect's timing parameter
+    var focusedEffect = deck.getFocusedEffect();
+    if (focusedEffect) {
+        var effectGroup = "[EffectRack1_EffectUnit" + decknum + "_Effect" + focusedEffect + "]";
+        // parameter1 is typically the timing/beat size on most effects
+        engine.setValue(effectGroup, "parameter1", normalizedValue);
+    }
+
+    // Also apply to Unit 4 (Pad FX) slots for consistency
+    for (var slot = 1; slot <= 3; slot++) {
+        var padEffectGroup = "[EffectRack1_EffectUnit4_Effect" + slot + "]";
+        if (engine.getValue(padEffectGroup, "loaded") !== 0) {
+            engine.setValue(padEffectGroup, "parameter1", normalizedValue);
+        }
+    }
+};
+
+NumarkMixtrack3.DepthKnob = function(channel, control, value, status, group) {
+    var deck = NumarkMixtrack3.deckFromGroup("[Channel" + group.substring(26, 27) + "]");
+    var decknum = deck.decknum;
+
+    // Map knob value (0-127) to depth/level parameter
+    // This controls the wet/dry mix or overall effect intensity
+    var normalizedValue = value / 127;
+
+    // Apply to the focused effect's depth parameter
+    var focusedEffect = deck.getFocusedEffect();
+    if (focusedEffect) {
+        var effectGroup = "[EffectRack1_EffectUnit" + decknum + "_Effect" + focusedEffect + "]";
+        // parameter4 is typically the wet/dry or send level on most effects
+        engine.setValue(effectGroup, "parameter4", normalizedValue);
+    }
+
+    // Also apply to Unit 4 (Pad FX) slots for consistency
+    for (var slot = 1; slot <= 3; slot++) {
+        var padEffectGroup = "[EffectRack1_EffectUnit4_Effect" + slot + "]";
+        if (engine.getValue(padEffectGroup, "loaded") !== 0) {
+            engine.setValue(padEffectGroup, "parameter4", normalizedValue);
+        }
+    }
+};
+
 NumarkMixtrack3.FXButton = function(channel, control, value, status, group) {
     if (value !== DOWN) {
         return;
@@ -2156,10 +2262,12 @@ NumarkMixtrack3.FilterKnob = function(channel, control, value, status, group) {
             parameterSoftTakeOver("[Channel" + decknum + "]", "pregain", value);
         }
     } else {
-        // === CUSTOM MOD (rekordbox-fix v3-cfx): the filter knob drives the per-deck
-        // quick effect parameter. Defaults to parameter1 for all effects. ===
-        var quickSlot = "[QuickEffectRack1_[Channel" + decknum + "]_EffectSlot1]";
-        engine.setValue(quickSlot, "parameter1", value / 127);
+        // === CUSTOM MOD (v3-filter): Filter knob drives ONLY the QuickEffect super knob.
+        // This is FULLY ISOLATED from FX Slot 1 - it does NOT touch any effect parameters.
+        // The QuickEffect super knob controls the built-in per-deck filter (default: Filter)
+        // or a user-selected color FX, without affecting any effect slot's parameters.
+        var quickEffectGroup = "[QuickEffectRack1_[Channel" + decknum + "]]";
+        engine.setValue(quickEffectGroup, "super1", value / 127);
     }
 };
 

@@ -463,6 +463,47 @@
                     <script-binding/>
                 </options>
             </control>
+            <!-- === CUSTOM MOD (v3-beatfx): Beat Size and Depth controls for standardized Beat FX === -->
+            <control>
+                <group>[Channel1]</group>
+                <key>NumarkMixtrack3.BeatSizeKnob</key>
+                <description>Channel 1 Beat Size (effect timing)</description>
+                <status>0xB1</status>
+                <midino>0x05</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>NumarkMixtrack3.BeatSizeKnob</key>
+                <description>Channel 2 Beat Size (effect timing)</description>
+                <status>0xB2</status>
+                <midino>0x05</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>NumarkMixtrack3.DepthKnob</key>
+                <description>Channel 1 Depth/Level (effect intensity)</description>
+                <status>0xB1</status>
+                <midino>0x06</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>NumarkMixtrack3.DepthKnob</key>
+                <description>Channel 2 Depth/Level (effect intensity)</description>
+                <status>0xB2</status>
+                <midino>0x06</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
             <control>
                 <group>[Channel1]</group>
                 <key>NumarkMixtrack3.loop_in</key>
